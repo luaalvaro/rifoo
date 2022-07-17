@@ -6,9 +6,12 @@ import {
     FormLabel,
     Input,
     Button,
-    Heading
+    Heading,
+    Link as A
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
+import Link from 'next/link'
+import { style } from '../constants/globalTheme'
 
 const Login = () => {
 
@@ -25,21 +28,29 @@ const Login = () => {
     return (
         <Center
             minHeight="100vh"
-            background="#405090"
+            background={style.color.background}
             flexDirection="column"
         >
-
-            <Heading
-                color="#fff"
-                fontSize={44}
-                mt="-120px"
-                mb="120px"
+            <Flex
+                mt="-80px"
+                mb="80px"
+                direction="column"
+                align="center"
             >
-                Rifoo
-            </Heading>
+                <Heading
+                    color={style.color.primary}
+                    fontSize={44}
+                >
+                    Rifoo
+                </Heading>
 
+                <Text>
+                    Seu negócio na palma da sua mão.
+                </Text>
+            </Flex>
             <Flex
                 background="#fff"
+                boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
                 borderRadius={8}
                 padding={4}
                 direction="column"
@@ -89,9 +100,21 @@ const Login = () => {
                     </Button>
                 </form>
 
-                <Text>
-                    Ainda não tem uma conta? <b>Cadastre-se</b>
-                </Text>
+                <Flex>
+                    <Text
+                        mr="5px"
+                    >
+                        Ainda não tem uma conta?
+                    </Text>
+
+                    <Link href="/cadastro">
+                        <A
+                            fontWeight={700}
+                        >
+                            Cadastre-se
+                        </A>
+                    </Link>
+                </Flex>
             </Flex>
         </Center>
     )

@@ -7,32 +7,73 @@ import {
     Input,
     Button,
     Heading,
-    VStack,
-    FormErrorMessage,
-    Checkbox
+    Link as A,
+    useToast
 } from '@chakra-ui/react'
-import { Formik, Field } from 'formik'
+import { useFormik } from 'formik'
+import Link from 'next/link'
+import { style } from '../constants/globalTheme'
+import { useState } from 'react'
 
 const Cadastro = () => {
+
+    const toast = useToast()
+    const [formStep, setformStep] = useState(0)
+
+    const useError = (description: string) => {
+        return toast({
+            description: description,
+            duration: 5000,
+            status: 'error'
+        })
+    }
+
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+            confirmPassword: '',
+            fullName: '',
+        },
+        onSubmit: async (values) => {
+
+            if (values.email === "")
+                useError("O email não pode ser vazio")
+            if (values.password === "")
+                useError("A senha não pode ser vazia")
+            if (values.fullName === "")
+                useError("O seu nome não pode ser vazio")
+
+
+        },
+    })
 
     return (
         <Center
             minHeight="100vh"
-            background="#405090"
+            background={style.color.background}
             flexDirection="column"
         >
-
-            <Heading
-                color="#fff"
-                fontSize={44}
-                mt="-30px"
-                mb="30px"
+            <Flex
+                mt="-35px"
+                mb="35px"
+                direction="column"
+                align="center"
             >
-                Rifoo
-            </Heading>
+                <Heading
+                    color={style.color.primary}
+                    fontSize={44}
+                >
+                    Rifoo
+                </Heading>
 
+                <Text>
+                    Seu negócio na palma da sua mão.
+                </Text>
+            </Flex>
             <Flex
                 background="#fff"
+                boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
                 borderRadius={8}
                 padding={4}
                 direction="column"
@@ -41,119 +82,112 @@ const Cadastro = () => {
             >
                 <Heading
                     fontSize={20}
-                    textAlign="center"
                 >
-                    Criar uma conta
+                    Fazer Cadastro
                 </Heading>
 
-                <Formik
-                    initialValues={{
-                        fullName: "",
-                        email: "",
-                        password: "",
-                        confirmPassword: ""
-                    }}
-                    onSubmit={(values) => {
-                        alert(JSON.stringify(values, null, 2));
-                    }}
-                >
-                    {({ handleSubmit, errors, touched }) => (
-                        <form onSubmit={handleSubmit}>
-                            <VStack spacing={4} align="flex-start">
+                <form onSubmit={formik.handleSubmit}>
 
-                                <FormControl isInvalid={!!errors.fullName && touched.fullName}>
-                                    <FormLabel htmlFor="fullName">Seu nome</FormLabel>
-                                    <Field
-                                        as={Input}
-                                        id="fullName"
-                                        name="fullName"
-                                        variant="filled"
-                                        validate={(value: string) => {
-                                            let error;
+                    {formStep === 0 &&
+                        <Flex
+                            direction="column"
+                        >
+                            <FormControl mb="25px">
+                                <FormLabel>Seu nome</FormLabel>
+                                <Input
+                                    id="fullName"
+                                    name="fullName"
+                                    value={formik.values.fullName}
+                                    onChange={formik.handleChange}
+                                />
+                            </FormControl>
+                            <FormControl mb="25px">
+                                <FormLabel>Email</FormLabel>
+                                <Input
+                                    id="email"
+                                    name="email"
+                                    value={formik.values.email}
+                                    onChange={formik.handleChange}
+                                />
+                            </FormControl>
+                        </Flex>
+                    }
 
-                                            if (value.length < 5) {
-                                                error = "Seu nome precisa ter pelo menos 6 caracteres";
-                                            }
+                    {formStep === 1 &&
+                        <Flex
+                            direction="column"
+                        >
+                            <FormControl mb="25px">
+                                <FormLabel>Senha</FormLabel>
+                                <Input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    value={formik.values.password}
+                                    onChange={formik.handleChange}
+                                />
+                            </FormControl>
+                            <FormControl mb="25px">
+                                <FormLabel>Confirme sua senha</FormLabel>
+                                <Input
+                                    type="password"
+                                    id="password2"
+                                    name="password2"
+                                    value={formik.values.confirmPassword}
+                                    onChange={formik.handleChange}
+                                />
+                            </FormControl>
+                        </Flex>
+                    }
 
-                                            return error;
-                                        }}
-                                    />
-                                    <FormErrorMessage>{errors.fullName}</FormErrorMessage>
-                                </FormControl>
+                    {formStep === 0 &&
+                        <Button
+                            background="#405090"
+                            color="#fff"
+                            width="100%"
 
-                                <FormControl isInvalid={!!errors.email && touched.email}>
-                                    <FormLabel htmlFor="email">Email</FormLabel>
-                                    <Field
-                                        as={Input}
-                                        id="email"
-                                        name="email"
-                                        variant="filled"
-                                        validate={(value: string) => {
-                                            let error;
+                            onClick={() => setformStep(1)}
+                            _hover={{
+                                background: "#405090",
+                                opacity: 0.8,
+                            }}
+                        >
+                            Próximo
+                        </Button>
+                    }
 
-                                            if (value.indexOf("@") === -1) {
-                                                error = "Preencha um email válido";
-                                            }
+                    {formStep === 1 &&
+                        <Button
+                            type="submit"
+                            background="#405090"
+                            color="#fff"
+                            width="100%"
 
-                                            return error;
-                                        }}
-                                    />
-                                    <FormErrorMessage>{errors.email}</FormErrorMessage>
-                                </FormControl>
+                            _hover={{
+                                background: "#405090",
+                                opacity: 0.8,
+                            }}
+                        >
+                            Cadastrar
+                        </Button>
+                    }
+                </form>
 
-                                <FormControl isInvalid={!!errors.password && touched.password}>
-                                    <FormLabel htmlFor="password">Senha</FormLabel>
-                                    <Field
-                                        as={Input}
-                                        id="password"
-                                        name="password"
-                                        type="password"
-                                        variant="filled"
-                                        validate={(value: string) => {
-                                            let error;
+                <Flex>
+                    <Text
+                        mr="5px"
+                    >
+                        Já tem uma conta?
+                    </Text>
 
-                                            if (value.length < 5) {
-                                                error = "Sua senha precisa ter pelo menos 6 caracteres";
-                                            }
-
-                                            return error;
-                                        }}
-                                    />
-                                    <FormErrorMessage>{errors.password}</FormErrorMessage>
-                                </FormControl>
-
-                                <FormControl isInvalid={!!errors.confirmPassword && touched.confirmPassword}>
-                                    <FormLabel htmlFor="confirmPassword">Confirmar senha</FormLabel>
-                                    <Field
-                                        as={Input}
-                                        id="confirmPassword"
-                                        name="confirmPassword"
-                                        type="password"
-                                        variant="filled"
-                                        validate={(value: string) => {
-                                            let error;
-
-                                            if (value.length < 5) {
-                                                error = "Sua senha precisa ter pelo menos 6 caracteres";
-                                            }
-
-                                            return error;
-                                        }}
-                                    />
-                                    <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
-                                </FormControl>
-
-                                <Button type="submit" colorScheme="purple" width="full">
-                                    Criar conta
-                                </Button>
-                            </VStack>
-                        </form>
-                    )}
-                </Formik>
-
-                <Text textAlign="center">
-                    Já tem uma conta? <b>Fazer login</b>
-                </Text>
+                    <Link href="/login">
+                        <A
+                            fontWeight={700}
+                        >
+                            Fazer login
+                        </A>
+                    </Link>
+                </Flex>
             </Flex>
         </Center>
     )
