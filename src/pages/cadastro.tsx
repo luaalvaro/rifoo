@@ -8,45 +8,28 @@ import {
     Button,
     Heading,
     Link as A,
-    useToast
+    useToast,
+    FormErrorMessage
 } from '@chakra-ui/react'
-import { useFormik } from 'formik'
+import { Formik, Field } from 'formik'
 import Link from 'next/link'
 import { style } from '../constants/globalTheme'
 import { useState } from 'react'
+import { BiLeftArrowAlt } from 'react-icons/bi'
 
 const Cadastro = () => {
 
     const toast = useToast()
     const [formStep, setformStep] = useState(0)
 
-    const useError = (description: string) => {
-        return toast({
-            description: description,
-            duration: 5000,
-            status: 'error'
-        })
+    const handleSubmitForm = (values: {
+        fullName: string,
+        email: string,
+        password: string,
+        confirmPassword: string
+    }) => {
+        console.log(values)
     }
-
-    const formik = useFormik({
-        initialValues: {
-            email: '',
-            password: '',
-            confirmPassword: '',
-            fullName: '',
-        },
-        onSubmit: async (values) => {
-
-            if (values.email === "")
-                useError("O email não pode ser vazio")
-            if (values.password === "")
-                useError("A senha não pode ser vazia")
-            if (values.fullName === "")
-                useError("O seu nome não pode ser vazio")
-
-
-        },
-    })
 
     return (
         <Center
@@ -71,6 +54,7 @@ const Cadastro = () => {
                     Seu negócio na palma da sua mão.
                 </Text>
             </Flex>
+
             <Flex
                 background="#fff"
                 boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
@@ -80,99 +64,176 @@ const Cadastro = () => {
                 gridGap="25px"
                 minWidth={320}
             >
-                <Heading
-                    fontSize={20}
+                <Flex
+                    align="center"
+                    gridGap="5px"
+
+                    onClick={() => setformStep(0)}
                 >
-                    Fazer Cadastro
-                </Heading>
+                    <BiLeftArrowAlt fontSize={24} />
+                    <Heading
+                        fontSize={20}
+                    >
+                        Fazer Cadastro
+                    </Heading>
+                </Flex>
 
-                <form onSubmit={formik.handleSubmit}>
+                <Formik
+                    initialValues={{
+                        fullName: "",
+                        email: "",
+                        password: "",
+                        confirmPassword: ""
+                    }}
+                    onSubmit={(values) => {
+                        handleSubmitForm(values)
+                    }}
+                >
+                    {({ handleSubmit, errors, touched }) => (
+                        <form onSubmit={handleSubmit}>
 
-                    {formStep === 0 &&
-                        <Flex
-                            direction="column"
-                        >
-                            <FormControl mb="25px">
-                                <FormLabel>Seu nome</FormLabel>
-                                <Input
-                                    id="fullName"
-                                    name="fullName"
-                                    value={formik.values.fullName}
-                                    onChange={formik.handleChange}
-                                />
-                            </FormControl>
-                            <FormControl mb="25px">
-                                <FormLabel>Email</FormLabel>
-                                <Input
-                                    id="email"
-                                    name="email"
-                                    value={formik.values.email}
-                                    onChange={formik.handleChange}
-                                />
-                            </FormControl>
-                        </Flex>
-                    }
+                            {formStep === 0 &&
+                                <Flex
+                                    direction="column"
+                                >
+                                    <FormControl
+                                        mb="25px"
+                                        isInvalid={!!errors.fullName && touched.fullName}
+                                    >
+                                        <FormLabel>Seu nome</FormLabel>
+                                        <Field
+                                            as={Input}
+                                            id="fullName"
+                                            name="fullName"
+                                            validate={(value: any) => {
+                                                let error;
 
-                    {formStep === 1 &&
-                        <Flex
-                            direction="column"
-                        >
-                            <FormControl mb="25px">
-                                <FormLabel>Senha</FormLabel>
-                                <Input
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    value={formik.values.password}
-                                    onChange={formik.handleChange}
-                                />
-                            </FormControl>
-                            <FormControl mb="25px">
-                                <FormLabel>Confirme sua senha</FormLabel>
-                                <Input
-                                    type="password"
-                                    id="password2"
-                                    name="password2"
-                                    value={formik.values.confirmPassword}
-                                    onChange={formik.handleChange}
-                                />
-                            </FormControl>
-                        </Flex>
-                    }
+                                                if (value.length < 5 || value === "") {
+                                                    error = "Escreva seu nome corretamente";
+                                                }
 
-                    {formStep === 0 &&
-                        <Button
-                            background="#405090"
-                            color="#fff"
-                            width="100%"
+                                                return error;
+                                            }}
+                                        />
+                                        <FormErrorMessage>{errors.fullName}</FormErrorMessage>
+                                    </FormControl>
+                                    <FormControl
+                                        mb="25px"
+                                        isInvalid={!!errors.email && touched.email}
+                                    >
+                                        <FormLabel>Email</FormLabel>
+                                        <Field
+                                            as={Input}
+                                            id="email"
+                                            name="email"
+                                            validate={(value: string) => {
+                                                let error;
 
-                            onClick={() => setformStep(1)}
-                            _hover={{
-                                background: "#405090",
-                                opacity: 0.8,
-                            }}
-                        >
-                            Próximo
-                        </Button>
-                    }
+                                                if (value === "") {
+                                                    error = "Escreva seu melhor email";
+                                                }
 
-                    {formStep === 1 &&
-                        <Button
-                            type="submit"
-                            background="#405090"
-                            color="#fff"
-                            width="100%"
+                                                if (value.indexOf("@") === -1) {
+                                                    error = "Escreva seu email corretamente";
+                                                }
 
-                            _hover={{
-                                background: "#405090",
-                                opacity: 0.8,
-                            }}
-                        >
-                            Cadastrar
-                        </Button>
-                    }
-                </form>
+                                                if (value.indexOf(".") === -1) {
+                                                    error = "Escreva seu email corretamente";
+                                                }
 
+                                                return error;
+                                            }}
+                                        />
+                                        <FormErrorMessage>{errors.email}</FormErrorMessage>
+                                    </FormControl>
+                                </Flex>
+                            }
+
+                            {formStep === 1 &&
+                                <Flex
+                                    direction="column"
+                                >
+                                    <FormControl
+                                        isInvalid={!!errors.password && touched.password}
+                                        mb="25px"
+                                    >
+                                        <FormLabel>Senha</FormLabel>
+                                        <Field
+                                            as={Input}
+                                            type="password"
+                                            id="password"
+                                            name="password"
+                                            validate={(value: string) => {
+                                                let error;
+
+                                                if (value.length < 8) {
+                                                    error = "Escreva uma senha com pelo menos 8 caracteres";
+                                                }
+
+                                                return error;
+                                            }}
+                                        />
+                                        <FormErrorMessage>{errors.password}</FormErrorMessage>
+                                    </FormControl>
+                                    <FormControl
+                                        mb="25px"
+                                        isInvalid={!!errors.confirmPassword && touched.confirmPassword}
+                                    >
+                                        <FormLabel>Confirme sua senha</FormLabel>
+                                        <Field
+                                            as={Input}
+                                            type="password"
+                                            id="confirmPassword"
+                                            name="confirmPassword"
+                                            validate={(value: string) => {
+                                                let error;
+
+                                                if (value.length < 8) {
+                                                    error = "Confirme a sua senha";
+                                                }
+
+                                                return error;
+                                            }}
+                                        />
+                                        <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
+                                    </FormControl>
+                                </Flex>
+                            }
+
+                            {formStep === 0 &&
+                                <Button
+                                    background="#405090"
+                                    color="#fff"
+                                    width="100%"
+
+                                    onClick={() => setformStep(1)}
+                                    _hover={{
+                                        background: "#405090",
+                                        opacity: 0.8,
+                                    }}
+                                >
+                                    Próximo
+                                </Button>
+                            }
+
+                            {formStep === 1 &&
+                                <Button
+                                    type="submit"
+                                    background="#405090"
+                                    color="#fff"
+                                    width="100%"
+
+                                    _hover={{
+                                        background: "#405090",
+                                        opacity: 0.8,
+                                    }}
+                                >
+                                    Cadastrar
+                                </Button>
+                            }
+                        </form>
+                    )}
+                </Formik>
                 <Flex>
                     <Text
                         mr="5px"
