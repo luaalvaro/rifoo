@@ -21,6 +21,7 @@ const Cadastro = () => {
 
     const toast = useToast()
     const [formStep, setformStep] = useState(0)
+    const [innerHeight, setInnerHeight] = useState(0)
 
     const handleSubmitForm = (values: {
         fullName: string,
@@ -31,11 +32,10 @@ const Cadastro = () => {
         console.log(values)
     }
 
-    const [innerHeight, setInnerHeight] = useState(0)
-
     useEffect(() => {
         setInnerHeight(window.innerHeight)
     }, [])
+
     return (
         <Center
             minHeight={innerHeight}
