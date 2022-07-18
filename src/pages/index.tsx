@@ -1,34 +1,42 @@
 import {
-  Center,
   Flex,
-  Text,
-  FormControl,
-  FormLabel,
-  Input,
-  Button,
-  Heading
+  Heading,
+  Text
 } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { style } from '../constants/globalTheme'
 
 const Home = () => {
 
+  const [innerHeight, setInnerHeight] = useState(0)
+
+  useEffect(() => {
+    setInnerHeight(window.innerHeight)
+  }, [])
+
   return (
-    <Center
-      minHeight="100vh"
-      background="#405090"
+    <Flex
+      minHeight={innerHeight}
+      background={style.color.background}
       flexDirection="column"
     >
 
-      <Heading
-        color="#fff"
-        fontSize={44}
-        mt="-120px"
-        mb="120px"
+      <Flex
+        background="#fff"
+        boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
+        p="15px"
       >
-        Rifoo
-      </Heading>
+        <Heading
+          color={style.color.primary}
+          fontSize={26}
+        >
+          Rifoo
+        </Heading>
+      </Flex>
 
 
-    </Center>
+
+    </Flex>
   )
 }
 

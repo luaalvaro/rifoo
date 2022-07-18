@@ -12,6 +12,7 @@ import {
 import { useFormik } from 'formik'
 import Link from 'next/link'
 import { style } from '../constants/globalTheme'
+import { useState, useEffect } from 'react'
 
 const Login = () => {
 
@@ -25,15 +26,21 @@ const Login = () => {
         },
     })
 
+    const [innerHeight, setInnerHeight] = useState(0)
+
+    useEffect(() => {
+        setInnerHeight(window.innerHeight)
+    }, [])
+
     return (
         <Center
-            minHeight="100vh"
+            minHeight={innerHeight}
             background={style.color.background}
             flexDirection="column"
         >
             <Flex
-                mt="-80px"
-                mb="80px"
+                mt="-50px"
+                mb="50px"
                 direction="column"
                 align="center"
             >

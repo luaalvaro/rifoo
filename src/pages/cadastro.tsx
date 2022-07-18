@@ -14,7 +14,7 @@ import {
 import { Formik, Field } from 'formik'
 import Link from 'next/link'
 import { style } from '../constants/globalTheme'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BiLeftArrowAlt } from 'react-icons/bi'
 
 const Cadastro = () => {
@@ -31,15 +31,20 @@ const Cadastro = () => {
         console.log(values)
     }
 
+    const [innerHeight, setInnerHeight] = useState(0)
+
+    useEffect(() => {
+        setInnerHeight(window.innerHeight)
+    }, [])
     return (
         <Center
-            minHeight="100vh"
+            minHeight={innerHeight}
             background={style.color.background}
             flexDirection="column"
         >
             <Flex
-                mt="-35px"
-                mb="35px"
+                mt="-50px"
+                mb="50px"
                 direction="column"
                 align="center"
             >
