@@ -1,6 +1,14 @@
 import { Flex, Text, Button } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 
 const BottomMenuNewOrder = () => {
+
+    const [innerHeight, setInnerHeight] = useState(0)
+
+    useEffect(() => {
+        setInnerHeight(window.innerHeight)
+    }, [])
+
     return (
         <Flex
             borderTop="1px solid rgba(0,0,0,0.2)"

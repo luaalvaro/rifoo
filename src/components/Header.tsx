@@ -1,7 +1,7 @@
 import { Flex, Heading, Menu, MenuButton, IconButton, MenuItem, MenuList } from '@chakra-ui/react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { style } from '../constants/globalTheme'
-
+import Link from 'next/link'
 const Header = () => {
     return (
         <Flex
@@ -11,12 +11,18 @@ const Header = () => {
             justify="space-between"
             align="center"
         >
-            <Heading
-                color={style.color.primary}
-                fontSize={26}
-            >
-                Rifoo
-            </Heading>
+
+            <Link href="/">
+                <a>
+                    <Heading
+                        color={style.color.primary}
+                        fontSize={28}
+                        cursor="pointer"
+                    >
+                        Rifoo
+                    </Heading>
+                </a>
+            </Link>
 
             <Menu>
                 <MenuButton

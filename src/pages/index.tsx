@@ -38,18 +38,22 @@ const Home = () => {
 
         <HomeButtom
           title="Nova venda"
+          href="/novavenda"
         />
 
         <HomeButtom
           title="Minhas vendas"
+          href="#"
         />
 
         <HomeButtom
           title="Produtos"
+          href="#"
         />
 
         <HomeButtom
           title="Estoque"
+          href="#"
         />
 
       </Flex>

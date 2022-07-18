@@ -4,10 +4,11 @@ import { useRouter } from 'next/router'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
 
 interface IHomeButton {
-    title: string
+    title: string;
+    href: string;
 }
 
-const HomeButtom: React.FC<IHomeButton> = ({ title }) => {
+const HomeButtom: React.FC<IHomeButton> = ({ title, href }) => {
 
     const router = useRouter()
 
@@ -22,7 +23,7 @@ const HomeButtom: React.FC<IHomeButton> = ({ title }) => {
             boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
             cursor="pointer"
 
-            onClick={() => router.push('/novavenda')}
+            onClick={() => router.push(href)}
         >
             <AiOutlineShoppingCart
                 fontSize={30}
