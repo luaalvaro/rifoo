@@ -1,72 +1,25 @@
 import {
   Flex,
-  Heading,
   Text,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  IconButton,
-  Center
+  Center,
+  Link as A
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { style } from '../constants/globalTheme'
-import { GiHamburgerMenu } from 'react-icons/gi'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
 import { IoIosStats } from 'react-icons/io'
+import { useRouter } from 'next/router'
+import Header from '../components/Header'
+import Container from '../components/Container'
+import HomeButtom from '../components/HomeButtom'
 
 const Home = () => {
 
-  const [innerHeight, setInnerHeight] = useState(0)
-
-  useEffect(() => {
-    setInnerHeight(window.innerHeight)
-  }, [])
+  const router = useRouter()
 
   return (
-    <Flex
-      minHeight={innerHeight}
-      background={style.color.background}
-      flexDirection="column"
-    >
-
-      <Flex
-        background="#fff"
-        boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
-        p="15px"
-        justify="space-between"
-        align="center"
-      >
-        <Heading
-          color={style.color.primary}
-          fontSize={26}
-        >
-          Rifoo
-        </Heading>
-
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            aria-label='Options'
-            icon={<GiHamburgerMenu />}
-            variant='outline'
-          />
-          <MenuList>
-            <MenuItem icon={<GiHamburgerMenu />} command='⌘T'>
-              New Tab
-            </MenuItem>
-            <MenuItem icon={<GiHamburgerMenu />} command='⌘N'>
-              New Window
-            </MenuItem>
-            <MenuItem icon={<GiHamburgerMenu />} command='⌘⇧N'>
-              Open Closed Tab
-            </MenuItem>
-            <MenuItem icon={<GiHamburgerMenu />} command='⌘O'>
-              Open File...
-            </MenuItem>
-          </MenuList>
-        </Menu>
-      </Flex>
+    <Container>
+      <Header />
 
       <Text
         fontSize={18}
@@ -83,69 +36,24 @@ const Home = () => {
         pt="15px"
       >
 
-        <Center
-          background="#fff"
-          borderRadius="8px"
-          height="80px"
-          gridGap="10px"
-          fontSize={24}
-          color={style.color.primary}
-          boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
-        >
-          <AiOutlineShoppingCart
-            fontSize={30}
-          />
-          <Text>Nova venda</Text>
-        </Center>
+        <HomeButtom
+          title="Nova venda"
+        />
 
-        <Center
-          background="#fff"
-          borderRadius="8px"
-          height="80px"
-          gridGap="10px"
-          fontSize={24}
-          color={style.color.primary}
-          boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
-        >
-          <IoIosStats
-            fontSize={30}
-          />
-          <Text>Minhas vendas</Text>
-        </Center>
+        <HomeButtom
+          title="Minhas vendas"
+        />
 
-        <Center
-          background="#fff"
-          borderRadius="8px"
-          height="80px"
-          gridGap="10px"
-          fontSize={24}
-          color={style.color.primary}
-          boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
-        >
-          <AiOutlineShoppingCart
-            fontSize={30}
-          />
-          <Text>Produtos</Text>
-        </Center>
+        <HomeButtom
+          title="Produtos"
+        />
 
-        <Center
-          background="#fff"
-          borderRadius="8px"
-          height="80px"
-          gridGap="10px"
-          fontSize={24}
-          color={style.color.primary}
-          boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
-        >
-          <AiOutlineShoppingCart
-            fontSize={30}
-          />
-          <Text>Estoque</Text>
-        </Center>
+        <HomeButtom
+          title="Estoque"
+        />
 
       </Flex>
-
-    </Flex>
+    </Container>
   )
 }
 
