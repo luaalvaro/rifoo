@@ -7,26 +7,62 @@ import {
     Input,
     Button,
     Heading,
-    Link as A
+    Link as A,
+    FormErrorMessage,
+    useToast
 } from '@chakra-ui/react'
-import { useFormik } from 'formik'
+import { Field, Formik, useFormik } from 'formik'
 import Link from 'next/link'
 import { style } from '../constants/globalTheme'
 import { useState, useEffect } from 'react'
+import supabase from '../services/supabase'
+import { useRouter } from 'next/router'
 
 const Login = () => {
 
-    const formik = useFormik({
-        initialValues: {
-            email: '',
-            senha: '',
-        },
-        onSubmit: async (values) => {
-
-        },
-    })
-
+    const router = useRouter()
+    const toast = useToast()
     const [innerHeight, setInnerHeight] = useState(0)
+    const [loading, setLoading] = useState(false)
+
+    const handleSubmitForm = async (values: {
+        email: string,
+        password: string,
+    }) => {
+
+        const { email, password } = values
+
+        try {
+            setLoading(true)
+
+            const { user, session, error } = await supabase
+                .auth
+                .signIn({
+                    email: email,
+                    password: password
+                })
+
+            if (error)
+                throw error
+
+            router.push('/app')
+        } catch (error: any) {
+
+            let messageShow = "Erro ao fazer login";
+
+            if (error.message === "Invalid login credentials") {
+                messageShow = "As informações fornecidas estão erradas"
+            }
+
+            return toast({
+                status: 'error',
+                description: messageShow,
+                duration: 3000,
+            })
+        } finally {
+            setLoading(false)
+        }
+    }
 
     useEffect(() => {
         setInnerHeight(window.innerHeight)
@@ -55,6 +91,8 @@ const Login = () => {
                     Seu negócio na palma da sua mão.
                 </Text>
             </Flex>
+
+
             <Flex
                 background="#fff"
                 boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
@@ -64,48 +102,97 @@ const Login = () => {
                 gridGap="25px"
                 minWidth={320}
             >
+
                 <Heading
                     fontSize={20}
                 >
-                    Fazer login
+                    Fazer Login
                 </Heading>
 
-                <form onSubmit={formik.handleSubmit}>
-                    <FormControl mb="25px">
-                        <FormLabel>Email</FormLabel>
-                        <Input
-                            id="email"
-                            name="email"
-                            value={formik.values.email}
-                            onChange={formik.handleChange}
-                        />
-                    </FormControl>
+                <Formik
+                    initialValues={{
+                        email: "",
+                        password: "",
+                    }}
+                    onSubmit={(values) => {
+                        handleSubmitForm(values)
+                    }}
+                >
+                    {({ handleSubmit, errors, touched }) => (
+                        <form onSubmit={handleSubmit}>
 
-                    <FormControl mb="25px">
-                        <FormLabel>Senha</FormLabel>
-                        <Input
-                            type="password"
-                            id="senha"
-                            name="senha"
-                            value={formik.values.senha}
-                            onChange={formik.handleChange}
-                        />
-                    </FormControl>
+                            <FormControl
+                                mb="25px"
+                                isInvalid={!!errors.email && touched.email}
+                            >
+                                <FormLabel>Email</FormLabel>
+                                <Field
+                                    as={Input}
+                                    id="email"
+                                    name="email"
+                                    validate={(value: string) => {
+                                        let error;
 
-                    <Button
-                        type="submit"
-                        background={style.color.primary}
-                        color="#fff"
-                        width="100%"
+                                        if (value === "") {
+                                            error = "Escreva seu melhor email";
+                                        }
 
-                        _hover={{
-                            background: style.color.primary,
-                            opacity: 0.8,
-                        }}
-                    >
-                        Entrar
-                    </Button>
-                </form>
+                                        if (value.indexOf("@") === -1) {
+                                            error = "Escreva seu email corretamente";
+                                        }
+
+                                        if (value.indexOf(".") === -1) {
+                                            error = "Escreva seu email corretamente";
+                                        }
+
+                                        return error;
+                                    }}
+                                />
+                                <FormErrorMessage>{errors.email}</FormErrorMessage>
+                            </FormControl>
+
+                            <FormControl
+                                isInvalid={!!errors.password && touched.password}
+                                mb="25px"
+                            >
+                                <FormLabel>Senha</FormLabel>
+                                <Field
+                                    as={Input}
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    validate={(value: string) => {
+                                        let error;
+
+                                        if (value.length < 8) {
+                                            error = "Escreva uma senha com pelo menos 8 caracteres";
+                                        }
+
+                                        return error;
+                                    }}
+                                />
+                                <FormErrorMessage>{errors.password}</FormErrorMessage>
+                            </FormControl>
+
+                            <Button
+                                type="submit"
+                                background={style.color.primary}
+                                color="#fff"
+                                width="100%"
+
+                                isLoading={loading}
+
+                                _hover={{
+                                    background: style.color.primary,
+                                    opacity: 0.8,
+                                }}
+                            >
+                                Entrar
+                            </Button>
+
+                        </form>
+                    )}
+                </Formik>
 
                 <Flex>
                     <Text
@@ -123,6 +210,8 @@ const Login = () => {
                     </Link>
                 </Flex>
             </Flex>
+
+
         </Center>
     )
 }

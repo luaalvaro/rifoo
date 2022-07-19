@@ -2,7 +2,19 @@ import { Flex, Heading, Menu, MenuButton, IconButton, MenuItem, MenuList } from 
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { style } from '../constants/globalTheme'
 import Link from 'next/link'
+import { BiLogIn } from 'react-icons/bi'
+import supabase from '../services/supabase'
+import { useRouter } from 'next/router'
+
 const Header = () => {
+
+    const router = useRouter()
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut()
+        return router.push("/")
+    }
+
     return (
         <Flex
             background="#fff"
@@ -32,17 +44,20 @@ const Header = () => {
                     variant='outline'
                 />
                 <MenuList>
-                    <MenuItem icon={<GiHamburgerMenu />} command='⌘T'>
+                    <MenuItem icon={<GiHamburgerMenu />}>
                         New Tab
                     </MenuItem>
-                    <MenuItem icon={<GiHamburgerMenu />} command='⌘N'>
+                    <MenuItem icon={<GiHamburgerMenu />}>
                         New Window
                     </MenuItem>
-                    <MenuItem icon={<GiHamburgerMenu />} command='⌘⇧N'>
+                    <MenuItem icon={<GiHamburgerMenu />}>
                         Open Closed Tab
                     </MenuItem>
-                    <MenuItem icon={<GiHamburgerMenu />} command='⌘O'>
-                        Open File...
+                    <MenuItem
+                        icon={<BiLogIn />}
+                        onClick={() => handleLogout()}
+                    >
+                        Sair
                     </MenuItem>
                 </MenuList>
             </Menu>
