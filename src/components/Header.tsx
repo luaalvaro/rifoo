@@ -12,7 +12,7 @@ const Header = () => {
             align="center"
         >
 
-            <Link href="/">
+            <Link href="/app">
                 <a>
                     <Heading
                         color={style.color.primary}

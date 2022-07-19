@@ -246,7 +246,7 @@ const Cadastro = () => {
                         Já tem uma conta?
                     </Text>
 
-                    <Link href="/login">
+                    <Link href="/">
                         <A
                             fontWeight={700}
                         >

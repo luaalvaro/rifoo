@@ -1,64 +1,130 @@
 import {
-  Flex,
-  Text,
-  Center,
-  Link as A
+    Center,
+    Flex,
+    Text,
+    FormControl,
+    FormLabel,
+    Input,
+    Button,
+    Heading,
+    Link as A
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { useFormik } from 'formik'
+import Link from 'next/link'
 import { style } from '../constants/globalTheme'
-import { AiOutlineShoppingCart } from 'react-icons/ai'
-import { IoIosStats } from 'react-icons/io'
-import { useRouter } from 'next/router'
-import Header from '../components/Header'
-import Container from '../components/Container'
-import HomeButtom from '../components/HomeButtom'
+import { useState, useEffect } from 'react'
 
-const Home = () => {
+const Login = () => {
 
-  const router = useRouter()
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            senha: '',
+        },
+        onSubmit: async (values) => {
 
-  return (
-    <Container>
-      <Header />
+        },
+    })
 
-      <Text
-        fontSize={18}
-        mt="15px"
-        mx="15px"
-      >
-        Boas vendas, <b>Genilson Andrade</b>
-      </Text>
+    const [innerHeight, setInnerHeight] = useState(0)
 
-      <Flex
-        direction="column"
-        gridGap="15px"
-        px="15px"
-        pt="15px"
-      >
+    useEffect(() => {
+        setInnerHeight(window.innerHeight)
+    }, [])
 
-        <HomeButtom
-          title="Nova venda"
-          href="/novavenda"
-        />
+    return (
+        <Center
+            minHeight={innerHeight}
+            background={style.color.background}
+            flexDirection="column"
+        >
+            <Flex
+                mt="-50px"
+                mb="50px"
+                direction="column"
+                align="center"
+            >
+                <Heading
+                    color={style.color.primary}
+                    fontSize={44}
+                >
+                    Rifoo
+                </Heading>
 
-        <HomeButtom
-          title="Minhas vendas"
-          href="#"
-        />
+                <Text>
+                    Seu negócio na palma da sua mão.
+                </Text>
+            </Flex>
+            <Flex
+                background="#fff"
+                boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
+                borderRadius={8}
+                padding={4}
+                direction="column"
+                gridGap="25px"
+                minWidth={320}
+            >
+                <Heading
+                    fontSize={20}
+                >
+                    Fazer login
+                </Heading>
 
-        <HomeButtom
-          title="Produtos"
-          href="#"
-        />
+                <form onSubmit={formik.handleSubmit}>
+                    <FormControl mb="25px">
+                        <FormLabel>Email</FormLabel>
+                        <Input
+                            id="email"
+                            name="email"
+                            value={formik.values.email}
+                            onChange={formik.handleChange}
+                        />
+                    </FormControl>
 
-        <HomeButtom
-          title="Estoque"
-          href="#"
-        />
+                    <FormControl mb="25px">
+                        <FormLabel>Senha</FormLabel>
+                        <Input
+                            type="password"
+                            id="senha"
+                            name="senha"
+                            value={formik.values.senha}
+                            onChange={formik.handleChange}
+                        />
+                    </FormControl>
 
-      </Flex>
-    </Container>
-  )
+                    <Button
+                        type="submit"
+                        background="#405090"
+                        color="#fff"
+                        width="100%"
+
+                        _hover={{
+                            background: "#405090",
+                            opacity: 0.8,
+                        }}
+                    >
+                        Entrar
+                    </Button>
+                </form>
+
+                <Flex>
+                    <Text
+                        mr="5px"
+                    >
+                        Ainda não tem uma conta?
+                    </Text>
+
+                    <Link href="/cadastro">
+                        <A
+                            fontWeight={700}
+                        >
+                            Cadastre-se
+                        </A>
+                    </Link>
+                </Flex>
+            </Flex>
+        </Center>
+    )
 }
 
-export default Home
+export default Login
