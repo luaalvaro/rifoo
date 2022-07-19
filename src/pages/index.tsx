@@ -94,12 +94,12 @@ const Login = () => {
 
                     <Button
                         type="submit"
-                        background="#405090"
+                        background={style.color.primary}
                         color="#fff"
                         width="100%"
 
                         _hover={{
-                            background: "#405090",
+                            background: style.color.primary,
                             opacity: 0.8,
                         }}
                     >

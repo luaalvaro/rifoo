@@ -207,13 +207,13 @@ const Cadastro = () => {
 
                             {formStep === 0 &&
                                 <Button
-                                    background="#405090"
+                                    background={style.color.primary}
                                     color="#fff"
                                     width="100%"
 
                                     onClick={() => setformStep(1)}
                                     _hover={{
-                                        background: "#405090",
+                                        background: style.color.primary,
                                         opacity: 0.8,
                                     }}
                                 >
@@ -224,12 +224,12 @@ const Cadastro = () => {
                             {formStep === 1 &&
                                 <Button
                                     type="submit"
-                                    background="#405090"
+                                    background={style.color.primary}
                                     color="#fff"
                                     width="100%"
 
                                     _hover={{
-                                        background: "#405090",
+                                        background: style.color.primary,
                                         opacity: 0.8,
                                     }}
                                 >

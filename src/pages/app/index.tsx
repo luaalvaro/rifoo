@@ -1,13 +1,7 @@
 import {
   Flex,
   Text,
-  Center,
-  Link as A
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { style } from '../../constants/globalTheme'
-import { AiOutlineShoppingCart } from 'react-icons/ai'
-import { IoIosStats } from 'react-icons/io'
 import { useRouter } from 'next/router'
 import Header from '../../components/Header'
 import Container from '../../components/Container'
