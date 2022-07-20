@@ -6,15 +6,120 @@ import {
     FormControl,
     FormLabel,
     Input,
-    Select
+    Select,
+    Toast,
+    useToast
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import Header from '../../components/Header'
 import Container from '../../components/Container'
+import { useState } from 'react'
+import Image from 'next/image'
+import supabase from '../../services/supabase'
 
 const NovoProduto = () => {
 
+    const toast = useToast()
     const router = useRouter()
+
+    const [loading, setLoading] = useState(false)
+
+    const [productURL, setProductURL] = useState("")
+    const [productFILE, setProductFILE] = useState<File>()
+    const [productName, setProductName] = useState("")
+    const [productSellType, setProductSellType] = useState("Por unidade")
+    const [productCostPrice, setProductCostPrice] = useState("")
+    const [productSellPrice, setProductSellPrice] = useState("")
+
+    const handleUploadImage = (files: FileList | null) => {
+        if (!files)
+            return
+
+        const file = files[0]
+        setProductFILE(file)
+        const newURL = URL.createObjectURL(file)
+        return setProductURL(newURL)
+    }
+
+    const handleSubmit = async () => {
+        if (
+            productName === "" ||
+            productSellType === "" ||
+            productCostPrice === "" ||
+            productSellPrice === ""
+        )
+            return toast({
+                title: "Informação necessária",
+                description: "Preencha todas as informações do produto",
+                duration: 5000,
+                status: "error"
+            })
+
+        const user = supabase.auth.user()
+
+        if (!user)
+            return
+
+        setLoading(true)
+        const { id } = user;
+        let imageKey = ""
+
+        if (productURL && productFILE) {
+
+            try {
+                const fileExt = productFILE.name.split('.').pop()
+                const fileName = `${Math.random()}.${fileExt}`
+                const filePath = `${id}/${fileName}`
+
+                let { data, error: uploadError } = await supabase.storage
+                    .from('products')
+                    .upload(filePath, productFILE)
+
+                if (uploadError) {
+                    throw uploadError
+                }
+
+                if (!data || !data.Key)
+                    throw "Key inexistente"
+
+                imageKey = data?.Key
+
+            } catch (error) {
+                console.log(error)
+            }
+
+        }
+
+        try {
+            const { data, error } = await supabase
+                .from('products')
+                .insert({
+                    product_name: productName,
+                    product_sell_type: productSellType,
+                    product_image_url: imageKey,
+                    product_cost_price: productCostPrice,
+                    product_sell_price: productSellPrice,
+                    user_id: id,
+                })
+                .single()
+
+            if (error)
+                throw error
+
+            console.log(data)
+            toast({
+                title: "Sucesso",
+                description: "Produto adicionado com sucesso",
+                duration: 5000,
+                status: "success"
+            })
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
 
     return (
         <Container>
@@ -34,34 +139,86 @@ const NovoProduto = () => {
                 px="15px"
                 pt="15px"
             >
-
-                <FormControl>
-                    <FormLabel>Nome do produto</FormLabel>
+                <FormControl
+                    id="imageProduct"
+                >
+                    <FormLabel>Foto do produto</FormLabel>
+                    {productURL &&
+                        <Image
+                            src={productURL}
+                            width={100}
+                            height={100}
+                        />
+                    }
                     <Input
+                        type="file"
                         background="#fff"
+                        onChange={(event) => handleUploadImage(event.target.files)}
                     />
                 </FormControl>
 
-                <FormControl>
+                <FormControl
+                    id="productName"
+                >
+                    <FormLabel>Nome do produto</FormLabel>
+                    <Input
+                        background="#fff"
+                        value={productName}
+                        onChange={({ target }) => setProductName(target.value)}
+                    />
+                </FormControl>
+
+                <FormControl
+                    id="sellType"
+                >
                     <FormLabel>Tipo de venda</FormLabel>
                     <Select
                         background="#fff"
+                        value={productSellType}
+                        onChange={({ target }) => setProductSellType(target.value)}
                     >
-                        <option>Venda unidade</option>
+                        <option>Por unidade</option>
                         <option>Venda em Peso (Ex:. Kg)</option>
                     </Select>
                 </FormControl>
 
-                <FormControl>
-                    <FormLabel>Foto do produto</FormLabel>
+                <FormControl
+                    id="priceCost"
+                >
+                    <FormLabel>Preço de custo</FormLabel>
                     <Input
-                        type="file"
+                        type="number"
                         background="#fff"
+                        value={productCostPrice}
+                        onChange={({ target }) => setProductCostPrice(target.value)}
                     />
                 </FormControl>
 
+                <FormControl>
+                    <FormLabel>Preço de venda</FormLabel>
+                    <Input
+                        type="number"
+                        background="#fff"
+                        value={productSellPrice}
+                        onChange={({ target }) => setProductSellPrice(target.value)}
+                    />
+                </FormControl>
+
+                <Text
+                    fontSize="sm"
+                    color="grey"
+                >
+                    Os valores salvos serão computados nas
+                    transações efetivadas a partir deste momento. Informe um valor médio real para que os cálculos sejam feitos corretamente para você ter estatísticas mais precisas ao longo das transações
+                </Text>
+
                 <Button
                     colorScheme="green"
+                    height="60px"
+
+                    onClick={handleSubmit}
+
+                    isLoading={loading}
                 >
                     Adicionar produto à base
                 </Button>

@@ -64,8 +64,18 @@ const Login = () => {
         }
     }
 
+    const checkIfLoggedUser = () => {
+        const user = supabase.auth.user()
+
+        if (!user)
+            return
+
+        return router.push("/app")
+    }
+
     useEffect(() => {
         setInnerHeight(window.innerHeight)
+        checkIfLoggedUser()
     }, [])
 
     return (

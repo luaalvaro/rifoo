@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import Header from '../../components/Header'
 import Container from '../../components/Container'
 import HomeButtom from '../../components/HomeButtom'
+import { FaMoneyBillWave } from 'react-icons/fa'
 
 const Home = () => {
 
@@ -43,11 +44,6 @@ const Home = () => {
         <HomeButtom
           title="Produtos"
           href="/app/produtos"
-        />
-
-        <HomeButtom
-          title="Estoque"
-          href="#"
         />
 
       </Flex>
