@@ -1,6 +1,6 @@
 import { Flex, Text, Button } from '@chakra-ui/react'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import supabase from '../services/supabase'
 
 interface IProductCard {
@@ -9,31 +9,38 @@ interface IProductCard {
 
 const ProductCard: React.FC<IProductCard> = ({ data }) => {
 
-    const [signedURL, setSignedURL] = useState("")
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
 
-    const getUrlImages = async () => {
+    const downloadImage = useCallback(async () => {
+
+        const path = data.product_image_url.split("products/")[1]
+        if (avatarUrl) return
+
         try {
-
-            const path = data.product_image_url.split("products/")[1]
-
-            const { data: resData, error } = await supabase
+            const { data, error } = await supabase
                 .storage
                 .from('products')
-                .createSignedUrl(path, 3600)
+                .download(path)
 
-            if (error) throw error
+            if (error)
+                throw error
 
-            if (!resData) return
+            if (!data)
+                throw "Image não encontrada"
 
-            setSignedURL(resData.signedURL)
-        } catch (error) {
-            console.log(error)
+            const url = URL.createObjectURL(data)
+            setAvatarUrl(url)
+
+        } catch (error: any) {
+            console.log('Error downloading image: ', error.message)
         }
-    }
+
+    }, [])
 
     useEffect(() => {
-        getUrlImages()
+        downloadImage()
     }, [])
+
     return (
         <Flex
             direction="column"
@@ -45,9 +52,9 @@ const ProductCard: React.FC<IProductCard> = ({ data }) => {
             <Flex
                 gridGap="20px"
             >
-                {signedURL !== "" &&
+                {avatarUrl &&
                     <Image
-                        src={signedURL}
+                        src={avatarUrl}
                         width="120px"
                         height="120px"
                     />

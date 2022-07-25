@@ -27,7 +27,6 @@ const Produtos = () => {
       if (error)
         throw error
 
-      console.log(data)
       setProducts(data)
     } catch (error) {
       console.log(error)
@@ -37,6 +36,7 @@ const Produtos = () => {
   useEffect(() => {
     fetchProducts()
   }, [])
+
   return (
     <Container>
       <Header />
