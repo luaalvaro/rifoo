@@ -1,8 +1,8 @@
 import { Flex, Text, Button, Stack, Skeleton, Center } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
-import { FaEdit, FaTrashAlt } from 'react-icons/fa'
 import supabase from '../services/supabase'
+import { useRouter } from 'next/router'
 
 interface IProductCard {
     data: Product
@@ -10,6 +10,7 @@ interface IProductCard {
 
 const ProductCard: React.FC<IProductCard> = ({ data }) => {
 
+    const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
 
@@ -55,6 +56,8 @@ const ProductCard: React.FC<IProductCard> = ({ data }) => {
             borderRadius="8px"
             boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
             cursor="pointer"
+
+            onClick={() => router.push(`/app/produtos/${data.id}`)}
         >
 
             <Flex

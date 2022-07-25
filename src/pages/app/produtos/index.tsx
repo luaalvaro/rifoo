@@ -7,11 +7,11 @@ import {
   Skeleton
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import Header from '../../components/Header'
-import Container from '../../components/Container'
-import supabase from '../../services/supabase'
+import Header from '../../../components/Header'
+import Container from '../../../components/Container'
+import supabase from '../../../services/supabase'
 import { useEffect, useState } from 'react'
-import ProductCard from '../../components/ProductCard'
+import ProductCard from '../../../components/ProductCard'
 import { FaBoxOpen } from 'react-icons/fa'
 
 const Produtos = () => {
@@ -61,7 +61,7 @@ const Produtos = () => {
         <Button
           colorScheme="green"
 
-          onClick={() => router.push("/app/novoproduto")}
+          onClick={() => router.push("/app/produtos/novo")}
         >
           Cadastrar novo produto
         </Button>

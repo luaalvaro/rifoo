@@ -13,11 +13,11 @@ import {
     Spinner
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import Header from '../../components/Header'
-import Container from '../../components/Container'
+import Header from '../../../components/Header'
+import Container from '../../../components/Container'
 import { ChangeEvent, useState } from 'react'
 import Image from 'next/image'
-import supabase from '../../services/supabase'
+import supabase from '../../../services/supabase'
 import imageCompression from 'browser-image-compression'
 
 const NovoProduto = () => {
