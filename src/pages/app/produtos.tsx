@@ -56,6 +56,14 @@ const Produtos = () => {
         pt="15px"
       >
 
+        <Button
+          colorScheme="green"
+
+          onClick={() => router.push("/app/novoproduto")}
+        >
+          Cadastrar novo produto
+        </Button>
+
         {products === null &&
           <Stack>
             <Skeleton h="20px" />
@@ -67,14 +75,6 @@ const Produtos = () => {
         {products && products.map((item, index) => (
           <ProductCard key={index} data={item} />
         ))}
-
-        <Button
-          colorScheme="green"
-
-          onClick={() => router.push("/app/novoproduto")}
-        >
-          Cadastrar novo produto
-        </Button>
       </Flex>
     </Container>
   )

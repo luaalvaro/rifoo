@@ -8,14 +8,17 @@ import {
     Input,
     Select,
     Toast,
-    useToast
+    useToast,
+    Center,
+    Spinner
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import Header from '../../components/Header'
 import Container from '../../components/Container'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import Image from 'next/image'
 import supabase from '../../services/supabase'
+import imageCompression from 'browser-image-compression'
 
 const NovoProduto = () => {
 
@@ -23,6 +26,7 @@ const NovoProduto = () => {
     const router = useRouter()
 
     const [loading, setLoading] = useState(false)
+    const [loadingCompression, setLoadingCompression] = useState(false)
 
     const [productURL, setProductURL] = useState("")
     const [productFILE, setProductFILE] = useState<File>()
@@ -31,14 +35,35 @@ const NovoProduto = () => {
     const [productCostPrice, setProductCostPrice] = useState("")
     const [productSellPrice, setProductSellPrice] = useState("")
 
-    const handleUploadImage = (files: FileList | null) => {
-        if (!files)
-            return
+    async function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
 
-        const file = files[0]
-        setProductFILE(file)
-        const newURL = URL.createObjectURL(file)
-        return setProductURL(newURL)
+        if (!event.target.files) return
+
+        setLoadingCompression(true)
+        const imageFile = event.target.files[0];
+        console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+        console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+
+        const options = {
+            maxSizeMB: 0.3,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true
+        }
+
+        try {
+            const compressedFile = await imageCompression(imageFile, options);
+            console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+            console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+            setProductFILE(compressedFile)
+            const newURL = URL.createObjectURL(compressedFile)
+            return setProductURL(newURL)
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoadingCompression(false)
+        }
+
     }
 
     const handleSubmit = async () => {
@@ -120,7 +145,6 @@ const NovoProduto = () => {
         }
     }
 
-
     return (
         <Container>
             <Header />
@@ -143,17 +167,21 @@ const NovoProduto = () => {
                     id="imageProduct"
                 >
                     <FormLabel>Foto do produto</FormLabel>
-                    {productURL &&
+
+                    {productURL && !loadingCompression &&
                         <Image
                             src={productURL}
                             width={100}
                             height={100}
                         />
                     }
+
+                    {loadingCompression && <Spinner />}
+
                     <Input
                         type="file"
                         background="#fff"
-                        onChange={(event) => handleUploadImage(event.target.files)}
+                        onChange={(event) => handleImageUpload(event)}
                     />
                 </FormControl>
 
