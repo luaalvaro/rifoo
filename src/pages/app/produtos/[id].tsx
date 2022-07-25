@@ -15,7 +15,7 @@ import {
 import { useRouter } from 'next/router'
 import Header from '../../../components/Header'
 import Container from '../../../components/Container'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import supabase from '../../../services/supabase'
 import imageCompression from 'browser-image-compression'
@@ -140,6 +140,66 @@ const DetalhesDoProduto = () => {
         }
     }
 
+    const downloadImage = useCallback(async (imgPath: string) => {
+
+        const path = imgPath.split("products/")[1]
+        // if (avatarUrl) return
+        try {
+            setLoading(true)
+            const { data, error } = await supabase
+                .storage
+                .from('products')
+                .download(path)
+
+            if (error)
+                throw error
+
+            if (!data)
+                throw "Image não encontrada"
+
+            const url = URL.createObjectURL(data)
+            setProductURL(url)
+
+        } catch (error: any) {
+            console.log('Error downloading image: ', error.message)
+        } finally {
+            setLoading(false)
+        }
+
+    }, [])
+
+    const fetchProduct = async (id: string) => {
+        console.log(id)
+
+        try {
+            const { data, error } = await supabase
+                .from<Product>('products')
+                .select('*')
+                .eq('id', id)
+                .single()
+
+            if (error)
+                throw error
+
+            downloadImage(data.product_image_url)
+            setProductName(data.product_name)
+            setProductSellPrice(String(data.product_sell_price))
+            setProductSellType(data.product_sell_type)
+            setProductCostPrice(String(data.product_cost_price))
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        const { id } = router.query
+
+        if (typeof id === 'string') {
+            fetchProduct(id)
+        }
+    }, [])
+
     return (
         <Container>
             <Header />
@@ -173,11 +233,11 @@ const DetalhesDoProduto = () => {
 
                     {loadingCompression && <Spinner />}
 
-                    <Input
+                    {/* <Input
                         type="file"
                         background="#fff"
                         onChange={(event) => handleImageUpload(event)}
-                    />
+                    /> */}
                 </FormControl>
 
                 <FormControl

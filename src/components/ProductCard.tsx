@@ -12,12 +12,12 @@ const ProductCard: React.FC<IProductCard> = ({ data }) => {
 
     const router = useRouter()
     const [loading, setLoading] = useState(false)
-    const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+    const [productUrl, setProductUrl] = useState<string | null>(null)
 
     const downloadImage = useCallback(async () => {
 
         const path = data.product_image_url.split("products/")[1]
-        if (avatarUrl) return
+        if (productUrl) return
         try {
             setLoading(true)
             const { data, error } = await supabase
@@ -32,7 +32,7 @@ const ProductCard: React.FC<IProductCard> = ({ data }) => {
                 throw "Image não encontrada"
 
             const url = URL.createObjectURL(data)
-            setAvatarUrl(url)
+            setProductUrl(url)
 
         } catch (error: any) {
             console.log('Error downloading image: ', error.message)
@@ -63,9 +63,9 @@ const ProductCard: React.FC<IProductCard> = ({ data }) => {
             <Flex
                 gridGap="20px"
             >
-                {avatarUrl && !loading &&
+                {productUrl && !loading &&
                     <Image
-                        src={avatarUrl}
+                        src={productUrl}
                         width="120px"
                         height="120px"
                     />
