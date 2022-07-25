@@ -38,8 +38,6 @@ const Produtos = () => {
     fetchProducts()
   }, [])
 
-  console.log(products)
-
   return (
     <Container>
       <Header />
