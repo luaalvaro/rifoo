@@ -12,6 +12,7 @@ import Container from '../../components/Container'
 import supabase from '../../services/supabase'
 import { useEffect, useState } from 'react'
 import ProductCard from '../../components/ProductCard'
+import { FaBoxOpen } from 'react-icons/fa'
 
 const Produtos = () => {
 
@@ -37,6 +38,8 @@ const Produtos = () => {
     fetchProducts()
   }, [])
 
+  console.log(products)
+
   return (
     <Container>
       <Header />
@@ -54,6 +57,7 @@ const Produtos = () => {
         gridGap="15px"
         px="15px"
         pt="15px"
+        pb="30px"
       >
 
         <Button
@@ -72,11 +76,25 @@ const Produtos = () => {
           </Stack>
         }
 
+        {products && !products.length &&
+          <Flex
+            mt="80px"
+            direction="column"
+            align="center"
+          >
+            <FaBoxOpen
+              fontSize={70}
+              opacity={.5}
+            />
+            <Text>Ooppps... Não encontramos nada por aqui</Text>
+          </Flex>
+        }
+
         {products && products.map((item, index) => (
           <ProductCard key={index} data={item} />
         ))}
       </Flex>
-    </Container>
+    </Container >
   )
 }
 
