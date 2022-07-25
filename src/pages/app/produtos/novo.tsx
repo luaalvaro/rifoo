@@ -230,12 +230,14 @@ const NovoProduto = () => {
                 <Text
                     fontSize="sm"
                     color="grey"
+                    textAlign="justify"
                 >
                     Os valores salvos serão computados nas
                     transações efetivadas a partir deste momento. Informe um valor médio real para que os cálculos sejam feitos corretamente para você ter estatísticas mais precisas ao longo das transações
                 </Text>
 
                 <Button
+                    mb="30px"
                     colorScheme="green"
                     height="60px"
 

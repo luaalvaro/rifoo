@@ -10,7 +10,9 @@ import {
     Toast,
     useToast,
     Center,
-    Spinner
+    Spinner,
+    Stack,
+    Skeleton
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import Header from '../../../components/Header'
@@ -168,10 +170,15 @@ const DetalhesDoProduto = () => {
 
     }, [])
 
-    const fetchProduct = async (id: string) => {
+    const fetchProduct = async (id: string | string[] | undefined) => {
         console.log(id)
 
+        if (!id || typeof id !== 'string')
+            return router.push('/app/produtos')
+
         try {
+            setLoading(true)
+
             const { data, error } = await supabase
                 .from<Product>('products')
                 .select('*')
@@ -189,15 +196,15 @@ const DetalhesDoProduto = () => {
 
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
     }
 
     useEffect(() => {
         const { id } = router.query
 
-        if (typeof id === 'string') {
-            fetchProduct(id)
-        }
+        fetchProduct(id)
     }, [])
 
     return (
@@ -212,114 +219,125 @@ const DetalhesDoProduto = () => {
                 Detalhes do produto
             </Text>
 
-            <Flex
-                direction="column"
-                gridGap="15px"
-                px="15px"
-                pt="15px"
-            >
-                <FormControl
-                    id="imageProduct"
-                >
-                    <FormLabel>Foto do produto</FormLabel>
+            {loading &&
+                <Stack px="15px">
+                    <Skeleton height="20px" />
+                    <Skeleton height="20px" />
+                    <Skeleton height="20px" />
+                </Stack>
+            }
 
-                    {productURL && !loadingCompression &&
-                        <Image
-                            src={productURL}
-                            width={100}
-                            height={100}
+            {!loading &&
+                <Flex
+                    direction="column"
+                    gridGap="15px"
+                    px="15px"
+                    pt="15px"
+                >
+                    <FormControl
+                        id="imageProduct"
+                    >
+                        <FormLabel>Foto do produto</FormLabel>
+
+                        {productURL && !loadingCompression &&
+                            <Image
+                                src={productURL}
+                                width={100}
+                                height={100}
+                            />
+                        }
+
+                        {loadingCompression && <Spinner />}
+
+                        {/* <Input
+                     type="file"
+                     background="#fff"
+                     onChange={(event) => handleImageUpload(event)}
+                 /> */}
+                    </FormControl>
+
+                    <FormControl
+                        id="productName"
+                    >
+                        <FormLabel>Nome do produto</FormLabel>
+                        <Input
+                            background="#fff"
+                            value={productName}
+                            onChange={({ target }) => setProductName(target.value)}
                         />
-                    }
+                    </FormControl>
 
-                    {loadingCompression && <Spinner />}
-
-                    {/* <Input
-                        type="file"
-                        background="#fff"
-                        onChange={(event) => handleImageUpload(event)}
-                    /> */}
-                </FormControl>
-
-                <FormControl
-                    id="productName"
-                >
-                    <FormLabel>Nome do produto</FormLabel>
-                    <Input
-                        background="#fff"
-                        value={productName}
-                        onChange={({ target }) => setProductName(target.value)}
-                    />
-                </FormControl>
-
-                <FormControl
-                    id="sellType"
-                >
-                    <FormLabel>Tipo de venda</FormLabel>
-                    <Select
-                        background="#fff"
-                        value={productSellType}
-                        onChange={({ target }) => setProductSellType(target.value)}
+                    <FormControl
+                        id="sellType"
                     >
-                        <option>Por unidade</option>
-                        <option>Venda em Peso (Ex:. Kg)</option>
-                    </Select>
-                </FormControl>
+                        <FormLabel>Tipo de venda</FormLabel>
+                        <Select
+                            background="#fff"
+                            value={productSellType}
+                            onChange={({ target }) => setProductSellType(target.value)}
+                        >
+                            <option>Por unidade</option>
+                            <option>Venda em Peso (Ex:. Kg)</option>
+                        </Select>
+                    </FormControl>
 
-                <FormControl
-                    id="priceCost"
-                >
-                    <FormLabel>Preço de custo</FormLabel>
-                    <Input
-                        type="number"
-                        background="#fff"
-                        value={productCostPrice}
-                        onChange={({ target }) => setProductCostPrice(target.value)}
-                    />
-                </FormControl>
-
-                <FormControl>
-                    <FormLabel>Preço de venda</FormLabel>
-                    <Input
-                        type="number"
-                        background="#fff"
-                        value={productSellPrice}
-                        onChange={({ target }) => setProductSellPrice(target.value)}
-                    />
-                </FormControl>
-
-                <Text
-                    fontSize="sm"
-                    color="grey"
-                >
-                    Os valores salvos serão computados nas
-                    transações efetivadas a partir deste momento. Informe um valor médio real para que os cálculos sejam feitos corretamente para você ter estatísticas mais precisas ao longo das transações
-                </Text>
-
-                <Flex gridGap="20px">
-                    <Button
-                        width="100%"
-                        colorScheme="green"
-                        height="60px"
-
-                        // onClick={handleSubmit}
-
-                        isLoading={loading}
+                    <FormControl
+                        id="priceCost"
                     >
-                        Salvar
-                    </Button>
-                    <Button
-                        width="100%"
-                        colorScheme="red"
-                        height="60px"
+                        <FormLabel>Preço de custo</FormLabel>
+                        <Input
+                            type="number"
+                            background="#fff"
+                            value={productCostPrice}
+                            onChange={({ target }) => setProductCostPrice(target.value)}
+                        />
+                    </FormControl>
 
-                        // onClick={handleSubmit}
+                    <FormControl>
+                        <FormLabel>Preço de venda</FormLabel>
+                        <Input
+                            type="number"
+                            background="#fff"
+                            value={productSellPrice}
+                            onChange={({ target }) => setProductSellPrice(target.value)}
+                        />
+                    </FormControl>
 
-                        isLoading={loading}
+                    <Text
+                        fontSize="sm"
+                        color="grey"
+                        textAlign="justify"
                     >
-                        Deletar
-                    </Button>
+                        Os valores salvos serão computados nas
+                        transações efetivadas a partir deste momento. Informe um valor médio real para que os cálculos sejam feitos corretamente para você ter estatísticas mais precisas ao longo das transações
+                    </Text>
+
+                    <Flex gridGap="20px" mb="30px">
+                        <Button
+                            width="60%"
+                            colorScheme="green"
+                            height="60px"
+
+                            // onClick={handleSubmit}
+
+                            isLoading={loading}
+                        >
+                            Salvar
+                        </Button>
+                        <Button
+                            width="40%"
+                            colorScheme="red"
+                            height="60px"
+
+                            // onClick={handleSubmit}
+
+                            isLoading={loading}
+                        >
+                            Deletar
+                        </Button>
+                    </Flex>
                 </Flex>
-            </Flex>
+            }
         </Container>
     )
 }
