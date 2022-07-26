@@ -155,6 +155,47 @@ const DetalhesDoProduto = () => {
     //     }
     // }
 
+    const handleUpdateProduct = async () => {
+        if (
+            productName === "" ||
+            productSellType === "" ||
+            productCostPrice === "" ||
+            productSellPrice === ""
+        )
+            return toast({
+                title: "Informação necessária",
+                description: "Preencha todas as informações do produto",
+                duration: 5000,
+                status: "error"
+            })
+
+        try {
+            const { data, error } = await supabase
+                .from('products')
+                .update({
+                    product_name: productName,
+                    product_sell_price: productSellPrice,
+                    product_cost_price: productCostPrice,
+                    product_sell_type: productSellType,
+                })
+                .eq('id', productId)
+                .single()
+
+            if (error)
+                throw error
+
+            toast({
+                title: 'Produto atualizado',
+                description: 'Produto atualizado com sucesso',
+                duration: 5000,
+                status: 'success'
+            })
+            return router.push('/app/produtos')
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const handleDeleteProduct = async () => {
         try {
             setLoadingDelete(true)
@@ -380,7 +421,7 @@ const DetalhesDoProduto = () => {
                             colorScheme="green"
                             height="60px"
 
-                            // onClick={handleSubmit}
+                            onClick={handleUpdateProduct}
 
                             isLoading={loading}
                         >
