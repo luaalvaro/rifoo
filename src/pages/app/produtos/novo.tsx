@@ -126,13 +126,14 @@ const NovoProduto = () => {
             if (error)
                 throw error
 
-            console.log(data)
             toast({
-                title: "Sucesso",
+                title: "Produto cadastrado",
                 description: "Produto adicionado com sucesso",
                 duration: 5000,
                 status: "success"
             })
+
+            return router.push('/app/produtos')
         } catch (error) {
             console.log(error)
         } finally {

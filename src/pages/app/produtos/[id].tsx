@@ -12,7 +12,15 @@ import {
     Center,
     Spinner,
     Stack,
-    Skeleton
+    Skeleton,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+    ModalFooter,
+    useDisclosure
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import Header from '../../../components/Header'
@@ -27,118 +35,166 @@ const DetalhesDoProduto = () => {
     const toast = useToast()
     const router = useRouter()
 
+    const [loadingDelete, setLoadingDelete] = useState(false)
     const [loading, setLoading] = useState(false)
     const [loadingCompression, setLoadingCompression] = useState(false)
 
     const [productURL, setProductURL] = useState("")
+    const [productPATH, setProductPATH] = useState("")
     const [productFILE, setProductFILE] = useState<File>()
     const [productName, setProductName] = useState("")
     const [productSellType, setProductSellType] = useState("Por unidade")
     const [productCostPrice, setProductCostPrice] = useState("")
     const [productSellPrice, setProductSellPrice] = useState("")
+    const [productId, setProductId] = useState("")
 
-    async function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
+    const { isOpen, onToggle } = useDisclosure()
 
-        if (!event.target.files) return
+    // async function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
 
-        setLoadingCompression(true)
-        const imageFile = event.target.files[0];
+    //     if (!event.target.files) return
 
-        const options = {
-            maxSizeMB: 0.3,
-            maxWidthOrHeight: 1920,
-            useWebWorker: true
-        }
+    //     setLoadingCompression(true)
+    //     const imageFile = event.target.files[0];
 
+    //     const options = {
+    //         maxSizeMB: 0.3,
+    //         maxWidthOrHeight: 1920,
+    //         useWebWorker: true
+    //     }
+
+    //     try {
+    //         const compressedFile = await imageCompression(imageFile, options);
+    //         setProductFILE(compressedFile)
+    //         const newURL = URL.createObjectURL(compressedFile)
+    //         return setProductURL(newURL)
+    //     } catch (error) {
+    //         console.log(error);
+    //     } finally {
+    //         setLoadingCompression(false)
+    //     }
+
+    // }
+
+    // const handleSubmit = async () => {
+    //     if (
+    //         productName === "" ||
+    //         productSellType === "" ||
+    //         productCostPrice === "" ||
+    //         productSellPrice === ""
+    //     )
+    //         return toast({
+    //             title: "Informação necessária",
+    //             description: "Preencha todas as informações do produto",
+    //             duration: 5000,
+    //             status: "error"
+    //         })
+
+    //     const user = supabase.auth.user()
+
+    //     if (!user)
+    //         return
+
+    //     setLoading(true)
+    //     const { id } = user;
+    //     let imageKey = ""
+
+    //     if (productURL && productFILE) {
+
+    //         try {
+    //             const fileExt = productFILE.name.split('.').pop()
+    //             const fileName = `${Math.random()}.${fileExt}`
+    //             const filePath = `${id}/${fileName}`
+
+    //             let { data, error: uploadError } = await supabase.storage
+    //                 .from('products')
+    //                 .upload(filePath, productFILE)
+
+    //             if (uploadError) {
+    //                 throw uploadError
+    //             }
+
+    //             if (!data || !data.Key)
+    //                 throw "Key inexistente"
+
+    //             imageKey = data?.Key
+
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+
+    //     }
+
+    //     try {
+    //         const { data, error } = await supabase
+    //             .from('products')
+    //             .insert({
+    //                 product_name: productName,
+    //                 product_sell_type: productSellType,
+    //                 product_image_url: imageKey,
+    //                 product_cost_price: productCostPrice,
+    //                 product_sell_price: productSellPrice,
+    //                 user_id: id,
+    //             })
+    //             .single()
+
+    //         if (error)
+    //             throw error
+
+    //         console.log(data)
+    //         toast({
+    //             title: "Sucesso",
+    //             description: "Produto adicionado com sucesso",
+    //             duration: 5000,
+    //             status: "success"
+    //         })
+    //     } catch (error) {
+    //         console.log(error)
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
+
+    const handleDeleteProduct = async () => {
         try {
-            const compressedFile = await imageCompression(imageFile, options);
-            setProductFILE(compressedFile)
-            const newURL = URL.createObjectURL(compressedFile)
-            return setProductURL(newURL)
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoadingCompression(false)
-        }
+            setLoadingDelete(true)
 
-    }
-
-    const handleSubmit = async () => {
-        if (
-            productName === "" ||
-            productSellType === "" ||
-            productCostPrice === "" ||
-            productSellPrice === ""
-        )
-            return toast({
-                title: "Informação necessária",
-                description: "Preencha todas as informações do produto",
-                duration: 5000,
-                status: "error"
-            })
-
-        const user = supabase.auth.user()
-
-        if (!user)
-            return
-
-        setLoading(true)
-        const { id } = user;
-        let imageKey = ""
-
-        if (productURL && productFILE) {
-
-            try {
-                const fileExt = productFILE.name.split('.').pop()
-                const fileName = `${Math.random()}.${fileExt}`
-                const filePath = `${id}/${fileName}`
-
-                let { data, error: uploadError } = await supabase.storage
-                    .from('products')
-                    .upload(filePath, productFILE)
-
-                if (uploadError) {
-                    throw uploadError
-                }
-
-                if (!data || !data.Key)
-                    throw "Key inexistente"
-
-                imageKey = data?.Key
-
-            } catch (error) {
-                console.log(error)
-            }
-
-        }
-
-        try {
             const { data, error } = await supabase
                 .from('products')
-                .insert({
-                    product_name: productName,
-                    product_sell_type: productSellType,
-                    product_image_url: imageKey,
-                    product_cost_price: productCostPrice,
-                    product_sell_price: productSellPrice,
-                    user_id: id,
-                })
-                .single()
+                .delete()
+                .eq('id', productId)
 
             if (error)
                 throw error
 
-            console.log(data)
+        } catch (error) {
+            console.log(error)
+        }
+
+        const path = productPATH.split('products/')[1]
+
+        try {
+            const { error } = await supabase
+                .storage
+                .from('products')
+                .remove([
+                    path
+                ])
+
+            if (error)
+                throw error
+
             toast({
-                title: "Sucesso",
-                description: "Produto adicionado com sucesso",
+                title: 'Produto deletado',
+                description: 'Produto deletado com sucesso',
                 duration: 5000,
-                status: "success"
+                status: 'success'
             })
+            return router.push('/app/produtos')
         } catch (error) {
             console.log(error)
         } finally {
-            setLoading(false)
+            setLoadingDelete(false)
         }
     }
 
@@ -171,7 +227,6 @@ const DetalhesDoProduto = () => {
     }, [])
 
     const fetchProduct = async (id: string | string[] | undefined) => {
-        console.log(id)
 
         if (!id || typeof id !== 'string')
             return router.push('/app/produtos')
@@ -193,9 +248,16 @@ const DetalhesDoProduto = () => {
             setProductSellPrice(String(data.product_sell_price))
             setProductSellType(data.product_sell_type)
             setProductCostPrice(String(data.product_cost_price))
+            setProductId(data.id)
+            setProductPATH(data.product_image_url)
 
-        } catch (error) {
+            console.log(data)
+
+        } catch (error: any) {
             console.log(error)
+
+            if (error.code === "PGRST116")
+                return router.push('/app/produtos')
         } finally {
             setLoading(false)
         }
@@ -219,7 +281,7 @@ const DetalhesDoProduto = () => {
                 Detalhes do produto
             </Text>
 
-            {loading &&
+            {loading && !productId &&
                 <Stack px="15px">
                     <Skeleton height="20px" />
                     <Skeleton height="20px" />
@@ -227,7 +289,7 @@ const DetalhesDoProduto = () => {
                 </Stack>
             }
 
-            {!loading &&
+            {productId &&
                 <Flex
                     direction="column"
                     gridGap="15px"
@@ -329,7 +391,7 @@ const DetalhesDoProduto = () => {
                             colorScheme="red"
                             height="60px"
 
-                            // onClick={handleSubmit}
+                            onClick={onToggle}
 
                             isLoading={loading}
                         >
@@ -338,6 +400,35 @@ const DetalhesDoProduto = () => {
                     </Flex>
                 </Flex>
             }
+
+            <Modal isOpen={isOpen} onClose={onToggle}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Tem certeza que você quer deletar este produto?</ModalHeader>
+                    <ModalCloseButton />
+
+                    <ModalBody>
+                        <Text>
+                            Caso você prossiga com a confirmação,
+                            este produto será removido da nossa base.
+                            Essa ação é irreversível,
+                            porém você poderá cadastrar outro produto quando quiser.
+                        </Text>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button
+                            colorScheme='red'
+                            mr={3}
+                            onClick={handleDeleteProduct}
+                            isLoading={loadingDelete}
+                        >
+                            Sim, deletar
+                        </Button>
+                        <Button variant='ghost' onClick={onToggle}>Cancelar</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </Container>
     )
 }
