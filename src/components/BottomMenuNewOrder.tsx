@@ -1,8 +1,10 @@
 import { Flex, Text, Button } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import useOrder from '../store/useOrder'
 
 const BottomMenuNewOrder = () => {
 
+    const order = useOrder(state => state)
     const [innerHeight, setInnerHeight] = useState(0)
 
     useEffect(() => {
@@ -38,7 +40,7 @@ const BottomMenuNewOrder = () => {
                     fontSize={35}
                     lineHeight="35px"
                 >
-                    R$ 21,78
+                    R$ {order.total_price.toFixed(2)}
                 </Text>
             </Flex>
 

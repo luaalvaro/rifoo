@@ -3,14 +3,18 @@ import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 import supabase from '../services/supabase'
 import { useRouter } from 'next/router'
+import useOrder from '../store/useOrder'
 
 interface IProductCard {
-    data: Product
+    data: Product,
+    type?: "sell",
 }
 
-const ProductCard: React.FC<IProductCard> = ({ data }) => {
+const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
 
+    const order = useOrder(state => state)
     const router = useRouter()
+    const [counter, setCounter] = useState(0)
     const [loading, setLoading] = useState(false)
     const [productUrl, setProductUrl] = useState<string | null>(null)
 
@@ -42,6 +46,21 @@ const ProductCard: React.FC<IProductCard> = ({ data }) => {
 
     }, [])
 
+
+    const handleAddProduct = () => {
+        setCounter(old => old + 1)
+        order.addItem(data)
+    }
+
+    const handleRmvProduct = () => {
+        setCounter(old => {
+            if (old === 0) return 0
+
+            return old - 1
+        })
+        order.rmvItem(data)
+    }
+
     useEffect(() => {
         downloadImage()
     }, [])
@@ -55,9 +74,9 @@ const ProductCard: React.FC<IProductCard> = ({ data }) => {
             py="15px"
             borderRadius="8px"
             boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
-            cursor="pointer"
+            cursor={type === "sell" ? "default" : "pointer"}
 
-            onClick={() => router.push(`/app/produtos/${data.id}`)}
+            onClick={type === "sell" ? undefined : () => router.push(`/app/produtos/${data.id}`)}
         >
 
             <Flex
@@ -96,13 +115,51 @@ const ProductCard: React.FC<IProductCard> = ({ data }) => {
                         R$ {data.product_sell_price}/und
                     </Text>
 
-                    <Text
-                        fontStyle="italic"
-                        mt="auto"
-                        opacity={.7}
-                    >
-                        Ver mais
-                    </Text>
+                    {!type &&
+                        <Text
+                            fontStyle="italic"
+                            mt="auto"
+                            opacity={.7}
+                        >
+                            Ver mais
+                        </Text>
+                    }
+
+                    {type === "sell" &&
+                        <Center
+                            flex="1"
+                            gridGap="30px"
+                        >
+                            <Button
+                                variant="ghost"
+                                fontSize={40}
+                                width="50px"
+                                height="50px"
+
+                                onClick={handleRmvProduct}
+                            >
+                                -
+                            </Button>
+
+                            <Text
+                                fontWeight={700}
+                                fontSize={35}
+                            >
+                                {counter}
+                            </Text>
+
+                            <Button
+                                variant="ghost"
+                                fontSize={40}
+                                width="50px"
+                                height="50px"
+
+                                onClick={handleAddProduct}
+                            >
+                                +
+                            </Button>
+                        </Center>
+                    }
                 </Flex>
             </Flex>
 

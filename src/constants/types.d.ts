@@ -15,3 +15,21 @@ interface Product {
     product_sell_type: string,
     user_id: string,
 }
+
+interface ProductSell {
+    id: string,
+    product_cost_price: number,
+    product_name: string,
+    product_sell_price: number,
+    product_sell_type: string,
+    qtd_items: number,
+}
+
+interface Order {
+    created_at?: string,
+    id?: string,
+    qtd_items: number,
+    total_price: number,
+    discount: number,
+    products: ProductSell[]
+}
