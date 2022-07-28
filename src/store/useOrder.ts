@@ -54,14 +54,15 @@ const useOrder = create<IUseOrder>((set) => ({
     }),
 
     rmvItem: (data) => set((state) => {
+
+        const response = state.products.filter(item => item.id === data.id)
+
         if (state.qtd_items === 0) return {}
 
         let newProductArray: ProductSell[] = []
 
-        const response = state.products.filter(item => item.id === data.id)
-
         if (response.length === 0) {
-            newProductArray = [...state.products]
+            return {}
         } else if (response.length === 1 && response[0].qtd_items === 1) {
             newProductArray = state.products.filter(item => item.id !== data.id)
         } else {

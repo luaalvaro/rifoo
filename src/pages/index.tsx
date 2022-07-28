@@ -70,6 +70,12 @@ const Login = () => {
         if (!user)
             return
 
+        toast({
+            title: 'Bem vindo de volta',
+            description: 'Você já está logado, estamos te redirecionando automaticamente',
+            duration: 5000,
+            status: 'success'
+        })
         return router.push("/app")
     }
 
