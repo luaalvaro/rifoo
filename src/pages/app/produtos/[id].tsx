@@ -1,15 +1,12 @@
 import {
     Flex,
     Text,
-    Link as A,
     Button,
     FormControl,
     FormLabel,
     Input,
     Select,
-    Toast,
     useToast,
-    Center,
     Spinner,
     Stack,
     Skeleton,
@@ -25,10 +22,10 @@ import {
 import { useRouter } from 'next/router'
 import Header from '../../../components/Header'
 import Container from '../../../components/Container'
-import { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import supabase from '../../../services/supabase'
-import imageCompression from 'browser-image-compression'
+
 
 const DetalhesDoProduto = () => {
 
@@ -37,11 +34,8 @@ const DetalhesDoProduto = () => {
 
     const [loadingDelete, setLoadingDelete] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [loadingCompression, setLoadingCompression] = useState(false)
-
     const [productURL, setProductURL] = useState("")
     const [productPATH, setProductPATH] = useState("")
-    const [productFILE, setProductFILE] = useState<File>()
     const [productName, setProductName] = useState("")
     const [productSellType, setProductSellType] = useState("Por unidade")
     const [productCostPrice, setProductCostPrice] = useState("")
@@ -49,111 +43,6 @@ const DetalhesDoProduto = () => {
     const [productId, setProductId] = useState("")
 
     const { isOpen, onToggle } = useDisclosure()
-
-    // async function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
-
-    //     if (!event.target.files) return
-
-    //     setLoadingCompression(true)
-    //     const imageFile = event.target.files[0];
-
-    //     const options = {
-    //         maxSizeMB: 0.3,
-    //         maxWidthOrHeight: 1920,
-    //         useWebWorker: true
-    //     }
-
-    //     try {
-    //         const compressedFile = await imageCompression(imageFile, options);
-    //         setProductFILE(compressedFile)
-    //         const newURL = URL.createObjectURL(compressedFile)
-    //         return setProductURL(newURL)
-    //     } catch (error) {
-    //         console.log(error);
-    //     } finally {
-    //         setLoadingCompression(false)
-    //     }
-
-    // }
-
-    // const handleSubmit = async () => {
-    //     if (
-    //         productName === "" ||
-    //         productSellType === "" ||
-    //         productCostPrice === "" ||
-    //         productSellPrice === ""
-    //     )
-    //         return toast({
-    //             title: "Informação necessária",
-    //             description: "Preencha todas as informações do produto",
-    //             duration: 5000,
-    //             status: "error"
-    //         })
-
-    //     const user = supabase.auth.user()
-
-    //     if (!user)
-    //         return
-
-    //     setLoading(true)
-    //     const { id } = user;
-    //     let imageKey = ""
-
-    //     if (productURL && productFILE) {
-
-    //         try {
-    //             const fileExt = productFILE.name.split('.').pop()
-    //             const fileName = `${Math.random()}.${fileExt}`
-    //             const filePath = `${id}/${fileName}`
-
-    //             let { data, error: uploadError } = await supabase.storage
-    //                 .from('products')
-    //                 .upload(filePath, productFILE)
-
-    //             if (uploadError) {
-    //                 throw uploadError
-    //             }
-
-    //             if (!data || !data.Key)
-    //                 throw "Key inexistente"
-
-    //             imageKey = data?.Key
-
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-
-    //     }
-
-    //     try {
-    //         const { data, error } = await supabase
-    //             .from('products')
-    //             .insert({
-    //                 product_name: productName,
-    //                 product_sell_type: productSellType,
-    //                 product_image_url: imageKey,
-    //                 product_cost_price: productCostPrice,
-    //                 product_sell_price: productSellPrice,
-    //                 user_id: id,
-    //             })
-    //             .single()
-
-    //         if (error)
-    //             throw error
-
-    //         console.log(data)
-    //         toast({
-    //             title: "Sucesso",
-    //             description: "Produto adicionado com sucesso",
-    //             duration: 5000,
-    //             status: "success"
-    //         })
-    //     } catch (error) {
-    //         console.log(error)
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // }
 
     const handleUpdateProduct = async () => {
         if (
@@ -291,9 +180,6 @@ const DetalhesDoProduto = () => {
             setProductCostPrice(String(data.product_cost_price))
             setProductId(data.id)
             setProductPATH(data.product_image_url)
-
-            console.log(data)
-
         } catch (error: any) {
             console.log(error)
 
@@ -342,21 +228,13 @@ const DetalhesDoProduto = () => {
                     >
                         <FormLabel>Foto do produto</FormLabel>
 
-                        {productURL && !loadingCompression &&
+                        {productURL &&
                             <Image
                                 src={productURL}
                                 width={100}
                                 height={100}
                             />
                         }
-
-                        {loadingCompression && <Spinner />}
-
-                        {/* <Input
-                     type="file"
-                     background="#fff"
-                     onChange={(event) => handleImageUpload(event)}
-                 /> */}
                     </FormControl>
 
                     <FormControl
@@ -444,11 +322,11 @@ const DetalhesDoProduto = () => {
 
             <Modal isOpen={isOpen} onClose={onToggle}>
                 <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Tem certeza que você quer deletar este produto?</ModalHeader>
+                <ModalContent mx="15px">
+                    <ModalHeader>Tem certeza que você quer deletar<br /> este produto?</ModalHeader>
                     <ModalCloseButton />
 
-                    <ModalBody>
+                    <ModalBody >
                         <Text>
                             Caso você prossiga com a confirmação,
                             este produto será removido da nossa base.

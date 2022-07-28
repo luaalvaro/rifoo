@@ -48,6 +48,8 @@ const BottomMenuNewOrder = () => {
                 width="180px"
                 height="50px"
                 colorScheme="green"
+
+                onClick={order.nextStep}
             >
                 Prosseguir
             </Button>

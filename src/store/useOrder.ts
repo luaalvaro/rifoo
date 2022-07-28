@@ -1,21 +1,29 @@
 import create from 'zustand'
 
 interface IUseOrder {
+    stepProgress: number,
     qtd_items: number,
     total_price: number,
     discount: number,
     products: ProductSell[],
 
+    nextStep: () => void,
+    prevStep: () => void,
     addItem: (data: Product) => void,
     rmvItem: (data: Product) => void,
+    resetState: () => void,
 }
 
-const useOrder = create<IUseOrder>((set) => ({
-
+const initialState = {
+    stepProgress: 0,
     qtd_items: 0,
     total_price: 0,
     discount: 0,
     products: [],
+}
+
+const useOrder = create<IUseOrder>((set) => ({
+    ...initialState,
 
     addItem: (data) => set((state) => {
 
@@ -52,7 +60,6 @@ const useOrder = create<IUseOrder>((set) => ({
             products: newProductArray
         }
     }),
-
     rmvItem: (data) => set((state) => {
 
         const response = state.products.filter(item => item.id === data.id)
@@ -84,6 +91,25 @@ const useOrder = create<IUseOrder>((set) => ({
             products: newProductArray
         }
     }),
+
+    nextStep: () => set(state => {
+        if (state.products.length === 0) return {}
+
+        return {
+            stepProgress: state.stepProgress + 1
+        }
+    }),
+    prevStep: () => set(state => {
+        if (state.stepProgress === 0) return {}
+
+        return {
+            stepProgress: state.stepProgress - 1
+        }
+    }),
+
+    resetState: () => set(state => ({
+        ...initialState
+    }))
 }))
 
 export default useOrder

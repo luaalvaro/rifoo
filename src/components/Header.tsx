@@ -1,18 +1,46 @@
-import { Flex, Heading, Menu, MenuButton, IconButton, MenuItem, MenuList } from '@chakra-ui/react'
+import {
+    Flex,
+    Heading,
+    Menu,
+    MenuButton,
+    IconButton,
+    MenuItem,
+    MenuList,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+    ModalFooter,
+    Button,
+    Text,
+} from '@chakra-ui/react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { style } from '../constants/globalTheme'
-import Link from 'next/link'
 import { BiLogIn } from 'react-icons/bi'
 import supabase from '../services/supabase'
 import { useRouter } from 'next/router'
+import useOrder from '../store/useOrder'
 
 const Header = () => {
 
+    const order = useOrder(state => state)
     const router = useRouter()
+    const { isOpen, onToggle } = useDisclosure()
 
     const handleLogout = async () => {
         await supabase.auth.signOut()
         return router.push("/")
+    }
+
+    const handleRedirectToHomePage = () => {
+        if (order.products.length === 0) {
+            return router.push('/app')
+        } else {
+            return onToggle()
+        }
     }
 
     return (
@@ -24,17 +52,15 @@ const Header = () => {
             align="center"
         >
 
-            <Link href="/app">
-                <a>
-                    <Heading
-                        color={style.color.primary}
-                        fontSize={28}
-                        cursor="pointer"
-                    >
-                        Rifoo
-                    </Heading>
-                </a>
-            </Link>
+            <Heading
+                color={style.color.primary}
+                fontSize={28}
+                cursor="pointer"
+
+                onClick={handleRedirectToHomePage}
+            >
+                Rifoo
+            </Heading>
 
             <Menu>
                 <MenuButton
@@ -61,6 +87,34 @@ const Header = () => {
                     </MenuItem>
                 </MenuList>
             </Menu>
+
+            <Modal isOpen={isOpen} onClose={onToggle}>
+                <ModalOverlay />
+                <ModalContent mx="15px">
+                    <ModalHeader>Venda em andamento</ModalHeader>
+                    <ModalCloseButton />
+
+                    <ModalBody >
+                        <Text>
+                            Você deseja descartar essa venda e voltar para o menu inicial?
+                        </Text>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button
+                            colorScheme='red'
+                            mr={3}
+                            onClick={() => {
+                                order.resetState()
+                                return router.push('/app')
+                            }}
+                        >
+                            Descartar venda
+                        </Button>
+                        <Button variant='ghost' onClick={onToggle}>Cancelar</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </Flex>
 
     )

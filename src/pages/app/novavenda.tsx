@@ -11,9 +11,12 @@ import { useEffect, useState } from 'react'
 import supabase from '../../services/supabase'
 import { FaBoxOpen } from 'react-icons/fa'
 import ProductCard from '../../components/ProductCard'
+import ResumeOrder from '../../components/ResumeOrder'
+import useOrder from '../../store/useOrder'
 
 const Home = () => {
 
+    const order = useOrder(state => state)
     const [products, setProducts] = useState<Product[] | null>(null)
 
     const fetchProducts = async () => {
@@ -75,19 +78,27 @@ const Home = () => {
                 </Flex>
             }
 
-            <Flex
-                direction="column"
-                px="15px"
-                gridGap="15px"
-            >
-                {products && products.map((item, index) => (
-                    <ProductCard
-                        type="sell"
-                        key={index}
-                        data={item}
-                    />
-                ))}
-            </Flex>
+            {order.stepProgress === 0 && products &&
+                <Flex
+                    direction="column"
+                    px="15px"
+                    gridGap="15px"
+                >
+                    {products.map((item, index) => (
+                        <ProductCard
+                            type="sell"
+                            key={index}
+                            data={item}
+                        />
+                    ))}
+                </Flex>
+            }
+
+            {
+                order.stepProgress === 1 &&
+                <ResumeOrder />
+            }
+
 
             <BottomMenuNewOrder />
         </Container>
