@@ -14,7 +14,6 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
 
     const order = useOrder(state => state)
     const router = useRouter()
-    const [counter, setCounter] = useState(0)
     const [loading, setLoading] = useState(false)
     const [productUrl, setProductUrl] = useState<string | null>(null)
 
@@ -46,24 +45,11 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
 
     }, [])
 
-
-    const handleAddProduct = () => {
-        setCounter(old => old + 1)
-        order.addItem(data)
-    }
-
-    const handleRmvProduct = () => {
-        setCounter(old => {
-            if (old === 0) return 0
-
-            return old - 1
-        })
-        order.rmvItem(data)
-    }
-
     useEffect(() => {
         downloadImage()
     }, [])
+
+    const hasOrderItem = order.products.filter(item => item.id === data.id)
 
     return (
         <Flex
@@ -136,7 +122,7 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
                                 width="50px"
                                 height="50px"
 
-                                onClick={handleRmvProduct}
+                                onClick={() => order.rmvItem(data)}
                             >
                                 -
                             </Button>
@@ -145,7 +131,7 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
                                 fontWeight={700}
                                 fontSize={35}
                             >
-                                {counter}
+                                {hasOrderItem.length === 0 ? "0" : hasOrderItem[0].qtd_items}
                             </Text>
 
                             <Button
@@ -154,7 +140,7 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
                                 width="50px"
                                 height="50px"
 
-                                onClick={handleAddProduct}
+                                onClick={() => order.addItem(data)}
                             >
                                 +
                             </Button>

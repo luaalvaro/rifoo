@@ -72,7 +72,7 @@ const Login = () => {
 
         toast({
             title: 'Bem vindo de volta',
-            description: 'Você já está logado, estamos te redirecionando automaticamente',
+            description: 'Tenha um excelente dia e ótimas vendas!',
             duration: 5000,
             status: 'success'
         })
