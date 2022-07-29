@@ -28,8 +28,9 @@ interface ProductSell {
 interface Order {
     created_at?: string,
     id?: string,
+    user_id?: string,
     qtd_items: number,
     total_price: number,
     discount: number,
-    products: ProductSell[]
+    products: ProductSell[] | string
 }

@@ -1,11 +1,54 @@
-import { Flex, Text, Button } from '@chakra-ui/react'
+import { Flex, Text, Button, useToast } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import supabase from '../services/supabase'
 import useOrder from '../store/useOrder'
 
 const BottomMenuNewOrder = () => {
 
+    const router = useRouter()
+    const toast = useToast()
     const order = useOrder(state => state)
     const [innerHeight, setInnerHeight] = useState(0)
+    const [loading, setLoading] = useState(false)
+
+    const handleSubmitNewSell = async () => {
+        const user = supabase.auth.user()
+
+        if (!user) return
+
+        const { id } = user;
+
+        try {
+            setLoading(true)
+            const { data, error } = await supabase
+                .from<Order>("sales")
+                .insert({
+                    qtd_items: order.qtd_items,
+                    discount: order.discount,
+                    products: JSON.stringify(order.products),
+                    total_price: order.total_price,
+                    user_id: id,
+                })
+
+            if (error)
+                throw error
+
+            console.log(data)
+
+            toast({
+                title: 'Venda realizada com sucesso!',
+                status: 'success',
+                duration: 6000,
+            })
+            order.resetState()
+            return router.push('/app')
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     useEffect(() => {
         setInnerHeight(window.innerHeight)
@@ -45,13 +88,15 @@ const BottomMenuNewOrder = () => {
             </Flex>
 
             <Button
-                width="180px"
+                width="160px"
                 height="50px"
                 colorScheme="green"
 
-                onClick={order.nextStep}
+                isLoading={loading}
+
+                onClick={order.stepProgress === 0 ? order.nextStep : handleSubmitNewSell}
             >
-                Prosseguir
+                {order.stepProgress === 0 ? 'Prosseguir' : 'Finalizar'}
             </Button>
         </Flex>
     )
