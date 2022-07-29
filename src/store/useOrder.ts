@@ -6,12 +6,14 @@ interface IUseOrder {
     total_price: number,
     discount: number,
     products: ProductSell[],
+    paymentMethod: number,
 
     nextStep: () => void,
     prevStep: () => void,
     addItem: (data: Product) => void,
     rmvItem: (data: Product) => void,
     resetState: () => void,
+    setPaymentMethod: (id: number) => void,
 }
 
 const initialState = {
@@ -20,6 +22,7 @@ const initialState = {
     total_price: 0,
     discount: 0,
     products: [],
+    paymentMethod: 1,
 }
 
 const useOrder = create<IUseOrder>((set) => ({
@@ -109,7 +112,9 @@ const useOrder = create<IUseOrder>((set) => ({
 
     resetState: () => set(state => ({
         ...initialState
-    }))
+    })),
+
+    setPaymentMethod: (id) => set(state => ({ paymentMethod: id }))
 }))
 
 export default useOrder

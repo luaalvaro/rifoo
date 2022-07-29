@@ -13,6 +13,7 @@ import { FaBoxOpen } from 'react-icons/fa'
 import ProductCard from '../../components/ProductCard'
 import ResumeOrder from '../../components/ResumeOrder'
 import useOrder from '../../store/useOrder'
+import PaymentOrder from '../../components/PaymentOrder'
 
 const Home = () => {
 
@@ -94,11 +95,12 @@ const Home = () => {
                 </Flex>
             }
 
-            {
-                order.stepProgress === 1 &&
-                <ResumeOrder />
+            {order.stepProgress === 1 &&
+                <>
+                    <ResumeOrder />
+                    <PaymentOrder />
+                </>
             }
-
 
             <BottomMenuNewOrder />
         </Container>
