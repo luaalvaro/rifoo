@@ -32,5 +32,6 @@ interface Order {
     qtd_items: number,
     total_price: number,
     discount: number,
-    products: ProductSell[] | string
+    products: ProductSell[] | string,
+    paymentMethod: number
 }
