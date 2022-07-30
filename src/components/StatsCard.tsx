@@ -1,15 +1,18 @@
 import { Center, Flex, Text } from '@chakra-ui/react'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 
-const StatsCard = () => {
+interface IStatsCard {
+    variant: 'upper' | 'lower'
+}
+const StatsCard: React.FC<IStatsCard> = ({ variant }) => {
     return (
         <Flex
             width="100%"
             bg="#fff"
             borderRadius={8}
             boxShadow="0px 0px 10px rgba(0,0,0,0.1)"
-            height="80px"
-            padding="5px 8px"
+            height="100px"
+            padding="5px"
             direction="column"
         >
             <Flex
@@ -17,22 +20,35 @@ const StatsCard = () => {
                 justify="space-between"
             >
                 <Text
-                    opacity={.7}
-                    fontSize={14}
 
+                    fontSize={14}
+                    ml="3px"
                 >
-                    Últimos 07 dias
+                    Faturamento
                 </Text>
 
-                <IoMdArrowDropdown fontSize={24} color="red" />
+                {variant === 'upper' && (
+                    <IoMdArrowDropup
+                        fontSize={24}
+                        color="green"
+                    />
+                )}
+
+                {variant === 'lower' && (
+                    <IoMdArrowDropdown
+                        fontSize={24}
+                        color="red"
+                    />
+                )}
             </Flex>
 
             <Center
                 flex="1"
             >
                 <Text
-                    fontSize={24}
-                    fontWeight={700}
+                    opacity={.8}
+                    fontSize={20}
+                    fontWeight={600}
                 >
                     R$ 2.374,55
                 </Text>

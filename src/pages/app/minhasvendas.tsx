@@ -60,12 +60,20 @@ const MinhasVendas = () => {
             </Text>
 
             <Flex
-                // bg="red"
                 padding="15px"
                 gridGap="15px"
             >
-                <StatsCard />
-                <StatsCard />
+                <StatsCard variant='lower' />
+                <StatsCard variant='upper' />
+            </Flex>
+
+            <Flex
+                padding="15px"
+                gridGap="15px"
+                direction="column"
+            >
+                <StatsCard variant='lower' />
+                <StatsCard variant='upper' />
             </Flex>
         </Container>
     )
