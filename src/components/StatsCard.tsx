@@ -2,9 +2,11 @@ import { Center, Flex, Text } from '@chakra-ui/react'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 
 interface IStatsCard {
-    variant: 'upper' | 'lower'
+    variant: 'upper' | 'lower',
+    title: string,
+    value: string,
 }
-const StatsCard: React.FC<IStatsCard> = ({ variant }) => {
+const StatsCard: React.FC<IStatsCard> = ({ variant, title, value }) => {
     return (
         <Flex
             width="100%"
@@ -24,7 +26,7 @@ const StatsCard: React.FC<IStatsCard> = ({ variant }) => {
                     fontSize={14}
                     ml="3px"
                 >
-                    Faturamento
+                    {title}
                 </Text>
 
                 {variant === 'upper' && (
@@ -50,7 +52,7 @@ const StatsCard: React.FC<IStatsCard> = ({ variant }) => {
                     fontSize={20}
                     fontWeight={600}
                 >
-                    R$ 2.374,55
+                    {value}
                 </Text>
             </Center>
         </Flex>

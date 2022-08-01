@@ -35,3 +35,9 @@ interface Order {
     products: ProductSell[] | string,
     paymentMethod: number
 }
+
+interface Stats {
+    totalSales: string,
+    totalPrice: string,
+    averagePrice: string
+}

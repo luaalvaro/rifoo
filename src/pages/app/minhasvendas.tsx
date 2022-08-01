@@ -6,18 +6,22 @@ import {
 } from '@chakra-ui/react'
 import Header from '../../components/Header'
 import Container from '../../components/Container'
-import BottomMenuNewOrder from '../../components/BottomMenuNewOrder'
 import { useEffect, useState } from 'react'
 import supabase from '../../services/supabase'
 import useOrder from '../../store/useOrder'
 import { useRouter } from 'next/router'
 import StatsCard from '../../components/StatsCard'
 
+interface IResponse {
+    message: string,
+    stats: Stats
+}
 const MinhasVendas = () => {
 
     const router = useRouter()
     const order = useOrder(state => state)
-    const [sales, setSales] = useState<Order[] | null>(null)
+    const [loading, setLoading] = useState(false)
+    const [stats, setStats] = useState<Stats | null>(null)
 
     const fetchSales = async () => {
 
@@ -25,6 +29,7 @@ const MinhasVendas = () => {
         if (!session) return router.push('/')
 
         try {
+            setLoading(true)
             const response = await fetch('/api/sales', {
                 method: 'POST',
                 body: JSON.stringify({
@@ -32,14 +37,14 @@ const MinhasVendas = () => {
                 })
             })
 
-            const data = await response.json()
-
-
+            const data: IResponse = await response.json()
 
             console.log(data)
-            setSales(data)
+            setStats(data.stats)
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -63,18 +68,24 @@ const MinhasVendas = () => {
                 padding="15px"
                 gridGap="15px"
             >
-                <StatsCard variant='lower' />
-                <StatsCard variant='upper' />
+                {stats &&
+                    <StatsCard
+                        variant='upper'
+                        title="Total de vendas"
+                        value={stats.totalSales}
+                    />
+                }
+
+                {stats &&
+                    <StatsCard
+                        variant='upper'
+                        title="Faturamento"
+                        value={stats.totalPrice}
+                    />
+                }
             </Flex>
 
-            <Flex
-                padding="15px"
-                gridGap="15px"
-                direction="column"
-            >
-                <StatsCard variant='lower' />
-                <StatsCard variant='upper' />
-            </Flex>
+
         </Container>
     )
 }

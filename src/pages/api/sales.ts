@@ -3,7 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 import jwt from 'jsonwebtoken'
 
 type Data = {
-  message: string
+  message: string,
+  stats?: Stats
 }
 
 type SessionDecoded = {
@@ -15,6 +16,17 @@ type SessionDecoded = {
   app_metadata: { provider: string, providers: [string] },
   user_metadata: {},
   role: string
+}
+
+type Sale = {
+  id: string,
+  created_at: string,
+  qtd_items: number,
+  total_price: number,
+  discount: number,
+  paymentMethod: number,
+  user_id: string,
+  products: string
 }
 
 export default async function handler(
@@ -46,6 +58,21 @@ export default async function handler(
     }
   }
 
+
+  const generateStats = (data: Sale[]) => {
+    console.log(data)
+
+    const totalSales = data.length
+    const totalPrice = data.reduce((acc, curr) => acc + curr.total_price, 0)
+    const averagePrice = totalPrice / totalSales
+
+    return {
+      totalSales: totalSales.toString(),
+      totalPrice: `R$ ${totalPrice.toFixed(2)}`,
+      averagePrice: `R$ ${averagePrice.toFixed(2)}`
+    }
+  }
+
   if (req.method === 'POST') {
 
     if (supabaseUrl === '' || supabaseKey === '')
@@ -60,21 +87,25 @@ export default async function handler(
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey)
+    let sales: Sale[] = []
 
     try {
       const { data, error } = await supabase
-        .from('sales')
+        .from<Sale>('sales')
         .select('*')
         .eq('user_id', decoded.sub)
 
       if (error) throw error
 
       console.log(data)
+      sales = data
     } catch (error) {
       console.log(error)
     }
 
-    return res.status(200).json({ message: 'Success' })
+    const stats = generateStats(sales)
+
+    return res.status(200).json({ message: 'Success', stats: stats })
   }
 
   return res.status(400).json({ message: 'Invalid request type' })
