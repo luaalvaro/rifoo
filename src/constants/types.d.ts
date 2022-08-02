@@ -31,6 +31,7 @@ interface Order {
     user_id?: string,
     qtd_items: number,
     total_price: number,
+    total_cost_price: number,
     discount: number,
     products: ProductSell[] | string,
     paymentMethod: number
@@ -39,5 +40,7 @@ interface Order {
 interface Stats {
     totalSales: string,
     totalPrice: string,
-    averagePrice: string
+    averagePrice: string,
+    totalCostPrice: string,
+    totalProfit: string,
 }

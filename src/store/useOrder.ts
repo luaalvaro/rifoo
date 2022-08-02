@@ -4,6 +4,7 @@ interface IUseOrder {
     stepProgress: number,
     qtd_items: number,
     total_price: number,
+    total_cost_price: number,
     discount: number,
     products: ProductSell[],
     paymentMethod: number,
@@ -20,6 +21,7 @@ const initialState = {
     stepProgress: 0,
     qtd_items: 0,
     total_price: 0,
+    total_cost_price: 0,
     discount: 0,
     products: [],
     paymentMethod: 1,
@@ -60,6 +62,7 @@ const useOrder = create<IUseOrder>((set) => ({
         return {
             qtd_items: state.qtd_items + 1,
             total_price: state.total_price + data.product_sell_price,
+            total_cost_price: state.total_cost_price + data.product_cost_price,
             products: newProductArray
         }
     }),

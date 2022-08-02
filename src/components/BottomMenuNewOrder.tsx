@@ -28,6 +28,7 @@ const BottomMenuNewOrder = () => {
                     discount: order.discount,
                     products: JSON.stringify(order.products),
                     total_price: order.total_price,
+                    total_cost_price: order.total_cost_price,
                     paymentMethod: order.paymentMethod,
                     user_id: id,
                 })

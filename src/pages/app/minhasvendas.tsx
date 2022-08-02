@@ -64,26 +64,51 @@ const MinhasVendas = () => {
                 Minhas vendas
             </Text>
 
-            <Flex
-                padding="15px"
-                gridGap="15px"
-            >
-                {stats &&
-                    <StatsCard
-                        variant='upper'
-                        title="Total de vendas"
-                        value={stats.totalSales}
-                    />
-                }
+            {loading &&
+                <Stack>
+                    <Skeleton h="20px" />
+                    <Skeleton h="20px" />
+                    <Skeleton h="20px" />
+                </Stack>
+            }
 
-                {stats &&
-                    <StatsCard
-                        variant='upper'
-                        title="Faturamento"
-                        value={stats.totalPrice}
-                    />
-                }
-            </Flex>
+            {stats && !loading &&
+                <>
+                    <Flex
+                        padding="15px"
+                        gridGap="15px"
+                    >
+                        <StatsCard
+                            variant='upper'
+                            title="Total de vendas"
+                            value={stats.totalSales}
+                        />
+
+                        <StatsCard
+                            variant='upper'
+                            title="Faturamento"
+                            value={stats.totalPrice}
+                        />
+                    </Flex>
+
+                    <Flex
+                        padding="15px"
+                        gridGap="15px"
+                    >
+                        <StatsCard
+                            variant='upper'
+                            title="Custos totais"
+                            value={stats.totalCostPrice}
+                        />
+
+                        <StatsCard
+                            variant='upper'
+                            title="Lucro total"
+                            value={stats.totalProfit}
+                        />
+                    </Flex>
+                </>
+            }
 
 
         </Container>
