@@ -36,8 +36,8 @@ const NovoProduto = () => {
     const [productFILE, setProductFILE] = useState<File>()
     const [productName, setProductName] = useState("")
     const [productSellType, setProductSellType] = useState("Por unidade")
-    const [productCostPrice, setProductCostPrice] = useState("")
-    const [productSellPrice, setProductSellPrice] = useState("")
+    const [productCostPrice, setProductCostPrice] = useState<number | undefined>(0)
+    const [productSellPrice, setProductSellPrice] = useState<number | undefined>(0)
 
     async function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
 
@@ -69,8 +69,8 @@ const NovoProduto = () => {
         if (
             productName === "" ||
             productSellType === "" ||
-            productCostPrice === "" ||
-            productSellPrice === ""
+            !productCostPrice ||
+            !productSellPrice
         )
             return toast({
                 title: "Informação necessária",
@@ -324,7 +324,7 @@ const NovoProduto = () => {
 
                         background="#fff"
                         value={productCostPrice}
-                        onValueChange={(values) => setProductCostPrice(`${values.floatValue}`)}
+                        onValueChange={(values) => setProductCostPrice(values.floatValue)}
                     />
                 </FormControl>
 
@@ -350,7 +350,7 @@ const NovoProduto = () => {
 
                         background="#fff"
                         value={productSellPrice}
-                        onValueChange={(values) => setProductSellPrice(`${values.floatValue}`)}
+                        onValueChange={(values) => setProductSellPrice(values.floatValue)}
                     />
                 </FormControl>
 
