@@ -36,8 +36,8 @@ const NovoProduto = () => {
     const [productFILE, setProductFILE] = useState<File>()
     const [productName, setProductName] = useState("")
     const [productSellType, setProductSellType] = useState("Por unidade")
-    const [productCostPrice, setProductCostPrice] = useState<number | undefined>(0)
-    const [productSellPrice, setProductSellPrice] = useState<number | undefined>(0)
+    const [productCostPrice, setProductCostPrice] = useState<number | undefined>(undefined)
+    const [productSellPrice, setProductSellPrice] = useState<number | undefined>(undefined)
 
     async function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
 
