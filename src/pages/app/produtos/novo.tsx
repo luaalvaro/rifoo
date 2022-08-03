@@ -317,6 +317,9 @@ const NovoProduto = () => {
                         thousandSeparator={'.'}
                         decimalSeparator={','}
                         prefix={"R$ "}
+                        allowNegative={false}
+                        decimalScale={2}
+                        fixedDecimalScale={true}
 
                         background="#fff"
                         value={productCostPrice}
@@ -340,6 +343,9 @@ const NovoProduto = () => {
                         thousandSeparator={'.'}
                         decimalSeparator={','}
                         prefix={"R$ "}
+                        allowNegative={false}
+                        decimalScale={2}
+                        fixedDecimalScale={true}
 
                         background="#fff"
                         value={productSellPrice}

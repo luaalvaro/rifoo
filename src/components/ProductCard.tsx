@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import supabase from '../services/supabase'
 import { useRouter } from 'next/router'
 import useOrder from '../store/useOrder'
+import NumberFormat from 'react-number-format'
 
 interface IProductCard {
     data: Product,
@@ -97,9 +98,18 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
                         {data.product_name}
                     </Text>
 
-                    <Text>
-                        R$ {data.product_sell_price}/und
-                    </Text>
+                    <NumberFormat
+                        displayType={'text'}
+                        value={data.product_sell_price}
+                        thousandSeparator={'.'}
+                        decimalSeparator={','}
+                        prefix={"R$ "}
+                        suffix={" /und"}
+                        allowNegative={false}
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+
+                    />
 
                     {!type &&
                         <Text

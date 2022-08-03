@@ -22,6 +22,8 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         setInnerHeight(window.innerHeight)
         handleWithAuth()
+
+        return () => setInnerHeight(0)
     }, [])
 
     return (

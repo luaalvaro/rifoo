@@ -1,6 +1,7 @@
-import { Flex, Text, Button, useToast } from '@chakra-ui/react'
+import { Flex, Text, Button, useToast, Input } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import NumberFormat from 'react-number-format'
 import supabase from '../services/supabase'
 import useOrder from '../store/useOrder'
 
@@ -81,12 +82,21 @@ const BottomMenuNewOrder = () => {
                 >
                     sub total
                 </Text>
-                <Text
-                    fontSize={35}
-                    lineHeight="35px"
-                >
-                    R$ {order.total_price.toFixed(2)}
-                </Text>
+
+                <NumberFormat
+                    displayType={'text'}
+                    value={order.total_price}
+                    thousandSeparator={'.'}
+                    decimalSeparator={','}
+                    prefix={"R$ "}
+                    allowNegative={false}
+                    decimalScale={2}
+                    fixedDecimalScale={true}
+
+                    style={{
+                        fontSize: '35px',
+                    }}
+                />
             </Flex>
 
             <Button
