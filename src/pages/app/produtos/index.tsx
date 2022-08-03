@@ -67,7 +67,9 @@ const Produtos = () => {
         </Button>
 
         {products === null &&
-          <Stack>
+          <Stack
+            px="15px"
+          >
             <Skeleton h="20px" />
             <Skeleton h="20px" />
             <Skeleton h="20px" />

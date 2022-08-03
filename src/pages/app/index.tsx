@@ -26,6 +26,7 @@ const Home = () => {
         fontSize={18}
         mt="15px"
         mx="15px"
+        userSelect="none"
       >
         Boas vendas, <b>Genilson Andrade</b>
       </Text>

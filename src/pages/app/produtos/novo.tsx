@@ -10,7 +10,8 @@ import {
     Toast,
     useToast,
     Center,
-    Spinner
+    Spinner,
+    Icon
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import Header from '../../../components/Header'
@@ -19,6 +20,9 @@ import { ChangeEvent, useState } from 'react'
 import Image from 'next/image'
 import supabase from '../../../services/supabase'
 import imageCompression from 'browser-image-compression'
+import { MdOutlineUploadFile } from 'react-icons/md'
+import { FaTimes } from 'react-icons/fa'
+import NumberFormat from 'react-number-format';
 
 const NovoProduto = () => {
 
@@ -141,6 +145,19 @@ const NovoProduto = () => {
         }
     }
 
+    const hasImage = productURL && !loadingCompression ? true : false
+
+    const handleRemoveImage = () => {
+        setProductFILE(undefined)
+        setProductURL("")
+    }
+
+    const NumberFormatStyled = <NumberFormat
+        thousandSeparator={'.'}
+        decimalSeparator={','}
+        prefix={"R$"}
+    />
+
     return (
         <Container>
             <Header />
@@ -173,19 +190,94 @@ const NovoProduto = () => {
                 <FormControl
                     id="imageProduct"
                 >
-                    <FormLabel>Foto do produto</FormLabel>
 
-                    {productURL && !loadingCompression &&
-                        <Image
-                            src={productURL}
-                            width={100}
-                            height={100}
-                        />
+                    {hasImage &&
+                        <Flex
+                            width="100%"
+                            background="rgba(255,0,0,0.1)"
+                            height="60px"
+                            borderRadius="8px"
+                            border="1px dashed #ccc"
+                            alignItems="center"
+                            justifyContent="center"
+                            cursor="pointer"
+                            gridGap="10px"
+                            mb="10px"
+                            userSelect="none"
+
+                            _hover={{ bg: 'rgba(255,0,0,0.15)' }}
+
+                            _active={{
+                                bg: 'rgba(255,0,0,0.15)',
+                                transform: 'scale(0.98)',
+                                borderColor: '#bec3c9',
+                            }}
+
+                            _focus={{
+                                boxShadow:
+                                    '0 0 1px 2px rgba(88, 144, 255, .75), 0 1px 1px rgba(0, 0, 0, .15)',
+                            }}
+
+                            onClick={handleRemoveImage}
+                        >
+                            <Icon
+                                as={FaTimes}
+                                fontSize="28px"
+                                opacity={0.8}
+                            />
+
+                            <Text
+                                opacity={0.9}
+                            >
+                                Remover imagem
+                            </Text>
+                        </Flex>
+                    }
+
+                    {!hasImage &&
+                        <FormLabel
+                            width="100%"
+                            display="flex"
+                            background="#fff"
+                            height="90px"
+                            borderRadius="8px"
+                            border="1px dashed #ccc"
+                            alignItems="center"
+                            justifyContent="center"
+                            cursor="pointer"
+                            gridGap="10px"
+                        >
+                            <Icon
+                                as={MdOutlineUploadFile}
+                                fontSize="28px"
+                                opacity={0.8}
+                            />
+
+                            <Text
+                                opacity={0.9}
+                            >
+                                Foto do produto
+                            </Text>
+                        </FormLabel>
+                    }
+
+                    {hasImage &&
+                        <Flex
+                            width="max-content"
+                            position="relative"
+                        >
+                            <Image
+                                src={productURL}
+                                width={200}
+                                height={200}
+                            />
+                        </Flex>
                     }
 
                     {loadingCompression && <Spinner />}
 
                     <Input
+                        display="none"
                         type="file"
                         background="#fff"
                         onChange={(event) => handleImageUpload(event)}
@@ -201,44 +293,62 @@ const NovoProduto = () => {
                         value={productSellType}
                         onChange={({ target }) => setProductSellType(target.value)}
                     >
-                        <option>Por unidade</option>
-                        <option>Venda em Peso (Ex:. Kg)</option>
+                        <option>Vou vender por unidade</option>
+                        <option>Vou vender no peso</option>
                     </Select>
                 </FormControl>
 
                 <FormControl
                     id="priceCost"
                 >
-                    <FormLabel>Preço de custo</FormLabel>
-                    <Input
-                        type="number"
+                    <FormLabel mb="0">Preço de custo</FormLabel>
+                    <Text
+                        mb="8px"
+                        fontSize="sm"
+                        color="grey"
+                        textAlign="justify"
+                    >
+                        O preço de custo é o total que foi pago pelo produto.
+                        Este valor <b>pode e deve</b> ser modificação futuramente.
+                    </Text>
+
+                    <NumberFormat
+                        customInput={Input}
+                        thousandSeparator={'.'}
+                        decimalSeparator={','}
+                        prefix={"R$ "}
+
                         background="#fff"
                         value={productCostPrice}
-                        onChange={({ target }) => setProductCostPrice(target.value)}
+                        onValueChange={(values) => setProductCostPrice(`${values.floatValue}`)}
                     />
                 </FormControl>
 
                 <FormControl>
-                    <FormLabel>Preço de venda</FormLabel>
-                    <Input
-                        type="number"
+                    <FormLabel mb="0">Preço de venda</FormLabel>
+                    <Text
+                        mb="8px"
+                        fontSize="sm"
+                        color="grey"
+                        textAlign="justify"
+                    >
+                        O preço de venda é o valor final que o seu cliente vai pagar.
+                        Este valor também pode ser modificado a qualquer momento.
+                    </Text>
+                    <NumberFormat
+                        customInput={Input}
+                        thousandSeparator={'.'}
+                        decimalSeparator={','}
+                        prefix={"R$ "}
+
                         background="#fff"
                         value={productSellPrice}
-                        onChange={({ target }) => setProductSellPrice(target.value)}
+                        onValueChange={(values) => setProductSellPrice(`${values.floatValue}`)}
                     />
                 </FormControl>
 
-                <Text
-                    fontSize="sm"
-                    color="grey"
-                    textAlign="justify"
-                >
-                    Os valores salvos serão computados nas
-                    transações efetivadas a partir deste momento. Informe um valor médio real para que os cálculos sejam feitos corretamente para você ter estatísticas mais precisas ao longo das transações
-                </Text>
-
                 <Button
-                    mb="30px"
+                    my="30px"
                     colorScheme="green"
                     height="60px"
 
@@ -248,8 +358,8 @@ const NovoProduto = () => {
                 >
                     Adicionar produto à base
                 </Button>
-            </Flex>
-        </Container>
+            </Flex >
+        </Container >
     )
 }
 

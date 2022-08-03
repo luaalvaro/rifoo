@@ -25,6 +25,7 @@ import Container from '../../../components/Container'
 import { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import supabase from '../../../services/supabase'
+import NumberFormat from 'react-number-format'
 
 
 const DetalhesDoProduto = () => {
@@ -38,8 +39,8 @@ const DetalhesDoProduto = () => {
     const [productPATH, setProductPATH] = useState("")
     const [productName, setProductName] = useState("")
     const [productSellType, setProductSellType] = useState("Por unidade")
-    const [productCostPrice, setProductCostPrice] = useState("")
-    const [productSellPrice, setProductSellPrice] = useState("")
+    const [productCostPrice, setProductCostPrice] = useState<number | undefined>(0)
+    const [productSellPrice, setProductSellPrice] = useState<number | undefined>(0)
     const [productId, setProductId] = useState("")
 
     const { isOpen, onToggle } = useDisclosure()
@@ -48,8 +49,8 @@ const DetalhesDoProduto = () => {
         if (
             productName === "" ||
             productSellType === "" ||
-            productCostPrice === "" ||
-            productSellPrice === ""
+            !productCostPrice ||
+            !productSellPrice
         )
             return toast({
                 title: "Informação necessária",
@@ -175,9 +176,9 @@ const DetalhesDoProduto = () => {
 
             downloadImage(data.product_image_url)
             setProductName(data.product_name)
-            setProductSellPrice(String(data.product_sell_price))
+            setProductSellPrice(data.product_sell_price)
             setProductSellType(data.product_sell_type)
-            setProductCostPrice(String(data.product_cost_price))
+            setProductCostPrice(data.product_cost_price)
             setProductId(data.id)
             setProductPATH(data.product_image_url)
         } catch (error: any) {
@@ -265,33 +266,54 @@ const DetalhesDoProduto = () => {
                     <FormControl
                         id="priceCost"
                     >
-                        <FormLabel>Preço de custo</FormLabel>
-                        <Input
-                            type="number"
+                        <FormLabel mb="0">Preço de custo</FormLabel>
+                        <Text
+                            mb="8px"
+                            fontSize="sm"
+                            color="grey"
+                            textAlign="justify"
+                        >
+                            O preço de custo é o total que foi pago pelo produto.
+                        </Text>
+
+                        <NumberFormat
+                            customInput={Input}
+                            thousandSeparator={'.'}
+                            decimalSeparator={','}
+                            prefix={"R$ "}
+                            allowNegative={false}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+
                             background="#fff"
                             value={productCostPrice}
-                            onChange={({ target }) => setProductCostPrice(target.value)}
+                            onValueChange={(values) => setProductCostPrice(values.floatValue)}
                         />
                     </FormControl>
 
                     <FormControl>
-                        <FormLabel>Preço de venda</FormLabel>
-                        <Input
-                            type="number"
+                        <FormLabel mb="0">Preço de venda</FormLabel>
+                        <Text
+                            mb="8px"
+                            fontSize="sm"
+                            color="grey"
+                            textAlign="justify"
+                        >
+                            O preço de venda é o valor final que o seu cliente vai pagar.
+                        </Text>
+                        <NumberFormat
+                            customInput={Input}
+                            thousandSeparator={'.'}
+                            decimalSeparator={','}
+                            prefix={"R$ "}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+
                             background="#fff"
                             value={productSellPrice}
-                            onChange={({ target }) => setProductSellPrice(target.value)}
+                            onValueChange={(values) => setProductSellPrice(values.floatValue)}
                         />
                     </FormControl>
-
-                    <Text
-                        fontSize="sm"
-                        color="grey"
-                        textAlign="justify"
-                    >
-                        Os valores salvos serão computados nas
-                        transações efetivadas a partir deste momento. Informe um valor médio real para que os cálculos sejam feitos corretamente para você ter estatísticas mais precisas ao longo das transações
-                    </Text>
 
                     <Flex gridGap="20px" mb="30px">
                         <Button
