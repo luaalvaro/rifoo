@@ -46,6 +46,7 @@ const Produtos = () => {
         fontSize={18}
         mt="15px"
         mx="15px"
+        userSelect="none"
       >
         Produtos
       </Text>

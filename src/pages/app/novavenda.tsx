@@ -47,6 +47,7 @@ const Home = () => {
                 fontSize={18}
                 margin="15px"
                 fontWeight={400}
+                userSelect="none"
             >
                 Realizar nova venda
             </Text>

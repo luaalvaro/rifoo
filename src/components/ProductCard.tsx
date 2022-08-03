@@ -62,7 +62,7 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
             borderRadius="8px"
             boxShadow="3px 5px 8px rgba(0,0,0,0.2)"
             cursor={type === "sell" ? "default" : "pointer"}
-
+            userSelect="none"
             onClick={type === "sell" ? undefined : () => router.push(`/app/produtos/${data.id}`)}
         >
 

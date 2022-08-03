@@ -60,6 +60,7 @@ const MinhasVendas = () => {
                 fontSize={18}
                 margin="15px"
                 fontWeight={400}
+                userSelect="none"
             >
                 Minhas vendas
             </Text>
