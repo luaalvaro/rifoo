@@ -18,7 +18,6 @@ import {
     Text,
 } from '@chakra-ui/react'
 import { GiHamburgerMenu } from 'react-icons/gi'
-import { style } from '../constants/globalTheme'
 import { BiLogIn } from 'react-icons/bi'
 import supabase from '../services/supabase'
 import { useRouter } from 'next/router'
@@ -52,15 +51,17 @@ const Header = () => {
             align="center"
         >
 
-            <Heading
-                color={style.color.primary}
-                fontSize={28}
+            <Text
+                color="brand.primary"
+                fontSize={30}
                 cursor="pointer"
+                userSelect="none"
+                fontWeight={600}
 
                 onClick={handleRedirectToHomePage}
             >
                 Rifoo
-            </Heading>
+            </Text>
 
             <Menu>
                 <MenuButton

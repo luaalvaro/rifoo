@@ -160,6 +160,17 @@ const NovoProduto = () => {
                 pt="15px"
             >
                 <FormControl
+                    id="productName"
+                >
+                    <FormLabel>Nome do produto</FormLabel>
+                    <Input
+                        background="#fff"
+                        value={productName}
+                        onChange={({ target }) => setProductName(target.value)}
+                    />
+                </FormControl>
+
+                <FormControl
                     id="imageProduct"
                 >
                     <FormLabel>Foto do produto</FormLabel>
@@ -178,17 +189,6 @@ const NovoProduto = () => {
                         type="file"
                         background="#fff"
                         onChange={(event) => handleImageUpload(event)}
-                    />
-                </FormControl>
-
-                <FormControl
-                    id="productName"
-                >
-                    <FormLabel>Nome do produto</FormLabel>
-                    <Input
-                        background="#fff"
-                        value={productName}
-                        onChange={({ target }) => setProductName(target.value)}
                     />
                 </FormControl>
 

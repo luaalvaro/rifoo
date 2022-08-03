@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react'
 import { Formik, Field } from 'formik'
 import Link from 'next/link'
-import { style } from '../constants/globalTheme'
 import { useState, useEffect } from 'react'
 import supabase from '../services/supabase'
 import { useRouter } from 'next/router'
@@ -90,7 +89,7 @@ const Cadastro = () => {
     return (
         <Center
             minHeight={innerHeight}
-            background={style.color.background}
+            background="brand.background"
             flexDirection="column"
         >
             <Flex
@@ -100,7 +99,7 @@ const Cadastro = () => {
                 align="center"
             >
                 <Heading
-                    color={style.color.primary}
+                    color="brand.primary"
                     fontSize={44}
                 >
                     Rifoo
@@ -247,14 +246,14 @@ const Cadastro = () => {
 
                             <Button
                                 type="submit"
-                                background={style.color.primary}
+                                background="brand.primary"
                                 color="#fff"
                                 width="100%"
 
                                 isLoading={loading}
 
                                 _hover={{
-                                    background: style.color.primary,
+                                    background: "brand.primary",
                                     opacity: 0.8,
                                 }}
                             >

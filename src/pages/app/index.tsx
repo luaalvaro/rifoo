@@ -6,10 +6,17 @@ import { useRouter } from 'next/router'
 import Header from '../../components/Header'
 import Container from '../../components/Container'
 import HomeButtom from '../../components/HomeButtom'
+import { BsBoxSeam, BsCartPlusFill, BsFillFileEarmarkBarGraphFill } from 'react-icons/bs'
 
 const Home = () => {
 
   const router = useRouter()
+
+  const services = [
+    { title: "Nova venda", icon: BsCartPlusFill, href: "/app/novavenda" },
+    { title: "Minhas vendas", icon: BsFillFileEarmarkBarGraphFill, href: "/app/minhasvendas" },
+    { title: "Meus produtos", icon: BsBoxSeam, href: "/app/produtos" },
+  ]
 
   return (
     <Container>
@@ -29,21 +36,14 @@ const Home = () => {
         px="15px"
         pt="15px"
       >
-
-        <HomeButtom
-          title="Nova venda"
-          href="/app/novavenda"
-        />
-
-        <HomeButtom
-          title="Minhas vendas"
-          href="/app/minhasvendas"
-        />
-
-        <HomeButtom
-          title="Produtos"
-          href="/app/produtos"
-        />
+        {services.map(service => (
+          <HomeButtom
+            key={service.title}
+            title={service.title}
+            icon={service.icon}
+            href={service.href}
+          />
+        ))}
 
       </Flex>
     </Container>

@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react'
 import { Field, Formik, useFormik } from 'formik'
 import Link from 'next/link'
-import { style } from '../constants/globalTheme'
 import { useState, useEffect } from 'react'
 import supabase from '../services/supabase'
 import { useRouter } from 'next/router'
@@ -87,7 +86,7 @@ const Login = () => {
     return (
         <Center
             minHeight={innerHeight}
-            background={style.color.background}
+            background="brand.background"
             flexDirection="column"
         >
             <Flex
@@ -97,7 +96,7 @@ const Login = () => {
                 align="center"
             >
                 <Heading
-                    color={style.color.primary}
+                    color="brand.primary"
                     fontSize={44}
                 >
                     Rifoo
@@ -192,14 +191,14 @@ const Login = () => {
 
                             <Button
                                 type="submit"
-                                background={style.color.primary}
+                                background="brand.primary"
                                 color="#fff"
                                 width="100%"
 
                                 isLoading={loading}
 
                                 _hover={{
-                                    background: style.color.primary,
+                                    background: "brand.primary",
                                     opacity: 0.8,
                                 }}
                             >

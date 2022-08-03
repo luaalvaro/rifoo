@@ -2,7 +2,6 @@ import { Flex, Skeleton, Stack } from "@chakra-ui/react"
 import { Session } from "@supabase/supabase-js"
 import { useRouter } from "next/router"
 import { useEffect, useState } from 'react'
-import { style } from "../constants/globalTheme"
 import supabase from "../services/supabase"
 
 const Container = ({ children }: { children: React.ReactNode }) => {
@@ -37,7 +36,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
                 :
                 <Flex
                     minHeight={innerHeight}
-                    background={style.color.background}
+                    background="brand.background"
                     flexDirection="column"
                 >
                     {children}
