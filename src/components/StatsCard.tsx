@@ -1,12 +1,14 @@
 import { Center, Flex, Text } from '@chakra-ui/react'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
+import NumberFormat from 'react-number-format'
 
 interface IStatsCard {
     variant: 'upper' | 'lower',
     title: string,
-    value: string,
+    value: number,
+    type?: "int"
 }
-const StatsCard: React.FC<IStatsCard> = ({ variant, title, value }) => {
+const StatsCard: React.FC<IStatsCard> = ({ variant, title, value, type }) => {
     return (
         <Flex
             width="100%"
@@ -16,6 +18,18 @@ const StatsCard: React.FC<IStatsCard> = ({ variant, title, value }) => {
             height="100px"
             padding="5px"
             direction="column"
+            userSelect="none"
+
+            _active={{
+                bg: '#dddfe2',
+                transform: 'scale(0.98)',
+                borderColor: '#bec3c9',
+            }}
+
+            _focus={{
+                boxShadow:
+                    '0 0 1px 2px rgba(88, 144, 255, .75), 0 1px 1px rgba(0, 0, 0, .15)',
+            }}
         >
             <Flex
                 width="100%"
@@ -47,13 +61,24 @@ const StatsCard: React.FC<IStatsCard> = ({ variant, title, value }) => {
             <Center
                 flex="1"
             >
-                <Text
-                    opacity={.8}
-                    fontSize={20}
-                    fontWeight={600}
-                >
-                    {value}
-                </Text>
+                <NumberFormat
+                    displayType={'text'}
+                    value={value}
+
+                    thousandSeparator={type === "int" ? undefined : '.'}
+                    decimalSeparator={type === "int" ? undefined : ','}
+                    prefix={type === "int" ? undefined : "R$ "}
+
+                    allowNegative={false}
+
+                    decimalScale={type === "int" ? undefined : 2}
+                    fixedDecimalScale={type === "int" ? false : true}
+
+                    style={{
+                        fontSize: '20px',
+                        fontWeight: 600,
+                    }}
+                />
             </Center>
         </Flex>
     )

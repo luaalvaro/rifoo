@@ -37,12 +37,12 @@ const BottomMenuNewOrder = () => {
             if (error)
                 throw error
 
-            console.log(data)
-
             toast({
                 title: 'Venda realizada com sucesso!',
+                description: 'Visite o menu Minhas vendas para ver os detalhes da venda.',
                 status: 'success',
                 duration: 6000,
+                position: 'top',
             })
             order.resetState()
             return router.push('/app')

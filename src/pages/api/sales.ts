@@ -68,11 +68,11 @@ export default async function handler(
     const totalProfit = totalPrice - totalCostPrice
 
     return {
-      totalSales: totalSales.toString(),
-      totalPrice: `R$ ${totalPrice.toFixed(2)}`,
-      averagePrice: `R$ ${averagePrice.toFixed(2)}`,
-      totalCostPrice: `R$ ${totalCostPrice.toFixed(2)}`,
-      totalProfit: `R$ ${totalProfit.toFixed(2)}`,
+      totalSales: totalSales,
+      totalPrice: totalPrice,
+      averagePrice: averagePrice,
+      totalCostPrice: totalCostPrice,
+      totalProfit: totalProfit,
     }
   }
 

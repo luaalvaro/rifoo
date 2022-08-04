@@ -108,7 +108,6 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
                         allowNegative={false}
                         decimalScale={2}
                         fixedDecimalScale={true}
-
                     />
 
                     {!type &&

@@ -38,9 +38,9 @@ interface Order {
 }
 
 interface Stats {
-    totalSales: string,
-    totalPrice: string,
-    averagePrice: string,
-    totalCostPrice: string,
-    totalProfit: string,
+    totalSales: number,
+    totalPrice: number,
+    averagePrice: number,
+    totalCostPrice: number,
+    totalProfit: number,
 }

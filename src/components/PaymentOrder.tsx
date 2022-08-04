@@ -1,11 +1,13 @@
-import { Box, Flex, Radio, RadioGroup, Text } from '@chakra-ui/react'
+import { Box, Flex, Icon, Radio, RadioGroup, Text } from '@chakra-ui/react'
 import useOrder from '../store/useOrder'
+import { FaMoneyBillWave, FaRegCreditCard, FaCreditCard } from 'react-icons/fa'
+import { BsXDiamondFill } from 'react-icons/bs'
 
 const paymentMethods = [
-    { id: 1, name: 'Chave PIX' },
-    { id: 2, name: 'Dinheiro' },
-    { id: 3, name: 'Máquina de cartão - Débito' },
-    { id: 4, name: 'Máquina de cartão - Crédito' },
+    { id: 1, name: 'Chave PIX', icon: BsXDiamondFill },
+    { id: 2, name: 'Dinheiro', icon: FaMoneyBillWave },
+    { id: 3, name: 'Máquina de cartão - Débito', icon: FaCreditCard },
+    { id: 4, name: 'Máquina de cartão - Crédito', icon: FaRegCreditCard },
 ]
 
 const PaymentOrder = () => {
@@ -43,10 +45,19 @@ const PaymentOrder = () => {
                         borderRadius="8px"
                         px="15px"
 
+                        align="center"
+                        gridGap="15px"
                         cursor="pointer"
 
                         onClick={() => order.setPaymentMethod(item.id)}
                     >
+
+                        <Icon
+                            as={item.icon}
+                            fontSize="25px"
+                            opacity={0.9}
+                        />
+
                         <Radio value={item.id}>{item.name}</Radio>
                     </Flex>
                 ))}

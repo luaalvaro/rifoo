@@ -83,6 +83,7 @@ const MinhasVendas = () => {
                             variant='upper'
                             title="Total de vendas"
                             value={stats.totalSales}
+                            type="int"
                         />
 
                         <StatsCard

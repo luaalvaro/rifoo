@@ -1,4 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react'
+import NumberFormat from 'react-number-format'
 import useOrder from '../store/useOrder'
 
 const ResumeOrder = () => {
@@ -25,7 +26,17 @@ const ResumeOrder = () => {
                     justify="space-between"
                 >
                     <Text>{item.qtd_items}x {item.product_name}</Text>
-                    <Text>R$ {item.product_sell_price}</Text>
+                    <NumberFormat
+                        displayType={'text'}
+                        value={item.product_sell_price}
+                        thousandSeparator={'.'}
+                        decimalSeparator={','}
+                        prefix={"R$ "}
+                        suffix={" /und"}
+                        allowNegative={false}
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+                    />
                 </Flex>
             ))}
 
