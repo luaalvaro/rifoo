@@ -14,30 +14,22 @@ import ProductCard from '../../components/ProductCard'
 import ResumeOrder from '../../components/ResumeOrder'
 import useOrder from '../../store/useOrder'
 import PaymentOrder from '../../components/PaymentOrder'
+import useSWR from 'swr'
+
+const fetcher = async () => {
+    const { data, error } = await supabase
+        .from<Product>("products")
+        .select()
+
+    if (error) throw error
+
+    return data
+}
 
 const Home = () => {
 
     const order = useOrder(state => state)
-    const [products, setProducts] = useState<Product[] | null>(null)
-
-    const fetchProducts = async () => {
-        try {
-            const { data, error } = await supabase
-                .from<Product>("products")
-                .select()
-
-            if (error)
-                throw error
-
-            setProducts(data)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    useEffect(() => {
-        fetchProducts()
-    }, [])
+    const { data: products, error } = useSWR('produtos', fetcher)
 
     return (
         <Container>
@@ -53,7 +45,7 @@ const Home = () => {
             </Text>
 
 
-            {products === null &&
+            {!products &&
                 <Stack>
                     <Skeleton h="20px" />
                     <Skeleton h="20px" />

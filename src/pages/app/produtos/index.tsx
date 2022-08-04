@@ -13,30 +13,22 @@ import supabase from '../../../services/supabase'
 import { useEffect, useState } from 'react'
 import ProductCard from '../../../components/ProductCard'
 import { FaBoxOpen } from 'react-icons/fa'
+import useSWR from 'swr'
+
+const fetcher = async () => {
+  const { data, error } = await supabase
+    .from<Product>("products")
+    .select()
+
+  if (error) throw error
+
+  return data
+}
 
 const Produtos = () => {
 
   const router = useRouter()
-  const [products, setProducts] = useState<Product[] | null>(null)
-
-  const fetchProducts = async () => {
-    try {
-      const { data, error } = await supabase
-        .from<Product>("products")
-        .select()
-
-      if (error)
-        throw error
-
-      setProducts(data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    fetchProducts()
-  }, [])
+  const { data: products, error } = useSWR('produtos', fetcher)
 
   return (
     <Container>
@@ -67,7 +59,7 @@ const Produtos = () => {
           Cadastrar novo produto
         </Button>
 
-        {products === null &&
+        {!products &&
           <Stack>
             <Skeleton h="20px" />
             <Skeleton h="20px" />
