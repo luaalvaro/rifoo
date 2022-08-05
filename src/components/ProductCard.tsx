@@ -1,4 +1,4 @@
-import { Flex, Text, Button, Stack, Skeleton, Center } from '@chakra-ui/react'
+import { Flex, Text, Button, Stack, Skeleton, Center, Input } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 import supabase from '../services/supabase'
@@ -51,7 +51,6 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
     }, [])
 
     const hasOrderItem = order.products.filter(item => item.id === data.id)
-
     return (
         <Flex
             bg="#fff"
@@ -116,11 +115,11 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
                             mt="auto"
                             opacity={.7}
                         >
-                            Ver mais
+                            Clique para ver mais
                         </Text>
                     }
 
-                    {type === "sell" &&
+                    {type === "sell" && data.product_sell_type === "unidade" &&
                         <Center
                             flex="1"
                             gridGap="30px"
@@ -154,6 +153,36 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
                                 +
                             </Button>
                         </Center>
+                    }
+
+                    {type === "sell" && data.product_sell_type === "peso" &&
+                        <Flex
+                            flex="1"
+                            align="center"
+                            pt="10px"
+                        >
+
+                            <NumberFormat
+                                customInput={Input}
+                                allowNegative={false}
+                                decimalScale={3}
+                                fixedDecimalScale={true}
+
+                                suffix={" kg"}
+                                width="100%"
+                                height="100%"
+                                background="#cecece"
+                                fontSize="30px"
+
+                                placeholder="0.000 kg"
+
+                                // onBlur={order.getTotalPriceWeight}
+                                // value={productCostPrice}
+                                onValueChange={(values) => order.addItemWeight(data, values.floatValue)}
+                            />
+
+
+                        </Flex>
                     }
                 </Flex>
             </Flex>

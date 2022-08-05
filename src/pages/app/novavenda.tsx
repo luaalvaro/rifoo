@@ -39,6 +39,8 @@ const Home = () => {
         fetchProducts()
     }, [])
 
+    console.log(order.total_price_weight)
+
     return (
         <Container>
             <Header />

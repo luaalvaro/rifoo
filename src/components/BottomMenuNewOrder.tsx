@@ -42,7 +42,6 @@ const BottomMenuNewOrder = () => {
                 description: 'Visite o menu Minhas vendas para ver os detalhes da venda.',
                 status: 'success',
                 duration: 6000,
-                position: 'top',
             })
             order.resetState()
             return router.push('/app')
@@ -52,6 +51,11 @@ const BottomMenuNewOrder = () => {
             setLoading(false)
         }
     }
+
+    const totalWeightPrice = order.total_price_weight
+        .reduce((acc, item) => acc + item.total_price, 0)
+
+    const totalPriceShow = totalWeightPrice + order.total_price
 
     useEffect(() => {
         setInnerHeight(window.innerHeight)
@@ -85,7 +89,7 @@ const BottomMenuNewOrder = () => {
 
                 <NumberFormat
                     displayType={'text'}
-                    value={order.total_price}
+                    value={totalPriceShow}
                     thousandSeparator={'.'}
                     decimalSeparator={','}
                     prefix={"R$ "}

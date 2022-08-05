@@ -12,7 +12,7 @@ interface Product {
     product_image_url: string,
     product_name: string,
     product_sell_price: number,
-    product_sell_type: string,
+    product_sell_type: "unidade" | "peso",
     user_id: string,
 }
 
@@ -23,6 +23,7 @@ interface ProductSell {
     product_sell_price: number,
     product_sell_type: string,
     qtd_items: number,
+    weight: number | undefined,
 }
 
 interface Order {

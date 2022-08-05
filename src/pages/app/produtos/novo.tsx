@@ -35,7 +35,7 @@ const NovoProduto = () => {
     const [productURL, setProductURL] = useState("")
     const [productFILE, setProductFILE] = useState<File>()
     const [productName, setProductName] = useState("")
-    const [productSellType, setProductSellType] = useState("Por unidade")
+    const [productSellType, setProductSellType] = useState("unidade")
     const [productCostPrice, setProductCostPrice] = useState<number | undefined>(undefined)
     const [productSellPrice, setProductSellPrice] = useState<number | undefined>(undefined)
 
@@ -151,12 +151,6 @@ const NovoProduto = () => {
         setProductFILE(undefined)
         setProductURL("")
     }
-
-    const NumberFormatStyled = <NumberFormat
-        thousandSeparator={'.'}
-        decimalSeparator={','}
-        prefix={"R$"}
-    />
 
     return (
         <Container>
@@ -294,15 +288,17 @@ const NovoProduto = () => {
                         value={productSellType}
                         onChange={({ target }) => setProductSellType(target.value)}
                     >
-                        <option>Vou vender por unidade</option>
-                        <option>Vou vender no peso</option>
+                        <option value="unidade">Vou vender por unidade</option>
+                        <option value="peso">Vou vender no peso</option>
                     </Select>
                 </FormControl>
 
                 <FormControl
                     id="priceCost"
                 >
-                    <FormLabel mb="0">Preço de custo</FormLabel>
+                    <FormLabel mb="0">
+                        {productSellType === "unidade" ? "Preço de custo" : "Preço de custo do KG (Quilo)"}
+                    </FormLabel>
                     <Text
                         mb="8px"
                         fontSize="sm"
@@ -329,7 +325,9 @@ const NovoProduto = () => {
                 </FormControl>
 
                 <FormControl>
-                    <FormLabel mb="0">Preço de venda</FormLabel>
+                    <FormLabel mb="0">
+                        {productSellType === "unidade" ? "Preço de venda" : "Preço de venda do KG (Quilo)"}
+                    </FormLabel>
                     <Text
                         mb="8px"
                         fontSize="sm"

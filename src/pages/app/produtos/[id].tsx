@@ -259,8 +259,8 @@ const DetalhesDoProduto = () => {
                             value={productSellType}
                             onChange={({ target }) => setProductSellType(target.value)}
                         >
-                            <option>Por unidade</option>
-                            <option>Venda em Peso (Ex:. Kg)</option>
+                            <option value="unidade">Vou vender por unidade</option>
+                            <option value="peso">Vou vender no peso</option>
                         </Select>
                     </FormControl>
 
