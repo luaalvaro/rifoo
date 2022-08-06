@@ -55,12 +55,16 @@ const BottomMenuNewOrder = () => {
     const totalWeightPrice = order.total_price_weight
         .reduce((acc, item) => acc + item.total_price, 0)
 
+    const totalWeightPriceCost = order.total_price_weight
+        .reduce((acc, item) => acc + item.total_cost_price, 0)
+
     const totalPriceShow = totalWeightPrice + order.total_price
 
     useEffect(() => {
         setInnerHeight(window.innerHeight)
     }, [])
 
+    console.log(totalWeightPriceCost)
     return (
         <Flex
             borderTop="1px solid rgba(0,0,0,0.2)"

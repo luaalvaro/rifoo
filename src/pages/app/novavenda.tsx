@@ -14,6 +14,7 @@ import ProductCard from '../../components/ProductCard'
 import ResumeOrder from '../../components/ResumeOrder'
 import useOrder from '../../store/useOrder'
 import PaymentOrder from '../../components/PaymentOrder'
+import { AiOutlineArrowLeft } from 'react-icons/ai'
 
 const Home = () => {
 
@@ -39,20 +40,32 @@ const Home = () => {
         fetchProducts()
     }, [])
 
-    console.log(order.total_price_weight)
-
     return (
         <Container>
             <Header />
 
-            <Text
+            <Flex
                 fontSize={18}
-                margin="15px"
+                marginY="25px"
+                marginX="15px"
                 fontWeight={400}
                 userSelect="none"
+
+                align="center"
+                gridGap="15px"
+
+                onClick={() => order.prevStep()}
             >
-                Realizar nova venda
-            </Text>
+                {order.stepProgress === 1 &&
+                    <AiOutlineArrowLeft />}
+                <Text>
+                    {
+                        order.stepProgress === 0
+                            ? "Realizar nova venda"
+                            : "Venda em andamento"
+                    }
+                </Text>
+            </Flex>
 
 
             {products === null &&

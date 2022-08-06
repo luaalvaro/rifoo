@@ -61,6 +61,9 @@ export default async function handler(
 
 
   const generateStats = (data: Sale[]) => {
+
+    console.log(data)
+
     const totalSales = data.length
     const totalPrice = data.reduce((acc, curr) => acc + curr.total_price, 0)
     const averagePrice = totalPrice / totalSales
@@ -100,7 +103,6 @@ export default async function handler(
 
       if (error) throw error
 
-      console.log(data)
       sales = data
     } catch (error) {
       console.log(error)
