@@ -99,6 +99,7 @@ const Home = () => {
                     direction="column"
                     px="15px"
                     gridGap="15px"
+                    paddingBottom="150px"
                 >
                     {products.map((item, index) => (
                         <ProductCard

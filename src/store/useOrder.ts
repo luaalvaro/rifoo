@@ -87,7 +87,6 @@ const useOrder = create<IUseOrder>((set) => ({
         let pricingItem: PricingItemWeight | null = null
 
         if (!weight) {
-            console.log('Sem peso, removendo produto')
             newProductArray = state.products.filter(item => item.id !== data.id)
             newWeightArray = state.total_price_weight.filter(item => item.id !== data.id)
 
@@ -101,7 +100,6 @@ const useOrder = create<IUseOrder>((set) => ({
         const response = state.total_price_weight.filter(item => item.id === data.id)
 
         const isNewProduct = response.length === 0
-        console.log('Status do produto', isNewProduct)
 
         const sellPrice = weight ? data.product_sell_price * weight : 0
 

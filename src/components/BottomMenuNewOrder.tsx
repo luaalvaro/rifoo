@@ -64,7 +64,6 @@ const BottomMenuNewOrder = () => {
         setInnerHeight(window.innerHeight)
     }, [])
 
-    console.log(totalWeightPriceCost)
     return (
         <Flex
             borderTop="1px solid rgba(0,0,0,0.2)"
