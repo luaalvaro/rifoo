@@ -46,7 +46,7 @@ const StatsCard: React.FC<IStatsCard> = ({ variant, title, value, type }) => {
                 {variant === 'upper' && (
                     <IoMdArrowDropup
                         fontSize={24}
-                        color="green"
+                        color="brand.primary"
                     />
                 )}
 

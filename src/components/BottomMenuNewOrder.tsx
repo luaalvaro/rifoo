@@ -10,7 +10,6 @@ const BottomMenuNewOrder = () => {
     const router = useRouter()
     const toast = useToast()
     const order = useOrder(state => state)
-    const [innerHeight, setInnerHeight] = useState(0)
     const [loading, setLoading] = useState(false)
 
     const handleSubmitNewSell = async () => {
@@ -60,16 +59,12 @@ const BottomMenuNewOrder = () => {
 
     const totalPriceShow = totalWeightPrice + order.total_price
 
-    useEffect(() => {
-        setInnerHeight(window.innerHeight)
-    }, [])
-
     return (
         <Flex
             borderTop="1px solid rgba(0,0,0,0.2)"
             position="fixed"
             bg="#fff"
-            top={innerHeight - 120}
+            height="120px"
             bottom="0"
             left="0"
             right="0"
@@ -109,9 +104,11 @@ const BottomMenuNewOrder = () => {
             <Button
                 width="160px"
                 height="50px"
-                colorScheme="green"
-
+                background="brand.primary"
+                color="#fff"
                 isLoading={loading}
+
+                _hover={{ bg: 'brand.primaryDark' }}
 
                 onClick={order.stepProgress === 0 ? order.nextStep : handleSubmitNewSell}
             >

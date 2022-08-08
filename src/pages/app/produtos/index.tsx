@@ -60,7 +60,11 @@ const Produtos = () => {
       >
 
         <Button
-          colorScheme="green"
+          color="#fff"
+          background="brand.primary"
+
+          _hover={{ bg: 'brand.primaryDark' }}
+
 
           onClick={() => router.push("/app/produtos/novo")}
         >

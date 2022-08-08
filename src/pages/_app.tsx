@@ -7,7 +7,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     colors: {
       brand: {
         background: "#F1F1F1",
-        primary: "green",
+        primary: "#405090",
+        primaryDark: "#2F3C8E",
       },
     },
   })

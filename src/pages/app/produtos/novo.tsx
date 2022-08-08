@@ -354,7 +354,10 @@ const NovoProduto = () => {
 
                 <Button
                     my="30px"
-                    colorScheme="green"
+                    color="#fff"
+                    background="brand.primary"
+
+                    _hover={{ bg: 'brand.primaryDark' }}
                     height="60px"
 
                     onClick={handleSubmit}

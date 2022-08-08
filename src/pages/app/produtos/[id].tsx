@@ -319,8 +319,11 @@ const DetalhesDoProduto = () => {
                     <Flex gridGap="20px" mb="30px">
                         <Button
                             width="60%"
-                            colorScheme="green"
+                            color="#fff"
+                            background="brand.primary"
                             height="60px"
+
+                            _hover={{ bg: 'brand.primaryDark' }}
 
                             onClick={handleUpdateProduct}
 
