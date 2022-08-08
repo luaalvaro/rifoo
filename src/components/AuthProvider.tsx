@@ -4,11 +4,10 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from 'react'
 import supabase from "../services/supabase"
 
-const Container = ({ children }: { children: React.ReactNode }) => {
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const router = useRouter()
     const [session, setSession] = useState<Session | null>(null)
-    const [innerHeight, setInnerHeight] = useState(0)
 
     const handleWithAuth = () => {
         const session = supabase.auth.session()
@@ -20,10 +19,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     }
 
     useEffect(() => {
-        setInnerHeight(window.innerHeight)
         handleWithAuth()
-
-        return () => setInnerHeight(0)
     }, [])
 
     return (
@@ -37,7 +33,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
                 </Stack>
                 :
                 <Flex
-                    minHeight={innerHeight}
+                    minHeight="100vh"
                     background="brand.background"
                     flexDirection="column"
                 >
@@ -48,4 +44,4 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     )
 }
 
-export default Container
+export default AuthProvider

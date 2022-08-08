@@ -5,7 +5,7 @@ import {
     Text,
 } from '@chakra-ui/react'
 import Header from '../../components/Header'
-import Container from '../../components/Container'
+import AuthProvider from '../../components/AuthProvider'
 import { useEffect, useState } from 'react'
 import supabase from '../../services/supabase'
 import useOrder from '../../store/useOrder'
@@ -53,7 +53,7 @@ const MinhasVendas = () => {
     }, [])
 
     return (
-        <Container>
+        <AuthProvider>
             <Header />
 
             <Text
@@ -113,7 +113,7 @@ const MinhasVendas = () => {
             }
 
 
-        </Container>
+        </AuthProvider>
     )
 }
 

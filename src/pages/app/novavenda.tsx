@@ -5,7 +5,7 @@ import {
     Text,
 } from '@chakra-ui/react'
 import Header from '../../components/Header'
-import Container from '../../components/Container'
+import AuthProvider from '../../components/AuthProvider'
 import BottomMenuNewOrder from '../../components/BottomMenuNewOrder'
 import { useEffect, useState } from 'react'
 import supabase from '../../services/supabase'
@@ -41,13 +41,12 @@ const Home = () => {
     }, [])
 
     return (
-        <Container>
+        <AuthProvider>
             <Header />
 
             <Flex
                 fontSize={18}
-                marginY="25px"
-                marginX="15px"
+                margin="15px"
                 fontWeight={400}
                 userSelect="none"
 
@@ -119,7 +118,7 @@ const Home = () => {
             }
 
             <BottomMenuNewOrder />
-        </Container>
+        </AuthProvider>
     )
 }
 

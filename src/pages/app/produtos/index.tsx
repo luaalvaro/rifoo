@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import Header from '../../../components/Header'
-import Container from '../../../components/Container'
+import AuthProvider from '../../../components/AuthProvider'
 import supabase from '../../../services/supabase'
 import { useEffect, useState } from 'react'
 import ProductCard from '../../../components/ProductCard'
@@ -39,7 +39,7 @@ const Produtos = () => {
   }, [])
 
   return (
-    <Container>
+    <AuthProvider>
       <Header />
 
       <Text
@@ -93,7 +93,7 @@ const Produtos = () => {
           <ProductCard key={index} data={item} />
         ))}
       </Flex>
-    </Container >
+    </AuthProvider>
   )
 }
 

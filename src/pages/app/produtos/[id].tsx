@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import Header from '../../../components/Header'
-import Container from '../../../components/Container'
+import AuthProvider from '../../../components/AuthProvider'
 import { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import supabase from '../../../services/supabase'
@@ -198,7 +198,7 @@ const DetalhesDoProduto = () => {
     }, [])
 
     return (
-        <Container>
+        <AuthProvider>
             <Header />
 
             <Text
@@ -371,7 +371,7 @@ const DetalhesDoProduto = () => {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-        </Container>
+        </AuthProvider>
     )
 }
 

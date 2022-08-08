@@ -21,7 +21,6 @@ const Login = () => {
 
     const router = useRouter()
     const toast = useToast()
-    const [innerHeight, setInnerHeight] = useState(0)
     const [loading, setLoading] = useState(false)
 
     const handleSubmitForm = async (values: {
@@ -79,13 +78,12 @@ const Login = () => {
     }
 
     useEffect(() => {
-        setInnerHeight(window.innerHeight)
         checkIfLoggedUser()
     }, [])
 
     return (
         <Center
-            minHeight={innerHeight}
+            minHeight="100vh"
             background="brand.background"
             flexDirection="column"
         >

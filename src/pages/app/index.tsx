@@ -2,15 +2,12 @@ import {
   Flex,
   Text,
 } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import Header from '../../components/Header'
-import Container from '../../components/Container'
+import AuthProvider from '../../components/AuthProvider'
 import HomeButtom from '../../components/HomeButtom'
 import { BsBoxSeam, BsCartPlusFill, BsFillFileEarmarkBarGraphFill } from 'react-icons/bs'
 
 const Home = () => {
-
-  const router = useRouter()
 
   const services = [
     { title: "Nova venda", icon: BsCartPlusFill, href: "/app/novavenda" },
@@ -19,7 +16,7 @@ const Home = () => {
   ]
 
   return (
-    <Container>
+    <AuthProvider>
       <Header />
 
       <Text
@@ -47,7 +44,7 @@ const Home = () => {
         ))}
 
       </Flex>
-    </Container>
+    </AuthProvider>
   )
 }
 

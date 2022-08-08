@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import Header from '../../../components/Header'
-import Container from '../../../components/Container'
+import AuthProvider from '../../../components/AuthProvider'
 import { ChangeEvent, useState } from 'react'
 import Image from 'next/image'
 import supabase from '../../../services/supabase'
@@ -153,7 +153,7 @@ const NovoProduto = () => {
     }
 
     return (
-        <Container>
+        <AuthProvider>
             <Header />
 
             <Text
@@ -364,7 +364,7 @@ const NovoProduto = () => {
                     Adicionar produto à base
                 </Button>
             </Flex >
-        </Container >
+        </AuthProvider>
     )
 }
 
