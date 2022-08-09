@@ -1,6 +1,6 @@
-import { Flex, Text, Button, useToast, Input } from '@chakra-ui/react'
+import { Flex, Text, Button, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import NumberFormat from 'react-number-format'
 import supabase from '../services/supabase'
 import useOrder from '../store/useOrder'
@@ -12,7 +12,14 @@ const BottomMenuNewOrder = () => {
     const order = useOrder(state => state)
     const [loading, setLoading] = useState(false)
 
+    const totalWeightPrice = order.products_weight
+        .reduce((acc, item) => acc + item.total_sell_price, 0)
+
+    const totalWeightPriceCost = order.products_weight
+        .reduce((acc, item) => acc + item.total_cost_price, 0)
+
     const handleSubmitNewSell = async () => {
+
         const user = supabase.auth.user()
 
         if (!user) return
@@ -27,10 +34,13 @@ const BottomMenuNewOrder = () => {
                     qtd_items: order.qtd_items,
                     discount: order.discount,
                     products: JSON.stringify(order.products),
+                    products_weight: JSON.stringify(order.products_weight),
                     total_price: order.total_price,
                     total_cost_price: order.total_cost_price,
                     paymentMethod: order.paymentMethod,
                     user_id: id,
+                    total_price_weight: totalWeightPrice,
+                    total_cost_price_weight: totalWeightPriceCost
                 })
 
             if (error)
@@ -51,14 +61,7 @@ const BottomMenuNewOrder = () => {
         }
     }
 
-    const totalWeightPrice = order.total_price_weight
-        .reduce((acc, item) => acc + item.total_price, 0)
-
-    const totalWeightPriceCost = order.total_price_weight
-        .reduce((acc, item) => acc + item.total_cost_price, 0)
-
     const totalPriceShow = totalWeightPrice + order.total_price
-
     return (
         <Flex
             borderTop="1px solid rgba(0,0,0,0.2)"

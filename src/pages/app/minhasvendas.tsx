@@ -66,7 +66,7 @@ const MinhasVendas = () => {
             </Text>
 
             {loading &&
-                <Stack>
+                <Stack px="15px">
                     <Skeleton h="20px" />
                     <Skeleton h="20px" />
                     <Skeleton h="20px" />
@@ -82,14 +82,14 @@ const MinhasVendas = () => {
                         <StatsCard
                             variant='upper'
                             title="Total de vendas"
-                            value={stats.totalSales}
+                            value={stats.qtd_sales}
                             type="int"
                         />
 
                         <StatsCard
                             variant='upper'
                             title="Faturamento"
-                            value={stats.totalPrice}
+                            value={stats.total_sell_price}
                         />
                     </Flex>
 
@@ -100,13 +100,13 @@ const MinhasVendas = () => {
                         <StatsCard
                             variant='upper'
                             title="Custos totais"
-                            value={stats.totalCostPrice}
+                            value={stats.total_cost_price}
                         />
 
                         <StatsCard
                             variant='upper'
                             title="Lucro total"
-                            value={stats.totalProfit}
+                            value={stats.total_profit}
                         />
                     </Flex>
                 </>

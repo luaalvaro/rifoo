@@ -23,7 +23,17 @@ interface ProductSell {
     product_sell_price: number,
     product_sell_type: string,
     qtd_items: number,
-    weight: number | undefined,
+}
+
+interface ProductSellWeight {
+    id: string,
+    product_sell_price: number,
+    weight: number,
+    total_sell_price: number,
+    total_cost_price: number,
+    qtd_items: number,
+    product_name: string,
+    product_sell_type: string,
 }
 
 interface Order {
@@ -35,13 +45,45 @@ interface Order {
     total_cost_price: number,
     discount: number,
     products: ProductSell[] | string,
-    paymentMethod: number
+    products_weight: ProductSellWeight[] | string,
+    paymentMethod: number,
+    total_price_weight: number,
+    total_cost_price_weight: number
+}
+
+type Sale = {
+    id: string,
+    created_at: string,
+    qtd_items: number,
+    total_price: number,
+    discount: number,
+    paymentMethod: number,
+    user_id: string,
+    products: string,
+    total_cost_price: number,
+    total_price_weight: number,
+    total_cost_price_weight: number
 }
 
 interface Stats {
-    totalSales: number,
-    totalPrice: number,
+    qtd_sales: number,
+    total_unit_price: number,
+    total_weight_price: number,
+    total_sell_price: number,
+    total_cost_weight_price: number,
     averagePrice: number,
-    totalCostPrice: number,
-    totalProfit: number,
+    total_cost_price: number,
+    total_cost_unit_price: number,
+    total_profit: number,
+}
+
+type SessionDecoded = {
+    aud: string,
+    exp: number,
+    sub: string,
+    email: string,
+    phone: string,
+    app_metadata: { provider: string, providers: [string] },
+    user_metadata: {},
+    role: string
 }

@@ -28,22 +28,36 @@ const ResumeOrder = () => {
                     justify="space-between"
                 >
                     <Text>
-                        {item.product_sell_type === "unidade" ?
-                            `${item.qtd_items}x ${item.product_name}`
-                            : `${item.weight}kg ${item.product_name}`
-                        }
+                        {`${item.qtd_items}x ${item.product_name}`}
                     </Text>
                     <NumberFormat
                         displayType={'text'}
-                        value={
-                            item.product_sell_type === "unidade"
-                                ? item.product_sell_price
-                                : !!item.weight ? item.product_sell_price * item.weight : 0
-                        }
+                        value={item.product_sell_price}
                         thousandSeparator={'.'}
                         decimalSeparator={','}
                         prefix={"R$ "}
                         suffix={item.product_sell_type === "unidade" ? " /und" : ""}
+                        allowNegative={false}
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+                    />
+                </Flex>
+            ))}
+
+            {order && order.products_weight.map(item => (
+                <Flex
+                    key={item.id.substring(0, 5)}
+                    justify="space-between"
+                >
+                    <Text>
+                        {`${item.weight}kg ${item.product_name}`}
+                    </Text>
+                    <NumberFormat
+                        displayType={'text'}
+                        value={item.total_sell_price}
+                        thousandSeparator={'.'}
+                        decimalSeparator={','}
+                        prefix={"R$ "}
                         allowNegative={false}
                         decimalScale={2}
                         fixedDecimalScale={true}

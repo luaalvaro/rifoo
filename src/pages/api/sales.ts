@@ -7,29 +7,6 @@ type Data = {
   stats?: Stats
 }
 
-type SessionDecoded = {
-  aud: string,
-  exp: number,
-  sub: string,
-  email: string,
-  phone: string,
-  app_metadata: { provider: string, providers: [string] },
-  user_metadata: {},
-  role: string
-}
-
-type Sale = {
-  id: string,
-  created_at: string,
-  qtd_items: number,
-  total_price: number,
-  discount: number,
-  paymentMethod: number,
-  user_id: string,
-  products: string,
-  total_cost_price: number,
-}
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
@@ -59,23 +36,35 @@ export default async function handler(
     }
   }
 
-
   const generateStats = (data: Sale[]) => {
 
     console.log(data)
 
-    const totalSales = data.length
-    const totalPrice = data.reduce((acc, curr) => acc + curr.total_price, 0)
-    const averagePrice = totalPrice / totalSales
-    const totalCostPrice = data.reduce((acc, curr) => acc + curr.total_cost_price, 0)
-    const totalProfit = totalPrice - totalCostPrice
+    const qtd_sales = data.length
+
+    const total_unit_price = data.reduce((acc, curr) => acc + curr.total_price, 0)
+    const total_weight_price = data.reduce((acc, curr) => acc + curr.total_price_weight, 0)
+    const averagePrice = (total_unit_price + total_weight_price) / qtd_sales
+    const total_cost_unit_price = data.reduce((acc, curr) => acc + curr.total_cost_price, 0)
+    const total_cost_weight_price = data.reduce((acc, curr) => acc + curr.total_cost_price_weight, 0)
+
+    const total_sell_price = total_weight_price + total_unit_price
+    const total_cost_price = total_cost_unit_price + total_cost_weight_price
+    const total_profit = total_sell_price - total_cost_price
 
     return {
-      totalSales: totalSales,
-      totalPrice: totalPrice,
+      qtd_sales: qtd_sales,
+      total_sell_price: total_sell_price,
+      total_cost_price: total_cost_price,
+
+      total_cost_unit_price: total_cost_unit_price,
+      total_cost_weight_price: total_cost_weight_price,
+
+      total_unit_price: total_unit_price,
+      total_weight_price: total_weight_price,
+
       averagePrice: averagePrice,
-      totalCostPrice: totalCostPrice,
-      totalProfit: totalProfit,
+      total_profit: total_profit,
     }
   }
 

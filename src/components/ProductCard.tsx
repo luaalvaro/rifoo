@@ -51,9 +51,10 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
     }, [])
 
     const hasOrderItem = order.products.filter(item => item.id === data.id)
+    const hasOrderWeightItem = order.products_weight.filter(item => item.id === data.id)
     const item = hasOrderItem.length > 0 ? hasOrderItem[0] : null
+    const itemWeight = hasOrderWeightItem.length > 0 ? hasOrderWeightItem[0] : null
 
-    console.log()
     return (
         <Flex
             bg="#fff"
@@ -179,7 +180,7 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
                                 fontSize="30px"
 
                                 placeholder="0.000 kg"
-                                defaultValue={item?.weight}
+                                defaultValue={itemWeight?.weight}
                                 onValueChange={(values) => order.addItemWeight(data, values.floatValue)}
                             />
 

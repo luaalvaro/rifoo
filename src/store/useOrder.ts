@@ -1,22 +1,15 @@
 import create from 'zustand'
 
-interface PricingItemWeight {
-    id: string,
-    sell_price: number,
-    weight: number,
-    total_price: number,
-    total_cost_price: number,
-}
-
 interface IUseOrder {
     stepProgress: number,
     qtd_items: number,
     total_price: number,
-    total_price_weight: PricingItemWeight[],
+    total_price_weight: number,
     total_cost_price: number,
     total_cost_price_weight: number,
     discount: number,
     products: ProductSell[],
+    products_weight: ProductSellWeight[],
     paymentMethod: any,
 
     nextStep: () => void,
@@ -32,11 +25,12 @@ const initialState = {
     stepProgress: 0,
     qtd_items: 0,
     total_price: 0,
-    total_price_weight: [],
+    total_price_weight: 0,
     total_cost_price: 0,
     total_cost_price_weight: 0,
     discount: 0,
     products: [],
+    products_weight: [],
     paymentMethod: 1,
 }
 
@@ -58,7 +52,6 @@ const useOrder = create<IUseOrder>((set) => ({
                     product_sell_price: data.product_sell_price,
                     product_sell_type: data.product_sell_type,
                     qtd_items: 1,
-                    weight: undefined,
                 }]
         } else {
             newProductArray = state.products.map(item => {
@@ -84,67 +77,44 @@ const useOrder = create<IUseOrder>((set) => ({
 
         let newProductArray: ProductSell[] = []
         let newWeightArray: any[] = []
-        let pricingItem: PricingItemWeight | null = null
 
         if (!weight) {
             newProductArray = state.products.filter(item => item.id !== data.id)
-            newWeightArray = state.total_price_weight.filter(item => item.id !== data.id)
+            newWeightArray = state.products_weight.filter(item => item.id !== data.id)
 
             return {
                 qtd_items: state.qtd_items - 1,
-                total_price_weight: newWeightArray,
+                products_weight: newWeightArray,
                 products: newProductArray
             }
         }
 
-        const response = state.total_price_weight.filter(item => item.id === data.id)
-
+        const response = state.products_weight.filter(item => item.id === data.id)
         const isNewProduct = response.length === 0
-
         const sellPrice = weight ? data.product_sell_price * weight : 0
 
         if (isNewProduct) {
-            newProductArray = [
-                ...state.products,
+            newWeightArray = [
+                ...state.products_weight,
                 {
                     id: data.id,
-                    product_cost_price: data.product_cost_price,
-                    product_name: data.product_name,
                     product_sell_price: data.product_sell_price,
-                    product_sell_type: data.product_sell_type,
-                    qtd_items: 1,
-                    weight: weight
-                }]
-
-            newWeightArray = [
-                ...state.total_price_weight,
-                pricingItem = {
-                    id: data.id,
-                    sell_price: data.product_sell_price,
                     weight: weight,
-                    total_price: sellPrice,
+                    total_sell_price: sellPrice,
                     total_cost_price: data.product_cost_price * weight,
+                    product_name: data.product_name,
+                    qtd_items: 1,
+                    product_sell_type: data.product_sell_type,
                 }
             ]
 
         } else {
-            newProductArray = state.products.map(item => {
-                if (item.id === data.id) {
-                    return {
-                        ...item,
-                        weight: weight
-                    }
-                }
-
-                return item
-            })
-
-            newWeightArray = state.total_price_weight.map(item => {
+            newWeightArray = state.products_weight.map(item => {
                 if (item.id === data.id) {
                     return {
                         ...item,
                         weight: weight,
-                        total_price: item.sell_price * weight,
+                        total_price: item.product_sell_price * weight,
                         total_cost_price: item.total_cost_price * weight,
                     }
                 }
@@ -155,8 +125,7 @@ const useOrder = create<IUseOrder>((set) => ({
 
         return {
             qtd_items: isNewProduct ? state.qtd_items + 1 : state.qtd_items,
-            total_price_weight: newWeightArray,
-            products: newProductArray
+            products_weight: newWeightArray,
         }
     }),
     rmvItem: (data) => set((state) => {
@@ -192,7 +161,7 @@ const useOrder = create<IUseOrder>((set) => ({
     }),
 
     nextStep: () => set(state => {
-        if (state.products.length === 0) return {}
+        if (state.products.length === 0 && state.products_weight.length === 0) return {}
 
         return {
             stepProgress: state.stepProgress + 1
