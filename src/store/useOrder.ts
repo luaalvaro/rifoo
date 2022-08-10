@@ -91,7 +91,6 @@ const useOrder = create<IUseOrder>((set) => ({
 
         const response = state.products_weight.filter(item => item.id === data.id)
         const isNewProduct = response.length === 0
-        const sellPrice = weight ? data.product_sell_price * weight : 0
 
         if (isNewProduct) {
             newWeightArray = [
@@ -100,7 +99,7 @@ const useOrder = create<IUseOrder>((set) => ({
                     id: data.id,
                     product_sell_price: data.product_sell_price,
                     weight: weight,
-                    total_sell_price: sellPrice,
+                    total_sell_price: data.product_sell_price * weight,
                     total_cost_price: data.product_cost_price * weight,
                     product_name: data.product_name,
                     qtd_items: 1,
@@ -114,8 +113,8 @@ const useOrder = create<IUseOrder>((set) => ({
                     return {
                         ...item,
                         weight: weight,
-                        total_price: item.product_sell_price * weight,
-                        total_cost_price: item.total_cost_price * weight,
+                        total_sell_price: data.product_sell_price * weight,
+                        total_cost_price: data.product_cost_price * weight,
                     }
                 }
 

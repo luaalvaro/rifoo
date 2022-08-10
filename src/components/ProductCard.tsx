@@ -77,6 +77,7 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
                         src={productUrl}
                         width="100px"
                         height="100px"
+                        quality="40"
                     />
                 }
 
@@ -107,7 +108,7 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
                         thousandSeparator={'.'}
                         decimalSeparator={','}
                         prefix={"R$ "}
-                        suffix={" /und"}
+                        suffix={data.product_sell_type === "peso" ? " kg" : " /und"}
                         allowNegative={false}
                         decimalScale={2}
                         fixedDecimalScale={true}
