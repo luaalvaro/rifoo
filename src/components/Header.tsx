@@ -22,10 +22,12 @@ import { BiLogIn } from 'react-icons/bi'
 import supabase from '../services/supabase'
 import { useRouter } from 'next/router'
 import useOrder from '../store/useOrder'
+import { services } from '../constants/defaultValues'
 
 const Header = () => {
 
-    const order = useOrder(state => state)
+    const orderQtdItems = useOrder(state => state.qtd_items)
+    const orderResetState = useOrder(state => state.resetState)
     const router = useRouter()
     const { isOpen, onToggle } = useDisclosure()
 
@@ -34,14 +36,13 @@ const Header = () => {
         return router.push("/")
     }
 
-    const handleRedirectToHomePage = () => {
-        if (order.products.length === 0) {
-            return router.push('/app')
-        } else {
+    const handleRedirectOrOpenConfirmModal = (href: string) => {
+        if (router.pathname.startsWith("/app/novavenda") && orderQtdItems > 0) {
             return onToggle()
+        } else {
+            return router.push(href)
         }
     }
-
     return (
         <Flex
             background="#fff"
@@ -58,7 +59,7 @@ const Header = () => {
                 userSelect="none"
                 fontWeight={600}
 
-                onClick={handleRedirectToHomePage}
+                onClick={() => handleRedirectOrOpenConfirmModal('/app')}
             >
                 Rifoo
             </Text>
@@ -71,15 +72,16 @@ const Header = () => {
                     variant='outline'
                 />
                 <MenuList>
-                    <MenuItem icon={<GiHamburgerMenu />}>
-                        New Tab
-                    </MenuItem>
-                    <MenuItem icon={<GiHamburgerMenu />}>
-                        New Window
-                    </MenuItem>
-                    <MenuItem icon={<GiHamburgerMenu />}>
-                        Open Closed Tab
-                    </MenuItem>
+                    {services.map((service, index) => (
+                        <MenuItem
+                            key={index}
+                            onClick={() => handleRedirectOrOpenConfirmModal(service.href)}
+                            icon={<service.icon />}
+                        >
+                            {service.title}
+                        </MenuItem>
+                    ))}
+
                     <MenuItem
                         icon={<BiLogIn />}
                         onClick={() => handleLogout()}
@@ -106,7 +108,7 @@ const Header = () => {
                             colorScheme='red'
                             mr={3}
                             onClick={() => {
-                                order.resetState()
+                                orderResetState()
                                 return router.push('/app')
                             }}
                         >

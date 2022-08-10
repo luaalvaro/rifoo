@@ -38,9 +38,17 @@ export default async function handler(
 
   const generateStats = (data: Sale[]) => {
 
-    console.log(data)
-
     const qtd_sales = data.length
+
+    let qtd_items_products = 0;
+    data.forEach(sale => {
+      const products: { qtd_items: number }[] = JSON.parse(sale.products)
+      const products_weight: { qtd_items: number }[] = JSON.parse(sale.products_weight)
+
+      qtd_items_products += products.reduce((acc, product) => acc + product.qtd_items, 0)
+
+      return qtd_items_products += products_weight.length
+    })
 
     const total_unit_price = data.reduce((acc, curr) => acc + curr.total_price, 0)
     const total_weight_price = data.reduce((acc, curr) => acc + curr.total_price_weight, 0)
@@ -54,6 +62,7 @@ export default async function handler(
 
     return {
       qtd_sales: qtd_sales,
+      qtd_items_products: qtd_items_products,
       total_sell_price: total_sell_price,
       total_cost_price: total_cost_price,
 

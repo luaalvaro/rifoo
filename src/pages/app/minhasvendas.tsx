@@ -88,8 +88,26 @@ const MinhasVendas = () => {
 
                         <StatsCard
                             variant='upper'
+                            title="Itens vendidos"
+                            value={stats.qtd_items_products}
+                            type="int"
+                        />
+                    </Flex>
+
+                    <Flex
+                        padding="15px"
+                        gridGap="15px"
+                    >
+                        <StatsCard
+                            variant='upper'
                             title="Faturamento"
                             value={stats.total_sell_price}
+                        />
+
+                        <StatsCard
+                            variant='upper'
+                            title="Ticket médio venda"
+                            value={stats.averagePrice}
                         />
                     </Flex>
 

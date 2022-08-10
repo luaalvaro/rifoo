@@ -60,6 +60,7 @@ type Sale = {
     paymentMethod: number,
     user_id: string,
     products: string,
+    products_weight: string,
     total_cost_price: number,
     total_price_weight: number,
     total_cost_price_weight: number
@@ -67,6 +68,7 @@ type Sale = {
 
 interface Stats {
     qtd_sales: number,
+    qtd_items_products: number,
     total_unit_price: number,
     total_weight_price: number,
     total_sell_price: number,
