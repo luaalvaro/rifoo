@@ -25,13 +25,12 @@ const Cadastro = () => {
     const [loading, setLoading] = useState(false)
 
     const handleSubmitForm = async (values: {
-        fullName: string,
         email: string,
         password: string,
         confirmPassword: string
     }) => {
 
-        const { fullName, email, password, confirmPassword } = values
+        const { email, password, confirmPassword } = values
 
         if (password !== confirmPassword)
             return toast({
@@ -143,27 +142,6 @@ const Cadastro = () => {
                             <Flex
                                 direction="column"
                             >
-                                <FormControl
-                                    mb="25px"
-                                    isInvalid={!!errors.fullName && touched.fullName}
-                                >
-                                    <FormLabel>Seu nome</FormLabel>
-                                    <Field
-                                        as={Input}
-                                        id="fullName"
-                                        name="fullName"
-                                        validate={(value: any) => {
-                                            let error;
-
-                                            if (value.length < 5 || value === "") {
-                                                error = "Escreva seu nome corretamente";
-                                            }
-
-                                            return error;
-                                        }}
-                                    />
-                                    <FormErrorMessage>{errors.fullName}</FormErrorMessage>
-                                </FormControl>
                                 <FormControl
                                     mb="25px"
                                     isInvalid={!!errors.email && touched.email}

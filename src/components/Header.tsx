@@ -23,6 +23,7 @@ import supabase from '../services/supabase'
 import { useRouter } from 'next/router'
 import useOrder from '../store/useOrder'
 import { services } from '../constants/defaultValues'
+import { FaUser } from 'react-icons/fa'
 
 const Header = () => {
 
@@ -81,6 +82,13 @@ const Header = () => {
                             {service.title}
                         </MenuItem>
                     ))}
+
+                    <MenuItem
+                        icon={<FaUser />}
+                        onClick={() => handleRedirectOrOpenConfirmModal('/app/perfil')}
+                    >
+                        Perfil
+                    </MenuItem>
 
                     <MenuItem
                         icon={<BiLogIn />}
