@@ -52,7 +52,9 @@ export default async function handler(
 
     const total_unit_price = data.reduce((acc, curr) => acc + curr.total_price, 0)
     const total_weight_price = data.reduce((acc, curr) => acc + curr.total_price_weight, 0)
-    const averagePrice = (total_unit_price + total_weight_price) / qtd_sales
+    const averagePrice = (total_unit_price + total_weight_price) === 0 ? 0
+      : (total_unit_price + total_weight_price) / qtd_sales
+
     const total_cost_unit_price = data.reduce((acc, curr) => acc + curr.total_cost_price, 0)
     const total_cost_weight_price = data.reduce((acc, curr) => acc + curr.total_cost_price_weight, 0)
 
