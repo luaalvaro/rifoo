@@ -16,6 +16,7 @@ import {
     ModalFooter,
     Button,
     Text,
+    Link as A
 } from '@chakra-ui/react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { BiLogIn } from 'react-icons/bi'
@@ -24,6 +25,9 @@ import { useRouter } from 'next/router'
 import useOrder from '../store/useOrder'
 import { services } from '../constants/defaultValues'
 import { FaUser } from 'react-icons/fa'
+import Image from 'next/image'
+import Rifoo from '../assets/rifoo.png'
+import Link from 'next/link'
 
 const Header = () => {
 
@@ -52,18 +56,18 @@ const Header = () => {
             justify="space-between"
             align="center"
         >
-
-            <Text
-                color="brand.primary"
-                fontSize={30}
+            <Flex
+                onClick={() => handleRedirectOrOpenConfirmModal('/app')}
                 cursor="pointer"
                 userSelect="none"
-                fontWeight={600}
-
-                onClick={() => handleRedirectOrOpenConfirmModal('/app')}
             >
-                Rifoo
-            </Text>
+                <Image
+                    src={Rifoo}
+                    alt="Rifoo"
+                    width={104}
+                    height={30}
+                />
+            </Flex>
 
             <Menu>
                 <MenuButton
