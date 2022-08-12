@@ -134,7 +134,7 @@ const Home = () => {
         </>
       )}
 
-      {!userSignatureActive && !loading &&
+      {!userSignatureActive && !loading && profile &&
         <Flex
           mt="50px"
           px="15px"
