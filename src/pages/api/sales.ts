@@ -74,6 +74,8 @@ export default async function handler(
 
       averagePrice: averagePrice,
       total_profit: total_profit,
+
+      data: data
     }
   }
 

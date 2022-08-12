@@ -93,8 +93,6 @@ const Home = () => {
     getUserProfile()
   }, [])
 
-  console.log(userSignatureActive)
-
   return (
     <AuthProvider>
       <Header />

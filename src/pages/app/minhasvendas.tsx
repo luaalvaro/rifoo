@@ -76,8 +76,9 @@ const MinhasVendas = () => {
             {stats && !loading &&
                 <>
                     <Flex
-                        padding="15px"
+                        paddingX="15px"
                         gridGap="15px"
+                        marginBottom="10px"
                     >
                         <StatsCard
                             variant='upper'
@@ -95,8 +96,9 @@ const MinhasVendas = () => {
                     </Flex>
 
                     <Flex
-                        padding="15px"
+                        paddingX="15px"
                         gridGap="15px"
+                        marginBottom="10px"
                     >
                         <StatsCard
                             variant='upper'
@@ -112,8 +114,9 @@ const MinhasVendas = () => {
                     </Flex>
 
                     <Flex
-                        padding="15px"
+                        paddingX="15px"
                         gridGap="15px"
+                        marginBottom="10px"
                     >
                         <StatsCard
                             variant='upper'
@@ -126,6 +129,41 @@ const MinhasVendas = () => {
                             title="Lucro total"
                             value={stats.total_profit}
                         />
+                    </Flex>
+
+                    <Flex
+                        padding="15px"
+
+                        direction="column"
+                        gridGap="10px"
+
+                        marginBottom="30px"
+                    >
+                        <Text>Histórico</Text>
+
+                        {stats.data.map((item, index) => (
+                            <Flex
+                                key={index}
+                                background="#fff"
+                                padding="10px"
+                                borderRadius="8px"
+                                boxShadow="0px 0px 10px rgba(0,0,0,0.1)"
+
+                                justify="space-between"
+                            >
+                                <Text
+                                    fontSize="14px"
+                                >
+                                    {item.qtd_items} itens vendidos
+                                </Text>
+
+                                <Text
+                                    fontSize="14px"
+                                >
+                                    R$ {(item.total_price + item.total_price_weight).toFixed(2)}
+                                </Text>
+                            </Flex>
+                        ))}
                     </Flex>
                 </>
             }

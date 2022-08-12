@@ -77,6 +77,7 @@ interface Stats {
     total_cost_price: number,
     total_cost_unit_price: number,
     total_profit: number,
+    data: Sale[]
 }
 
 type SessionDecoded = {

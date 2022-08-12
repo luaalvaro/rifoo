@@ -13,7 +13,7 @@ const StatsCard: React.FC<IStatsCard> = ({ variant, title, value, type }) => {
         <Flex
             width="100%"
             bg="#fff"
-            borderRadius={8}
+            borderRadius="8px"
             boxShadow="0px 0px 10px rgba(0,0,0,0.1)"
             height="100px"
             padding="5px"
