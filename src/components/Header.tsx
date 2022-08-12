@@ -26,8 +26,7 @@ import useOrder from '../store/useOrder'
 import { services } from '../constants/defaultValues'
 import { FaUser } from 'react-icons/fa'
 import Image from 'next/image'
-import Rifoo from '../assets/rifoo.png'
-import Link from 'next/link'
+import Rifoo from '../assets/rifoo.svg'
 
 const Header = () => {
 

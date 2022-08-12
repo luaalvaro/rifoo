@@ -16,6 +16,8 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import supabase from '../services/supabase'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
+import Rifoo from '../assets/rifoo.svg'
 
 const Login = () => {
 
@@ -93,12 +95,12 @@ const Login = () => {
                 direction="column"
                 align="center"
             >
-                <Heading
-                    color="brand.primary"
-                    fontSize={44}
-                >
-                    Rifoo
-                </Heading>
+                <Image
+                    src={Rifoo}
+                    alt="Rifoo"
+                    width={208}
+                    height={60}
+                />
 
                 <Text>
                     Seu negócio na palma da sua mão.
