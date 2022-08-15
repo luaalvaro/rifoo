@@ -1,6 +1,15 @@
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex, Icon, Text } from '@chakra-ui/react'
 import React from 'react'
 import ProductsPreviewImages from './ProductsPreviewImages'
+import { FaMoneyBillWave, FaRegCreditCard, FaCreditCard } from 'react-icons/fa'
+import { BsXDiamondFill } from 'react-icons/bs'
+
+const paymentMethods = [
+    { id: 1, name: 'Chave PIX', icon: BsXDiamondFill },
+    { id: 2, name: 'Dinheiro', icon: FaMoneyBillWave },
+    { id: 3, name: 'Máquina de cartão - Débito', icon: FaCreditCard },
+    { id: 4, name: 'Máquina de cartão - Crédito', icon: FaRegCreditCard },
+]
 
 interface IHistoryCard {
     sale: Sale
@@ -61,17 +70,14 @@ const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
             </Flex>
 
             <Flex
-                justify="flex-end"
+                justify="space-between"
                 align="center"
             >
-                {/* <Text
-            width="max-content"
-            fontSize="14px"
-            fontStyle="italic"
-            opacity={0.6}
-        >
-            Ver detalhes...
-        </Text> */}
+                <Icon
+                    as={paymentMethods[sale.paymentMethod - 1]?.icon}
+                    fontSize="25px"
+                    opacity={0.5}
+                />
 
                 <ProductsPreviewImages item={sale} />
             </Flex>
