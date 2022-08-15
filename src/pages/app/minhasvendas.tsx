@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import StatsCard from '../../components/StatsCard'
 import ProductsPreviewImages from '../../components/ProductsPreviewImages'
 import HistoryCard from '../../components/HistoryCard'
+import { FaBoxOpen } from 'react-icons/fa'
 
 interface IResponse {
     message: string,
@@ -147,6 +148,19 @@ const MinhasVendas = () => {
                 </>
             }
 
+            {!stats && !loading &&
+                <Flex
+                    mt="80px"
+                    direction="column"
+                    align="center"
+                >
+                    <FaBoxOpen
+                        fontSize={70}
+                        opacity={.5}
+                    />
+                    <Text>Ooppps... Você ainda não fez nenhuma venda</Text>
+                </Flex>
+            }
 
         </AuthProvider>
     )

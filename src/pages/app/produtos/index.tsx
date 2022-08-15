@@ -89,7 +89,7 @@ const Produtos = () => {
               fontSize={70}
               opacity={.5}
             />
-            <Text>Ooppps... Não encontramos nada por aqui</Text>
+            <Text textAlign="center">Ooppps... Você ainda não cadastrou nenhum produto</Text>
           </Flex>
         }
 

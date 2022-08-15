@@ -6,7 +6,7 @@ moment.locale('pt-br')
 
 type Data = {
   message: string,
-  stats?: Stats
+  stats?: Stats | null
 }
 
 export default async function handler(
@@ -118,7 +118,10 @@ export default async function handler(
       console.log(error)
     }
 
-    const stats = generateStats(sales)
+    let stats = null;
+    if (sales.length !== 0) {
+      stats = generateStats(sales)
+    }
 
     return res.status(200).json({ message: 'Success', stats: stats })
   }
