@@ -9,6 +9,11 @@ interface IStatsCard {
     type?: "int"
 }
 const StatsCard: React.FC<IStatsCard> = ({ variant, title, value, type }) => {
+
+    const textColor = title === "Lucro total"
+        ? "green"
+        : "black"
+
     return (
         <Flex
             width="100%"
@@ -46,7 +51,7 @@ const StatsCard: React.FC<IStatsCard> = ({ variant, title, value, type }) => {
                 {variant === 'upper' && (
                     <IoMdArrowDropup
                         fontSize={24}
-                        color="brand.primary"
+                        color={textColor}
                     />
                 )}
 
@@ -77,6 +82,7 @@ const StatsCard: React.FC<IStatsCard> = ({ variant, title, value, type }) => {
                     style={{
                         fontSize: '20px',
                         fontWeight: 600,
+                        color: textColor
                     }}
                 />
             </Center>

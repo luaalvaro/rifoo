@@ -1,28 +1,15 @@
 import {
   Flex,
   Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
   useDisclosure,
-  FormErrorMessage,
   useToast,
   Stack,
   Skeleton,
 } from '@chakra-ui/react'
 import Header from '../../components/Header'
 import AuthProvider from '../../components/AuthProvider'
-import HomeButtom from '../../components/HomeButtom'
-import { services } from '../../constants/defaultValues'
 import supabase from '../../services/supabase'
 import { useEffect, useState } from 'react'
-import { Field, Formik } from 'formik'
 import { yyyyMMdd_to_ddMMyyyy } from '../../utils/dataHacks'
 
 const Perfil = () => {
@@ -122,7 +109,10 @@ const Perfil = () => {
             mt="10px"
             px="15px"
           >
-            <Text fontWeight={700}>Sua fatura vence no dia {yyyyMMdd_to_ddMMyyyy(profile?.valid_until)}</Text>
+            <Text>
+              O primeiro mês é por nossa conta!<br />
+              Teste grátis até <b>{yyyyMMdd_to_ddMMyyyy(profile?.valid_until)}</b>
+            </Text>
           </Flex>
         </>
       )}

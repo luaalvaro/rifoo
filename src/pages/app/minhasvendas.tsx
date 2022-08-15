@@ -12,6 +12,7 @@ import useOrder from '../../store/useOrder'
 import { useRouter } from 'next/router'
 import StatsCard from '../../components/StatsCard'
 import ProductsPreviewImages from '../../components/ProductsPreviewImages'
+import HistoryCard from '../../components/HistoryCard'
 
 interface IResponse {
     message: string,
@@ -139,52 +140,8 @@ const MinhasVendas = () => {
                     >
                         <Text>Histórico</Text>
 
-                        {stats.data.map((item, index) => (
-                            <Flex
-                                key={index}
-                                background="#fff"
-                                padding="10px"
-                                borderRadius="8px"
-                                boxShadow="0px 0px 10px rgba(0,0,0,0.1)"
-
-                                justify="space-between"
-
-                                direction="column"
-                            >
-                                <Flex
-                                    justify="space-between"
-                                    marginBottom="15px"
-                                >
-                                    <Text
-                                        fontSize="16px"
-                                    >
-                                        {new Date(item.created_at).toLocaleString()}
-                                    </Text>
-
-                                    <Text
-                                        fontSize="16px"
-                                        fontWeight={600}
-                                    >
-                                        R$ {(item.total_price + item.total_price_weight).toFixed(2)}
-                                    </Text>
-                                </Flex>
-
-                                <Flex
-                                    justify="space-between"
-                                    align="center"
-                                >
-                                    <Text
-                                        width="max-content"
-                                        fontSize="14px"
-                                        fontStyle="italic"
-                                        opacity={0.6}
-                                    >
-                                        Ver detalhes...
-                                    </Text>
-
-                                    <ProductsPreviewImages item={item} />
-                                </Flex>
-                            </Flex>
+                        {stats.data.map((sale, index) => (
+                            <HistoryCard key={index} sale={sale} />
                         ))}
                     </Flex>
                 </>

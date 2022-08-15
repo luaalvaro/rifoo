@@ -24,6 +24,7 @@ import supabase from '../../services/supabase'
 import { useEffect, useState } from 'react'
 import { Field, Formik } from 'formik'
 import { yyyyMMdd_to_ddMMyyyy } from '../../utils/dataHacks'
+import HistoryCard from '../../components/HistoryCard'
 
 const Home = () => {
 
@@ -31,6 +32,7 @@ const Home = () => {
   const [profile, setProfile] = useState<any>(null)
   const { isOpen, onToggle } = useDisclosure()
   const [loading, setLoading] = useState(false)
+  const [lastSale, setLastSale] = useState<Sale | null>(null)
 
   const userSignatureActive = typeof profile?.valid_until === 'string'
     && new Date(profile.valid_until) >= new Date()
@@ -68,6 +70,26 @@ const Home = () => {
     }
   }
 
+  const fetchLastSales = async () => {
+    try {
+      setLoading(true)
+      const { data, error } = await supabase
+        .from('sales')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (error) throw error
+
+      setLastSale(data)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const getUserProfile = async () => {
     try {
       setLoading(true)
@@ -91,6 +113,7 @@ const Home = () => {
 
   useEffect(() => {
     getUserProfile()
+    fetchLastSales()
   }, [])
 
   return (
@@ -130,6 +153,10 @@ const Home = () => {
                 href={service.href}
               />
             ))}
+
+            {lastSale &&
+              <HistoryCard sale={lastSale} cardTitle="Última venda" />
+            }
           </Flex>
         </>
       )}
