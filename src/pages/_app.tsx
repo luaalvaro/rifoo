@@ -15,6 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         background: "#F1F1F1",
         primary: "#405090",
         primaryDark: "#2F3C8E",
+        backgroundCupom: "#FFFFE5",
       },
     },
   })

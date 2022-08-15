@@ -25,6 +25,7 @@ import { useEffect, useState } from 'react'
 import { Field, Formik } from 'formik'
 import { yyyyMMdd_to_ddMMyyyy } from '../../utils/dataHacks'
 import HistoryCard from '../../components/HistoryCard'
+import { RiAdminFill } from 'react-icons/ri'
 
 const Home = () => {
 
@@ -154,6 +155,14 @@ const Home = () => {
                 href={service.href}
               />
             ))}
+
+            {profile?.member_type === "admin" &&
+              <HomeButtom
+                title="Administração"
+                icon={RiAdminFill}
+                href="#"
+              />
+            }
 
             {lastSale &&
               <HistoryCard sale={lastSale} cardTitle="Última venda" />
