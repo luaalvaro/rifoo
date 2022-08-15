@@ -11,9 +11,9 @@ import AuthProvider from '../../components/AuthProvider'
 import supabase from '../../services/supabase'
 import { useEffect, useState } from 'react'
 import { yyyyMMdd_to_ddMMyyyy } from '../../utils/dataHacks'
+import moment from 'moment'
 
 const Perfil = () => {
-
   const toast = useToast()
   const [profile, setProfile] = useState<any>(null)
   const { isOpen, onToggle } = useDisclosure()
@@ -47,7 +47,7 @@ const Perfil = () => {
     getUserProfile()
   }, [])
 
-  console.log(userSignatureActive)
+  console.log(profile?.valid_until)
 
   return (
     <AuthProvider>
@@ -106,12 +106,12 @@ const Perfil = () => {
           </Text>
 
           <Flex
-            mt="10px"
+            mt="25px"
             px="15px"
           >
             <Text>
-              O primeiro mês é por nossa conta!<br />
-              Teste grátis até <b>{yyyyMMdd_to_ddMMyyyy(profile?.valid_until)}</b>
+              Sua assinatura está ativa e expira em&nbsp;
+              <b>{moment(profile?.valid_until, "YYYY-MM-DD").fromNow()}</b>
             </Text>
           </Flex>
         </>

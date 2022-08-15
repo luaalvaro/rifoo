@@ -2,6 +2,11 @@ import type { AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
 import { extendTheme } from '@chakra-ui/react'
 import HeaderConfig from '../components/HeaderConfig'
+import moment from 'moment'
+import 'moment/locale/pt-br'
+
+moment.locale('pt-br')
+
 function MyApp({ Component, pageProps }: AppProps) {
 
   const theme = extendTheme({

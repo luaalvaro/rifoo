@@ -85,7 +85,7 @@ const Home = () => {
 
       setLastSale(data)
     } catch (error) {
-      console.log(error)
+
     } finally {
       setLoading(false)
     }
