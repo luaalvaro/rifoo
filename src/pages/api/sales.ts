@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { createClient } from '@supabase/supabase-js'
 import jwt from 'jsonwebtoken'
+import moment from 'moment'
+moment.locale('pt-br')
 
 type Data = {
   message: string,
@@ -98,10 +100,16 @@ export default async function handler(
     let sales: Sale[] = []
 
     try {
+
+      const last_week = moment().subtract(7, 'days').calendar();
+      console.log('7 dias atrás', last_week);
+
       const { data, error } = await supabase
         .from<Sale>('sales')
         .select('*')
         .eq('user_id', decoded.sub)
+        .order('created_at', { ascending: false })
+        .gte('created_at', last_week)
 
       if (error) throw error
 

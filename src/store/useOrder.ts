@@ -52,6 +52,7 @@ const useOrder = create<IUseOrder>((set) => ({
                     product_sell_price: data.product_sell_price,
                     product_sell_type: data.product_sell_type,
                     qtd_items: 1,
+                    url_image_product: data.product_image_url,
                 }]
         } else {
             newProductArray = state.products.map(item => {
@@ -76,7 +77,7 @@ const useOrder = create<IUseOrder>((set) => ({
     addItemWeight: (data, weight) => set((state) => {
 
         let newProductArray: ProductSell[] = []
-        let newWeightArray: any[] = []
+        let newWeightArray: ProductSellWeight[] = []
 
         if (!weight) {
             newProductArray = state.products.filter(item => item.id !== data.id)
@@ -104,6 +105,7 @@ const useOrder = create<IUseOrder>((set) => ({
                     product_name: data.product_name,
                     qtd_items: 1,
                     product_sell_type: data.product_sell_type,
+                    url_image_product: data.product_image_url,
                 }
             ]
 

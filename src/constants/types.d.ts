@@ -23,6 +23,7 @@ interface ProductSell {
     product_sell_price: number,
     product_sell_type: string,
     qtd_items: number,
+    url_image_product: string,
 }
 
 interface ProductSellWeight {
@@ -34,6 +35,7 @@ interface ProductSellWeight {
     qtd_items: number,
     product_name: string,
     product_sell_type: string,
+    url_image_product: string,
 }
 
 interface Order {
