@@ -33,6 +33,7 @@ const Home = () => {
   const { isOpen, onToggle } = useDisclosure()
   const [loading, setLoading] = useState(false)
   const [lastSale, setLastSale] = useState<Sale | null>(null)
+  const [stepProgress, setStepProgress] = useState(0)
 
   const userSignatureActive = typeof profile?.valid_until === 'string'
     && new Date(profile.valid_until) >= new Date()
@@ -175,153 +176,220 @@ const Home = () => {
         <ModalContent
           mx="15px"
         >
-          <ModalHeader>Completar cadastro</ModalHeader>
+          <ModalHeader>Bem vindo ao Rifoo</ModalHeader>
 
           <ModalBody
             display="flex"
             flexDirection="column"
             gridGap="15px"
           >
-            <Formik
-              initialValues={{
-                fullName: "",
-                birthdate: "",
-                cpf: "",
-                whatsapp: "",
-                referred: ""
-              }}
-              onSubmit={(values) => {
-                handleSubmitProfile(values)
-              }}
-            >
-              {({ handleSubmit, errors, touched }) => (
-                <form onSubmit={handleSubmit}>
+            {stepProgress === 0 &&
+              <Flex
+                marginBottom="20px"
+                direction="column"
+                gridGap="20px"
+              >
+                <Text
+                  lineHeight="20px"
+                  textAlign="justify"
+                >
+                  O Rifoo vai te dar controle sobre seu negócio.
+                  Você pode controlar seus produtos e vendas, e também ter acesso a
+                  relatórios e gráficos que vão te ajudar a melhorar seu negócio.
+                </Text>
 
-                  <Flex
-                    direction="column"
-                  >
-                    <FormControl
-                      mb="25px"
-                      isInvalid={!!errors.fullName && touched.fullName}
+                <Text
+                  lineHeight="20px"
+                  fontWeight={700}
+                >
+                  O primeiro mês é por nossa conta!
+                </Text>
+
+                <Text
+                  lineHeight="20px"
+                  textAlign="justify"
+                >
+                  Utilize o Rifoo durante 30 dias, totalmente de graça!
+                  Você não precisa cadastrar cartão de crédito.
+                </Text>
+
+                <Text
+                  lineHeight="20px"
+                  textAlign="justify"
+                >
+                  Após esse período, você poderá renovar o Rifoo por apenas R$ 29.90/mês
+                </Text>
+
+                <Button
+                  background="brand.primary"
+                  color="#fff"
+                  width="100%"
+
+                  isLoading={loading}
+
+                  onClick={() => setStepProgress(1)}
+
+                  _hover={{
+                    background: "brand.primary",
+                    opacity: 0.8,
+                  }}
+                >
+                  Começar 30 dias grátis
+                </Button>
+              </Flex>
+            }
+
+            {stepProgress === 1 &&
+              <Formik
+                initialValues={{
+                  fullName: "",
+                  birthdate: "",
+                  cpf: "",
+                  whatsapp: "",
+                  referred: ""
+                }}
+                onSubmit={(values) => {
+                  handleSubmitProfile(values)
+                }}
+              >
+                {({ handleSubmit, errors, touched }) => (
+                  <form onSubmit={handleSubmit}>
+
+                    <Text
+                      lineHeight="20px"
+                      textAlign="justify"
+                      mb="20px"
                     >
-                      <FormLabel>Nome completo</FormLabel>
-                      <Field
-                        as={Input}
-                        id="fullName"
-                        name="fullName"
-                        validate={(value: string) => {
-                          let error;
+                      Complete o seu cadastro com algumas informações
+                      para começar com o seu período de 30 dias grátis.
+                    </Text>
 
-                          if (value === "") {
-                            error = "Preencha seu nome completo";
-                          }
-
-                          return error;
-                        }}
-                      />
-                      <FormErrorMessage>{errors.fullName}</FormErrorMessage>
-                    </FormControl>
-
-                    <FormControl
-                      mb="25px"
-                      isInvalid={!!errors.birthdate && touched.birthdate}
+                    <Flex
+                      direction="column"
                     >
-                      <FormLabel>Data de nascimento</FormLabel>
-                      <Field
-                        as={Input}
-                        id="birthdate"
-                        name="birthdate"
-                        type="date"
-                        validate={(value: string) => {
-                          let error;
+                      <FormControl
+                        mb="25px"
+                        isInvalid={!!errors.fullName && touched.fullName}
+                      >
+                        <FormLabel>Nome completo</FormLabel>
+                        <Field
+                          as={Input}
+                          id="fullName"
+                          name="fullName"
+                          validate={(value: string) => {
+                            let error;
 
-                          if (value === "") {
-                            error = "Preencha sua data de nascimento";
-                          }
+                            if (value === "") {
+                              error = "Preencha seu nome completo";
+                            }
 
-                          return error;
-                        }}
-                      />
-                      <FormErrorMessage>{errors.birthdate}</FormErrorMessage>
-                    </FormControl>
+                            return error;
+                          }}
+                        />
+                        <FormErrorMessage>{errors.fullName}</FormErrorMessage>
+                      </FormControl>
 
-                    <FormControl
-                      mb="25px"
-                      isInvalid={!!errors.cpf && touched.cpf}
+                      <FormControl
+                        mb="25px"
+                        isInvalid={!!errors.birthdate && touched.birthdate}
+                      >
+                        <FormLabel>Data de nascimento</FormLabel>
+                        <Field
+                          as={Input}
+                          id="birthdate"
+                          name="birthdate"
+                          type="date"
+                          validate={(value: string) => {
+                            let error;
+
+                            if (value === "") {
+                              error = "Preencha sua data de nascimento";
+                            }
+
+                            return error;
+                          }}
+                        />
+                        <FormErrorMessage>{errors.birthdate}</FormErrorMessage>
+                      </FormControl>
+
+                      <FormControl
+                        mb="25px"
+                        isInvalid={!!errors.cpf && touched.cpf}
+                      >
+                        <FormLabel>CPF</FormLabel>
+                        <Field
+                          as={Input}
+                          id="cpf"
+                          name="cpf"
+                          validate={(value: string) => {
+                            let error;
+
+                            if (value === "") {
+                              error = "Preencha seu CPF";
+                            }
+
+                            return error;
+                          }}
+                        />
+                        <FormErrorMessage>{errors.cpf}</FormErrorMessage>
+                      </FormControl>
+
+                      <FormControl
+                        mb="25px"
+                        isInvalid={!!errors.whatsapp && touched.whatsapp}
+                      >
+                        <FormLabel>Whats app</FormLabel>
+                        <Field
+                          as={Input}
+                          id="whatsapp"
+                          name="whatsapp"
+                          validate={(value: string) => {
+                            let error;
+
+                            if (value === "") {
+                              error = "Preencha seu whatsapp";
+                            }
+
+                            return error;
+                          }}
+                        />
+                        <FormErrorMessage>{errors.whatsapp}</FormErrorMessage>
+                      </FormControl>
+
+                      <FormControl
+                        mb="25px"
+                      >
+                        <FormLabel>Código de indicação</FormLabel>
+                        <Field
+                          as={Input}
+                          id="referred"
+                          name="referred"
+                        />
+                      </FormControl>
+                    </Flex>
+
+                    <Button
+                      type="submit"
+                      background="brand.primary"
+                      color="#fff"
+                      width="100%"
+
+                      isLoading={loading}
+
+                      _hover={{
+                        background: "brand.primary",
+                        opacity: 0.8,
+                      }}
+
+                      marginBottom="15px"
                     >
-                      <FormLabel>CPF</FormLabel>
-                      <Field
-                        as={Input}
-                        id="cpf"
-                        name="cpf"
-                        validate={(value: string) => {
-                          let error;
+                      Salvar e continuar
+                    </Button>
 
-                          if (value === "") {
-                            error = "Preencha seu CPF";
-                          }
-
-                          return error;
-                        }}
-                      />
-                      <FormErrorMessage>{errors.cpf}</FormErrorMessage>
-                    </FormControl>
-
-                    <FormControl
-                      mb="25px"
-                      isInvalid={!!errors.whatsapp && touched.whatsapp}
-                    >
-                      <FormLabel>Whats app</FormLabel>
-                      <Field
-                        as={Input}
-                        id="whatsapp"
-                        name="whatsapp"
-                        validate={(value: string) => {
-                          let error;
-
-                          if (value === "") {
-                            error = "Preencha seu whatsapp";
-                          }
-
-                          return error;
-                        }}
-                      />
-                      <FormErrorMessage>{errors.whatsapp}</FormErrorMessage>
-                    </FormControl>
-
-                    <FormControl
-                      mb="25px"
-                    >
-                      <FormLabel>Código de indicação</FormLabel>
-                      <Field
-                        as={Input}
-                        id="referred"
-                        name="referred"
-                      />
-                    </FormControl>
-                  </Flex>
-
-                  <Button
-                    type="submit"
-                    background="brand.primary"
-                    color="#fff"
-                    width="100%"
-
-                    isLoading={loading}
-
-                    _hover={{
-                      background: "brand.primary",
-                      opacity: 0.8,
-                    }}
-
-                    marginBottom="15px"
-                  >
-                    Completar
-                  </Button>
-
-                </form>
-              )}
-            </Formik>
+                  </form>
+                )}
+              </Formik>
+            }
           </ModalBody>
         </ModalContent>
       </Modal>
