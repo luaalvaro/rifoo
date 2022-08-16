@@ -118,14 +118,15 @@ export default async function handler(
       console.log('Finally')
     }
 
-    let stats = null;
+    console.log(sales, sales.length)
+
     if (sales.length !== 0) {
       console.log('Estatísticas das vendas geradas')
-      return stats = generateStats(sales)
+      let stats = generateStats(sales);
+      return res.status(200).json({ message: 'Success', stats: stats })
+    } else {
+      return res.status(200).json({ message: 'Success', stats: null })
     }
-
-    console.log('stats', stats)
-    return res.status(200).json({ message: 'Success', stats: stats })
   }
 
   return res.status(400).json({ message: 'Invalid request type' })
