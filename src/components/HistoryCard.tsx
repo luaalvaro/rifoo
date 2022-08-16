@@ -92,9 +92,10 @@ const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
                                     data.productsArray
                                     && data.productsArray.length > 0
                                     && data.productsArray
-                                        .map((product: any) => {
+                                        .map((product: any, index: number) => {
                                             return (
                                                 <Flex
+                                                    key={index}
                                                     width="100%"
                                                     justify="space-between"
                                                 >
@@ -117,9 +118,10 @@ const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
                                     data.productsWeightArray
                                     && data.productsWeightArray.length > 0
                                     && data.productsWeightArray
-                                        .map((product: any) => {
+                                        .map((product: any, index: number) => {
                                             return (
                                                 <Flex
+                                                    key={index}
                                                     width="100%"
                                                     justify="space-between"
                                                 >
