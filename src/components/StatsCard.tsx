@@ -5,7 +5,7 @@ import NumberFormat from 'react-number-format'
 interface IStatsCard {
     variant: 'upper' | 'lower',
     title: string,
-    value: number,
+    value: number | string,
     type?: "int"
 }
 const StatsCard: React.FC<IStatsCard> = ({ variant, title, value, type }) => {

@@ -6,16 +6,10 @@ import {
 } from '@chakra-ui/react'
 import Header from '../../../components/Header'
 import AuthProvider from '../../../components/AuthProvider'
-import { useCallback, useEffect, useState } from 'react'
 import supabase from '../../../services/supabase'
-import useOrder from '../../../store/useOrder'
 import { useRouter } from 'next/router'
 import StatsCard from '../../../components/StatsCard'
-import ProductsPreviewImages from '../../../components/ProductsPreviewImages'
-import HistoryCard from '../../../components/HistoryCard'
 import { FaBoxOpen } from 'react-icons/fa'
-import moment from 'moment'
-import { formatDateStartsWithDay } from '../../../utils/dataHacks'
 import useSWR from 'swr'
 
 const sessionToken = supabase.auth.session()
@@ -59,6 +53,11 @@ const MinhasVendas = () => {
         const total_cost_price = total_cost_unit_price + total_cost_weight_price
         const total_profit = total_sell_price - total_cost_price
 
+        const qtd_users_actives_ids = data.map(item => item.user_id)
+        const qtd_users_actives = new Set(qtd_users_actives_ids).size
+
+        const averageSellsPerActiveUser = qtd_users_actives === 0 ? 0 : qtd_sales / qtd_users_actives
+
         return {
             qtd_sales: qtd_sales,
             qtd_items_products: qtd_items_products,
@@ -73,6 +72,9 @@ const MinhasVendas = () => {
 
             averagePrice: averagePrice,
             total_profit: total_profit,
+
+            qtd_users_actives: qtd_users_actives,
+            averageSellsPerActiveUser: averageSellsPerActiveUser,
 
             data: data
         }
@@ -110,6 +112,26 @@ const MinhasVendas = () => {
                     >
                         <StatsCard
                             variant='upper'
+                            title="Usuários ativos"
+                            value={stats.qtd_users_actives}
+                            type="int"
+                        />
+
+                        <StatsCard
+                            variant='upper'
+                            title="Média de vendas por usuário ativo"
+                            value={stats.averageSellsPerActiveUser.toFixed(2)}
+                            type="int"
+                        />
+                    </Flex>
+
+                    <Flex
+                        paddingX="15px"
+                        gridGap="15px"
+                        marginBottom="10px"
+                    >
+                        <StatsCard
+                            variant='upper'
                             title="Total de vendas"
                             value={stats.qtd_sales}
                             type="int"
@@ -122,7 +144,6 @@ const MinhasVendas = () => {
                             type="int"
                         />
                     </Flex>
-
                     <Flex
                         paddingX="15px"
                         gridGap="15px"
@@ -160,6 +181,8 @@ const MinhasVendas = () => {
                     </Flex>
                 </>
             }
+
+
 
             {!stats && !loading &&
                 <Flex
