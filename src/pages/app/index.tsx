@@ -28,13 +28,33 @@ import HistoryCard from '../../components/HistoryCard'
 import { RiAdminFill } from 'react-icons/ri'
 import moment from 'moment'
 import Link from 'next/link'
+import useSWR from 'swr'
+
+const fetcherProfile = async (url: any) => await supabase
+  .from(url)
+  .select("*")
+  .single()
+
+const fetcherLastSale = async (url: any) => await supabase
+  .from('sales')
+  .select('*')
+  .order('created_at', { ascending: false })
+  .limit(1)
+  .single()
+
 const Home = () => {
 
   const toast = useToast()
-  const [profile, setProfile] = useState<any>(null)
+
+  const { data, error } = useSWR('profiles', fetcherProfile)
+  const profile = data?.data
+
+  const { data: saleData, error: saleError } = useSWR('lastsale', fetcherLastSale)
+  const lastSale = saleData?.data
+
+  const loading = !data || !saleData
+
   const { isOpen, onToggle } = useDisclosure()
-  const [loading, setLoading] = useState(false)
-  const [lastSale, setLastSale] = useState<Sale | null>(null)
   const [stepProgress, setStepProgress] = useState(0)
 
   const userSignatureActive = typeof profile?.valid_until === 'string'
@@ -45,7 +65,7 @@ const Home = () => {
     if (!session) return
 
     try {
-      setLoading(true)
+
       const response = await fetch('/api/createprofile', {
         method: 'POST',
         body: JSON.stringify({
@@ -57,7 +77,6 @@ const Home = () => {
       const data = await response.json()
 
       if (data.message === "Success" && response.status === 200) {
-        getUserProfile()
         toast({
           status: 'success',
           title: 'Perfil criado com sucesso!',
@@ -69,58 +88,12 @@ const Home = () => {
     } catch (error) {
       console.log(error)
     } finally {
-      setLoading(false)
-    }
-  }
 
-  const fetchLastSales = async () => {
-    try {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('sales')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single()
-
-      if (error) throw error
-
-      setLastSale(data)
-    } catch (error) {
-
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const getUserProfile = async () => {
-    try {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('profiles')
-        .select("*")
-        .single()
-
-      if (error) throw error
-
-      setProfile(data)
-    } catch (error) {
-      console.log(error)
-      if (!isOpen) {
-        onToggle()
-      }
-    } finally {
-      setLoading(false)
     }
   }
 
   const signatureDate = moment(profile?.valid_until, "YYYY-MM-DD").fromNow()
   const signatureStatusDate = signatureDate.includes('há') ? 'atrasada' : 'atual'
-
-  useEffect(() => {
-    getUserProfile()
-    fetchLastSales()
-  }, [])
 
   return (
     <AuthProvider>

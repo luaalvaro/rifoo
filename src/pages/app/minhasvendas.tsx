@@ -35,8 +35,6 @@ const MinhasVendas = () => {
 
         if (!data || data.length === 0) return null
 
-        console.log(data)
-
         const qtd_sales = data.length
 
         let qtd_items_products = 0;

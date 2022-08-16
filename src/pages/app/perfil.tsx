@@ -12,45 +12,22 @@ import supabase from '../../services/supabase'
 import { useEffect, useState } from 'react'
 import { yyyyMMdd_to_ddMMyyyy } from '../../utils/dataHacks'
 import moment from 'moment'
+import useSWR from 'swr'
+
+const fetcher = async (url: any) => await supabase
+  .from(url)
+  .select("*")
+  .single()
 
 const Perfil = () => {
-  const toast = useToast()
-  const [profile, setProfile] = useState<any>(null)
-  const { isOpen, onToggle } = useDisclosure()
-  const [loading, setLoading] = useState(false)
 
-  const userSignatureActive = typeof profile?.valid_until === 'string'
-    && new Date(profile.valid_until) >= new Date()
+  const { data, error } = useSWR('profiles', fetcher)
 
+  const profile = data?.data
+  const loading = !data
   const signatureDate = moment(profile?.valid_until, "YYYY-MM-DD").fromNow()
-  const signatureStatusDate = signatureDate.includes('há') ? 'atrasada' : 'atual'
-
-  const getUserProfile = async () => {
-    try {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('profiles')
-        .select("*")
-        .single()
-
-      if (error) throw error
-
-      setProfile(data)
-    } catch (error) {
-      console.log(error)
-      if (!isOpen) {
-        onToggle()
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    getUserProfile()
-  }, [])
-
-  console.log(profile?.valid_until)
+  const signatureStatusDate = signatureDate.includes('há') ? 'atrasada' : 'ativa'
+  const signatureTextUntil = signatureDate.includes('há') ? 'Expirou' : 'Expira'
 
   return (
     <AuthProvider>
@@ -111,10 +88,11 @@ const Perfil = () => {
           <Flex
             mt="25px"
             px="15px"
+            userSelect="none"
           >
             <Text>
-              Sua fatura está {signatureStatusDate} <b>{signatureDate}</b>
-              <br /> clique aqui para renovar.
+              Sua assinatura está {signatureStatusDate}.<br />
+              <b>{`${signatureTextUntil} ${signatureDate}`}</b>
             </Text>
           </Flex>
         </>
