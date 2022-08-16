@@ -55,9 +55,10 @@ const Cadastro = () => {
                 throw error
 
             toast({
-                status: 'error',
-                description: 'Cadastro criado com sucesso!',
-                duration: 5000,
+                status: 'success',
+                title: 'Cadastro criado com sucesso!',
+                description: 'Finalize seu cadastro, para aproveitar 30 dias grátis!',
+                duration: 9000,
             })
 
             setTimeout(() => {
