@@ -33,7 +33,9 @@ const MinhasVendas = () => {
 
     const generateStats = (data: Sale[] | null | undefined) => {
 
-        if (!data) return
+        if (!data || data.length === 0) return null
+
+        console.log(data)
 
         const qtd_sales = data.length
 

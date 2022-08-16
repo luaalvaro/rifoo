@@ -15,30 +15,18 @@ import ResumeOrder from '../../components/ResumeOrder'
 import useOrder from '../../store/useOrder'
 import PaymentOrder from '../../components/PaymentOrder'
 import { AiOutlineArrowLeft } from 'react-icons/ai'
+import useSWR from 'swr'
+
+const fetcher = async (url: any) => await await supabase
+    .from<Product>(url)
+    .select()
 
 const Home = () => {
 
     const order = useOrder(state => state)
-    const [products, setProducts] = useState<Product[] | null>(null)
-
-    const fetchProducts = async () => {
-        try {
-            const { data, error } = await supabase
-                .from<Product>("products")
-                .select()
-
-            if (error)
-                throw error
-
-            setProducts(data)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    useEffect(() => {
-        fetchProducts()
-    }, [])
+    const { data, error } = useSWR('products', fetcher)
+    const products = data?.data
+    const loading = !data
 
     return (
         <AuthProvider>
@@ -67,7 +55,7 @@ const Home = () => {
             </Flex>
 
 
-            {products === null &&
+            {products === null || loading &&
                 <Stack px="15px">
                     <Skeleton h="20px" />
                     <Skeleton h="20px" />
@@ -75,7 +63,7 @@ const Home = () => {
                 </Stack>
             }
 
-            {products && !products.length &&
+            {products && !products.length && !loading &&
                 <Flex
                     mt="80px"
                     direction="column"
@@ -94,7 +82,7 @@ const Home = () => {
                 </Flex>
             }
 
-            {order.stepProgress === 0 && products &&
+            {order.stepProgress === 0 && products && !loading &&
                 <Flex
                     direction="column"
                     px="15px"
