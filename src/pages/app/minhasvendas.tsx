@@ -15,6 +15,7 @@ import ProductsPreviewImages from '../../components/ProductsPreviewImages'
 import HistoryCard from '../../components/HistoryCard'
 import { FaBoxOpen } from 'react-icons/fa'
 import moment from 'moment'
+import { formatDateStartsWithDay } from '../../utils/dataHacks'
 
 interface IResponse {
     message: string,
@@ -77,7 +78,7 @@ const MinhasVendas = () => {
 
         try {
             setLoading(true)
-            const last_week = moment().subtract(7, 'days').calendar();
+            const last_week = formatDateStartsWithDay(moment().subtract(7, 'days').calendar())
 
             const { data, error } = await supabase
                 .from<Sale>('sales')
