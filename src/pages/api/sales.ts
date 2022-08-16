@@ -100,9 +100,7 @@ export default async function handler(
     let sales: Sale[] = []
 
     try {
-
       const last_week = moment().subtract(7, 'days').calendar();
-      console.log('7 dias atrás', last_week);
 
       const { data, error } = await supabase
         .from<Sale>('sales')
@@ -116,11 +114,14 @@ export default async function handler(
       sales = data
     } catch (error) {
       console.log(error)
+    } finally {
+      console.log('Finally')
     }
 
     let stats = null;
     if (sales.length !== 0) {
-      stats = generateStats(sales)
+      console.log('Estatísticas das vendas geradas')
+      return stats = generateStats(sales)
     }
 
     return res.status(200).json({ message: 'Success', stats: stats })
