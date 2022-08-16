@@ -101,6 +101,8 @@ export default async function handler(
     try {
       const last_week = moment().subtract(7, 'days').calendar();
 
+      console.log(decoded)
+
       const { data, error } = await supabase
         .from<Sale>('sales')
         .select('*')
