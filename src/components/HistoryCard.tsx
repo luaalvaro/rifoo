@@ -74,11 +74,11 @@ const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
                                 flexDirection="column"
                                 p="15px"
                                 background="brand.backgroundCupom"
-                                gridGap="8px"
                             >
                                 <Flex
                                     width="100%"
                                     justify="flex-end"
+                                    mb="30px"
                                 >
                                     <Text
                                         fontSize="14px"
@@ -88,32 +88,57 @@ const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
                                     </Text>
                                 </Flex>
 
-                                <Flex
-                                    width="100%"
-                                    justify="space-between"
-                                    marginTop="20px"
-                                >
-                                    <Text
-                                        fontSize="14px"
-                                    >
-                                        {data.productsArray
-                                            && data.productsArray.length > 0
-                                            && data.productsArray.map((product: any) => {
-                                                return <>{`${product.qtd_items}x ${product.product_name}`}</>
-                                            })}
-                                    </Text>
+                                {
+                                    data.productsArray
+                                    && data.productsArray.length > 0
+                                    && data.productsArray
+                                        .map((product: any) => {
+                                            return (
+                                                <Flex
+                                                    width="100%"
+                                                    justify="space-between"
+                                                >
+                                                    <Text
+                                                        fontSize="14px"
+                                                    >
+                                                        {`${product.qtd_items}x ${product.product_name}`}
+                                                    </Text>
 
-                                    <Text
-                                        fontSize="14px"
-                                    >
-                                        {data.productsArray
-                                            && data.productsArray.length > 0
-                                            && data.productsArray.map((product: any) => {
-                                                return <>{`R$ ${product.product_sell_price * product.qtd_items}`}</>
-                                            })}
-                                    </Text>
-                                </Flex>
+                                                    <Text>
+                                                        {`R$ ${product.product_sell_price * product.qtd_items}`}
+                                                    </Text>
+                                                </Flex>
+                                            )
+                                        })
+                                }
+
+
+                                {
+                                    data.productsWeightArray
+                                    && data.productsWeightArray.length > 0
+                                    && data.productsWeightArray
+                                        .map((product: any) => {
+                                            return (
+                                                <Flex
+                                                    width="100%"
+                                                    justify="space-between"
+                                                >
+                                                    <Text
+                                                        fontSize="14px"
+                                                    >
+                                                        {`${product.weight} kg ${product.product_name}`}
+                                                    </Text>
+
+                                                    <Text>
+                                                        {`R$ ${product.product_sell_price * product.qtd_items}`}
+                                                    </Text>
+                                                </Flex>
+                                            )
+                                        })
+                                }
+
                             </Flex>
+
                         </ModalBody>
 
                         <ModalFooter>
