@@ -14,6 +14,7 @@ import StatsCard from '../../components/StatsCard'
 import ProductsPreviewImages from '../../components/ProductsPreviewImages'
 import HistoryCard from '../../components/HistoryCard'
 import { FaBoxOpen } from 'react-icons/fa'
+import moment from 'moment'
 
 interface IResponse {
     message: string,
@@ -25,22 +26,75 @@ const MinhasVendas = () => {
     const [loading, setLoading] = useState(false)
     const [stats, setStats] = useState<Stats | null>(null)
 
+    const generateStats = (data: Sale[]) => {
+
+        const qtd_sales = data.length
+
+        let qtd_items_products = 0;
+        data.forEach(sale => {
+            const products: { qtd_items: number }[] = JSON.parse(sale.products)
+            const products_weight: { qtd_items: number }[] = JSON.parse(sale.products_weight)
+
+            qtd_items_products += products.reduce((acc, product) => acc + product.qtd_items, 0)
+
+            return qtd_items_products += products_weight.length
+        })
+
+        const total_unit_price = data.reduce((acc, curr) => acc + curr.total_price, 0)
+        const total_weight_price = data.reduce((acc, curr) => acc + curr.total_price_weight, 0)
+        const averagePrice = (total_unit_price + total_weight_price) === 0 ? 0
+            : (total_unit_price + total_weight_price) / qtd_sales
+
+        const total_cost_unit_price = data.reduce((acc, curr) => acc + curr.total_cost_price, 0)
+        const total_cost_weight_price = data.reduce((acc, curr) => acc + curr.total_cost_price_weight, 0)
+
+        const total_sell_price = total_weight_price + total_unit_price
+        const total_cost_price = total_cost_unit_price + total_cost_weight_price
+        const total_profit = total_sell_price - total_cost_price
+
+        return {
+            qtd_sales: qtd_sales,
+            qtd_items_products: qtd_items_products,
+            total_sell_price: total_sell_price,
+            total_cost_price: total_cost_price,
+
+            total_cost_unit_price: total_cost_unit_price,
+            total_cost_weight_price: total_cost_weight_price,
+
+            total_unit_price: total_unit_price,
+            total_weight_price: total_weight_price,
+
+            averagePrice: averagePrice,
+            total_profit: total_profit,
+
+            data: data
+        }
+    }
+
     const fetchSales = async () => {
         const session = supabase.auth.session()
         if (!session) return router.push('/')
 
         try {
             setLoading(true)
-            const response = await fetch('/api/sales', {
-                method: 'POST',
-                body: JSON.stringify({
-                    sessionToken: session.access_token
-                })
-            })
+            const last_week = moment().subtract(7, 'days').calendar();
 
-            const data: IResponse = await response.json()
+            const { data, error } = await supabase
+                .from<Sale>('sales')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .gte('created_at', last_week)
 
-            setStats(data.stats)
+            if (error) throw error
+
+            console.log(data, data.length)
+            if (data.length !== 0) {
+                console.log('Estatísticas das vendas geradas')
+                let stats = generateStats(data);
+                return setStats(stats)
+            } else {
+                return setStats(null)
+            }
         } catch (error) {
             console.log(error)
         } finally {

@@ -97,12 +97,11 @@ export default async function handler(
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey)
-    let sales: Sale[] = []
 
     try {
-
       const last_week = moment().subtract(7, 'days').calendar();
-      console.log('7 dias atrás', last_week);
+
+      // console.log(decoded)
 
       const { data, error } = await supabase
         .from<Sale>('sales')
@@ -113,17 +112,19 @@ export default async function handler(
 
       if (error) throw error
 
-      sales = data
+      // console.log(data, data.length)
+      if (data.length !== 0) {
+        // console.log('Estatísticas das vendas geradas')
+        let stats = generateStats(data);
+        return res.status(200).json({ message: 'Success', stats: stats })
+      } else {
+        return res.status(200).json({ message: 'Success', stats: null })
+      }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
+    } finally {
+      // console.log('Finally')
     }
-
-    let stats = null;
-    if (sales.length !== 0) {
-      stats = generateStats(sales)
-    }
-
-    return res.status(200).json({ message: 'Success', stats: stats })
   }
 
   return res.status(400).json({ message: 'Invalid request type' })
