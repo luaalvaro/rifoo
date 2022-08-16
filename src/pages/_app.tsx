@@ -9,12 +9,14 @@ moment.locale('pt-br')
 
 function MyApp({ Component, pageProps }: AppProps) {
 
+  const stage = `${process.env.NEXT_PUBLIC_STAGE_APP}`
+
   const theme = extendTheme({
     colors: {
       brand: {
         background: "#F1F1F1",
-        primary: "#405090",
-        primaryDark: "#2F3C8E",
+        primary: stage === "dev" ? "#FF4F4F" : "#405090",
+        primaryDark: stage === "dev" ? "#BA3939" : "#2F3C8E",
         backgroundCupom: "#FFFFE5",
       },
     },

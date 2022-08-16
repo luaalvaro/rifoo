@@ -27,8 +27,11 @@ import { services } from '../constants/defaultValues'
 import { FaUser } from 'react-icons/fa'
 import Image from 'next/image'
 import Rifoo from '../assets/rifoo.svg'
+import RifooDev from '../assets/rifoodev.svg'
 
 const Header = () => {
+
+    const stage = `${process.env.NEXT_PUBLIC_STAGE_APP}`
 
     const orderQtdItems = useOrder(state => state.qtd_items)
     const orderResetState = useOrder(state => state.resetState)
@@ -61,7 +64,7 @@ const Header = () => {
                 userSelect="none"
             >
                 <Image
-                    src={Rifoo}
+                    src={stage === "dev" ? RifooDev : Rifoo}
                     alt="Rifoo"
                     width={104}
                     height={30}
