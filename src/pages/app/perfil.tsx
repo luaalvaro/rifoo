@@ -22,6 +22,9 @@ const Perfil = () => {
   const userSignatureActive = typeof profile?.valid_until === 'string'
     && new Date(profile.valid_until) >= new Date()
 
+  const signatureDate = moment(profile?.valid_until, "YYYY-MM-DD").fromNow()
+  const signatureStatusDate = signatureDate.includes('há') ? 'atrasada' : 'atual'
+
   const getUserProfile = async () => {
     try {
       setLoading(true)
@@ -110,8 +113,8 @@ const Perfil = () => {
             px="15px"
           >
             <Text>
-              Sua assinatura está ativa e expira em&nbsp;
-              <b>{moment(profile?.valid_until, "YYYY-MM-DD").fromNow()}</b>
+              Sua fatura está {signatureStatusDate} <b>{signatureDate}</b>
+              <br /> clique aqui para renovar.
             </Text>
           </Flex>
         </>

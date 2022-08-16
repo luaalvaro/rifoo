@@ -15,6 +15,7 @@ import {
   useToast,
   Stack,
   Skeleton,
+  Link as A
 } from '@chakra-ui/react'
 import Header from '../../components/Header'
 import AuthProvider from '../../components/AuthProvider'
@@ -23,10 +24,10 @@ import { services } from '../../constants/defaultValues'
 import supabase from '../../services/supabase'
 import { useEffect, useState } from 'react'
 import { Field, Formik } from 'formik'
-import { yyyyMMdd_to_ddMMyyyy } from '../../utils/dataHacks'
 import HistoryCard from '../../components/HistoryCard'
 import { RiAdminFill } from 'react-icons/ri'
-
+import moment from 'moment'
+import Link from 'next/link'
 const Home = () => {
 
   const toast = useToast()
@@ -113,6 +114,9 @@ const Home = () => {
     }
   }
 
+  const signatureDate = moment(profile?.valid_until, "YYYY-MM-DD").fromNow()
+  const signatureStatusDate = signatureDate.includes('há') ? 'atrasada' : 'atual'
+
   useEffect(() => {
     getUserProfile()
     fetchLastSales()
@@ -121,8 +125,28 @@ const Home = () => {
   return (
     <AuthProvider>
       <Header />
-
-      {loading &&
+      {!userSignatureActive && !loading && profile &&
+        <Flex
+          width="100%"
+          px="15px"
+          py="15px"
+        >
+          <Link href="/app/perfil">
+            <A
+              width="100%"
+              textAlign="center"
+              color="red"
+              fontSize="14px"
+              lineHeight="16px"
+            >
+              Sua fatura está {signatureStatusDate} <b>{signatureDate}</b>
+              <br /> clique aqui para renovar.
+            </A>
+          </Link>
+        </Flex>
+      }
+      {
+        loading &&
         <Stack padding="15px">
           <Skeleton height="20px" />
           <Skeleton height="20px" />
@@ -130,54 +154,47 @@ const Home = () => {
         </Stack>
       }
 
-      {!loading && profile && (
-        <>
-          <Text
-            fontSize={18}
-            mt="15px"
-            mx="15px"
-            userSelect="none"
-          >
-            Boas vendas, <b>{profile?.fullName}</b>
-          </Text>
+      {
+        !loading && profile && (
+          <>
+            <Text
+              fontSize={18}
+              mt="15px"
+              mx="15px"
+              userSelect="none"
+            >
+              Boas vendas, <b>{profile?.fullName}</b>
+            </Text>
 
-          <Flex
-            direction="column"
-            gridGap="15px"
-            px="15px"
-            pt="15px"
-          >
-            {services.map(service => (
-              <HomeButtom
-                key={service.title}
-                title={service.title}
-                icon={service.icon}
-                href={service.href}
-              />
-            ))}
+            <Flex
+              direction="column"
+              gridGap="15px"
+              px="15px"
+              pt="15px"
+            >
+              {services.map(service => (
+                <HomeButtom
+                  key={service.title}
+                  title={service.title}
+                  icon={service.icon}
+                  href={service.href}
+                />
+              ))}
 
-            {profile?.member_type === "admin" &&
-              <HomeButtom
-                title="Administração"
-                icon={RiAdminFill}
-                href="#"
-              />
-            }
+              {profile?.member_type === "admin" &&
+                <HomeButtom
+                  title="Administração"
+                  icon={RiAdminFill}
+                  href="#"
+                />
+              }
 
-            {lastSale &&
-              <HistoryCard sale={lastSale} cardTitle="Última venda" />
-            }
-          </Flex>
-        </>
-      )}
-
-      {!userSignatureActive && !loading && profile &&
-        <Flex
-          mt="50px"
-          px="15px"
-        >
-          <Text color="red">Sua fatura vence no dia {yyyyMMdd_to_ddMMyyyy(profile?.valid_until)}</Text>
-        </Flex>
+              {lastSale &&
+                <HistoryCard sale={lastSale} cardTitle="Última venda" />
+              }
+            </Flex>
+          </>
+        )
       }
 
       <Modal isOpen={isOpen} onClose={() => { }}>
@@ -402,7 +419,7 @@ const Home = () => {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </AuthProvider>
+    </AuthProvider >
   )
 }
 
