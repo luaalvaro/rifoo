@@ -124,6 +124,7 @@ export default async function handler(
       return stats = generateStats(sales)
     }
 
+    console.log('stats', stats)
     return res.status(200).json({ message: 'Success', stats: stats })
   }
 
