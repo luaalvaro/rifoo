@@ -185,7 +185,7 @@ const Home = () => {
                 <HomeButtom
                   title="Administração"
                   icon={RiAdminFill}
-                  href="#"
+                  href="/app/admin"
                 />
               }
 
