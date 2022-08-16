@@ -101,7 +101,7 @@ export default async function handler(
     try {
       const last_week = moment().subtract(7, 'days').calendar();
 
-      console.log(decoded)
+      // console.log(decoded)
 
       const { data, error } = await supabase
         .from<Sale>('sales')
@@ -112,18 +112,18 @@ export default async function handler(
 
       if (error) throw error
 
-      console.log(data, data.length)
+      // console.log(data, data.length)
       if (data.length !== 0) {
-        console.log('Estatísticas das vendas geradas')
+        // console.log('Estatísticas das vendas geradas')
         let stats = generateStats(data);
         return res.status(200).json({ message: 'Success', stats: stats })
       } else {
         return res.status(200).json({ message: 'Success', stats: null })
       }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     } finally {
-      console.log('Finally')
+      // console.log('Finally')
     }
   }
 
