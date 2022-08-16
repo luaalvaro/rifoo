@@ -16,18 +16,24 @@ import HistoryCard from '../../components/HistoryCard'
 import { FaBoxOpen } from 'react-icons/fa'
 import moment from 'moment'
 import { formatDateStartsWithDay } from '../../utils/dataHacks'
+import useSWR from 'swr'
 
-interface IResponse {
-    message: string,
-    stats: Stats
-}
+const last_week = formatDateStartsWithDay(moment().subtract(7, 'days').calendar())
+
+const fetcher = async (url: any) => await supabase.from<Sale>(url)
+    .select('*')
+    .order('created_at', { ascending: false })
+    .gte('created_at', last_week)
+
 const MinhasVendas = () => {
 
     const router = useRouter()
-    const [loading, setLoading] = useState(false)
-    const [stats, setStats] = useState<Stats | null>(null)
+    const { data, error } = useSWR('sales', fetcher)
+    const loading = !data
 
-    const generateStats = (data: Sale[]) => {
+    const generateStats = (data: Sale[] | null | undefined) => {
+
+        if (!data) return
 
         const qtd_sales = data.length
 
@@ -72,40 +78,7 @@ const MinhasVendas = () => {
         }
     }
 
-    const fetchSales = async () => {
-        const session = supabase.auth.session()
-        if (!session) return router.push('/')
-
-        try {
-            setLoading(true)
-            const last_week = formatDateStartsWithDay(moment().subtract(7, 'days').calendar())
-
-            const { data, error } = await supabase
-                .from<Sale>('sales')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .gte('created_at', last_week)
-
-            if (error) throw error
-
-            console.log(data, data.length)
-            if (data.length !== 0) {
-                console.log('Estatísticas das vendas geradas')
-                let stats = generateStats(data);
-                return setStats(stats)
-            } else {
-                return setStats(null)
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    useEffect(() => {
-        fetchSales()
-    }, [])
+    const stats = generateStats(data?.data)
 
     return (
         <AuthProvider>
