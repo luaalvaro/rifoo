@@ -3,28 +3,38 @@ import { Session } from "@supabase/supabase-js"
 import { useRouter } from "next/router"
 import { useEffect, useState } from 'react'
 import supabase from "../services/supabase"
+import useSWR from 'swr'
 
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+interface IAuthProvider {
+    children: React.ReactNode,
+    permissions?: string[],
+}
+
+const fetcher = async (url: any) => await supabase
+    .from(url)
+    .select("*")
+    .single()
+
+const AuthProvider: React.FC<IAuthProvider> = ({ children, permissions }) => {
 
     const router = useRouter()
-    const [session, setSession] = useState<Session | null>(null)
+    const { data, error } = useSWR('profiles', fetcher)
+    const profile = data?.data
+    const loading = !data
 
-    const handleWithAuth = () => {
-        const session = supabase.auth.session()
-
-        if (!session)
-            return router.push("/")
-
-        setSession(session)
-    }
+    const authorized = !!profile && (!!permissions
+        ? permissions?.includes(profile.member_type)
+        : true)
 
     useEffect(() => {
-        handleWithAuth()
-    }, [])
+        if (!authorized) {
+            router.push('/app')
+        }
+    }, [data])
 
     return (
         <>
-            {!session
+            {!authorized
                 ?
                 <Stack>
                     <Skeleton height='20px' />

@@ -35,7 +35,6 @@ const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
 
     const handleGetListProducts = () => {
         const { products, products_weight } = sale
-        let listProducts: any = []
 
         const productsArray = JSON.parse(products)
         const productsWeightArray = JSON.parse(products_weight)
@@ -49,8 +48,6 @@ const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
     useEffect(() => {
         handleGetListProducts()
     }, [])
-
-    console.log(data)
 
     return (
         <>

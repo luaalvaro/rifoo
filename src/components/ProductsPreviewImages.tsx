@@ -60,7 +60,6 @@ const ProductsPreviewImages: React.FC<IProductsPreview> = ({ item }) => {
     }
 
     useEffect(() => {
-        console.log('Necessário revalidação das imagens', images.length !== urls.length)
         if (images.length !== urls.length) {
             handleDownloadImages()
         }

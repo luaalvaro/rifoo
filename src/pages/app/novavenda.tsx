@@ -1,5 +1,8 @@
 import {
     Flex,
+    Input,
+    InputGroup,
+    InputLeftElement,
     Skeleton,
     Stack,
     Text,
@@ -9,7 +12,7 @@ import AuthProvider from '../../components/AuthProvider'
 import BottomMenuNewOrder from '../../components/BottomMenuNewOrder'
 import { useEffect, useState } from 'react'
 import supabase from '../../services/supabase'
-import { FaBoxOpen } from 'react-icons/fa'
+import { FaBoxOpen, FaSearch } from 'react-icons/fa'
 import ProductCard from '../../components/ProductCard'
 import ResumeOrder from '../../components/ResumeOrder'
 import useOrder from '../../store/useOrder'
@@ -23,10 +26,17 @@ const fetcher = async (url: any) => await await supabase
 
 const Home = () => {
 
+    const [search, setSearch] = useState('')
+
     const order = useOrder(state => state)
     const { data, error } = useSWR('products', fetcher)
-    const products = data?.data
     const loading = !data
+    const products = data?.data
+
+    const hasSearch = search.length > 2
+    const productsToRender = hasSearch ? products?.filter(product => product.product_name
+        .toLowerCase()
+        .includes(search.toLowerCase())) : products
 
     return (
         <AuthProvider>
@@ -89,7 +99,20 @@ const Home = () => {
                     gridGap="15px"
                     paddingBottom="150px"
                 >
-                    {products.map((item, index) => (
+
+                    <InputGroup>
+                        <InputLeftElement>
+                            <FaSearch />
+                        </InputLeftElement>
+                        <Input
+                            background="#fff"
+                            placeholder='Pesquisar produto...'
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </InputGroup>
+
+                    {productsToRender?.map((item, index) => (
                         <ProductCard
                             type="sell"
                             key={index}

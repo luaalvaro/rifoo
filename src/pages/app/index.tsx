@@ -95,6 +95,7 @@ const Home = () => {
   const signatureDate = moment(profile?.valid_until, "YYYY-MM-DD").fromNow()
   const signatureStatusDate = signatureDate.includes('há') ? 'atrasada' : 'atual'
 
+  console.log("Rifoo - seu negócio na palma da sua mão")
   return (
     <AuthProvider>
       <Header />

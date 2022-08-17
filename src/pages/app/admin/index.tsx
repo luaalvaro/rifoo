@@ -83,7 +83,7 @@ const MinhasVendas = () => {
     const stats = generateStats(data?.data)
 
     return (
-        <AuthProvider>
+        <AuthProvider permissions={["admin"]}>
             <Header />
 
             <Text
