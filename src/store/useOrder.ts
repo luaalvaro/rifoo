@@ -130,7 +130,7 @@ const useOrder = create<IUseOrder>((set) => ({
         }
     }),
     rmvItem: (data) => set((state) => {
-
+        console.log('removendo item do estado')
         const response = state.products.filter(item => item.id === data.id)
 
         if (state.qtd_items === 0) return {}
@@ -154,9 +154,12 @@ const useOrder = create<IUseOrder>((set) => ({
             })
         }
 
+        console.log(state.total_cost_price - data.product_cost_price,);
+
         return {
             qtd_items: state.qtd_items - 1,
             total_price: state.total_price - data.product_sell_price,
+            total_cost_price: state.total_cost_price - data.product_cost_price,
             products: newProductArray
         }
     }),
