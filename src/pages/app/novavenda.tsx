@@ -101,7 +101,10 @@ const Home = () => {
                 >
 
                     <InputGroup>
-                        <InputLeftElement>
+                        <InputLeftElement
+                            color="brand.primary"
+                            opacity={.7}
+                        >
                             <FaSearch />
                         </InputLeftElement>
                         <Input
