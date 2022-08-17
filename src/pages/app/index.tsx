@@ -45,6 +45,7 @@ const fetcherLastSale = async (url: any) => await supabase
 const Home = () => {
 
   const toast = useToast()
+  const [submitLoading, setSubmitLoading] = useState(false)
 
   const { data, error } = useSWR('profiles', fetcherProfile)
   const profile = data?.data
@@ -65,7 +66,7 @@ const Home = () => {
     if (!session) return
 
     try {
-
+      setSubmitLoading(true)
       const response = await fetch('/api/createprofile', {
         method: 'POST',
         body: JSON.stringify({
@@ -83,12 +84,17 @@ const Home = () => {
           description: 'Aproveite o Rifoo grátis durante 30 dias!',
           duration: 5000,
         })
-        location.reload()
+
+        onToggle()
+
+        setTimeout(() => {
+          return location.reload()
+        }, 2000)
       }
     } catch (error) {
       console.log(error)
     } finally {
-
+      setSubmitLoading(false)
     }
   }
 
@@ -389,7 +395,7 @@ const Home = () => {
                       color="#fff"
                       width="100%"
 
-                      isLoading={loading}
+                      isLoading={submitLoading}
 
                       _hover={{
                         background: "brand.primary",

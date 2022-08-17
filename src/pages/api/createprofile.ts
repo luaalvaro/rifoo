@@ -4,7 +4,8 @@ import jwt from 'jsonwebtoken'
 
 type Data = {
   message: string,
-  stats?: Stats
+  stats?: Stats,
+  profile?: any,
 }
 
 export default async function handler(
@@ -93,18 +94,21 @@ export default async function handler(
             birthdate: birthdate,
             valid_until: until,
             referred: referred,
+            member_type: 'user',
           })
+          .single()
 
         if (errorProfile) throw errorProfile
 
         console.log(profile)
+        return res.status(200).json({ message: 'Success', profile: profile })
       }
     } catch (error) {
       console.log(error)
       return res.status(500).json({ message: 'Try again' })
     }
 
-    return res.status(200).json({ message: 'Success' })
+
   }
 
   return res.status(400).json({ message: 'Invalid request type' })

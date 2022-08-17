@@ -32,25 +32,35 @@ const AuthProvider: React.FC<IAuthProvider> = ({ children, permissions }) => {
 
         const isNewUser = authenticated && !hasProfile
         const newUserAtHome = isNewUser && atHomeApp
+        const routeHasPermission = !!permissions
+
+        console.log(loading)
+
+        const userHasPermission = permissions?.includes(profile?.member_type)
+
+        console.log(profile?.member_type);
 
         console.log({
-            authenticated,
-            hasProfile,
-            atHomeApp,
-            isNewUser,
-            newUserAtHome,
+            routeHasPermission,
+            userHasPermission
         })
 
         if (!authenticated)
             return router.push('/login')
 
-        if (isNewUser && newUserAtHome)
-            return true
-
         if (isNewUser && !newUserAtHome)
             return router.push('/app')
 
-        return true
+        if (routeHasPermission && !userHasPermission)
+            return router.push('/app')
+
+        if (isNewUser && newUserAtHome)
+            return true
+
+        if (!isNewUser && hasProfile)
+            return true
+
+        return false
     }
 
 
