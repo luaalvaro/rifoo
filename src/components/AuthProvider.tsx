@@ -18,30 +18,54 @@ const fetcher = async (url: any) => await supabase
 const AuthProvider: React.FC<IAuthProvider> = ({ children, permissions }) => {
 
     const router = useRouter()
+    const session = supabase.auth.session()
+
     const { data, error } = useSWR('profiles', fetcher)
     const profile = data?.data
     const loading = !data
 
-    const authorized = !!profile && (!!permissions
-        ? permissions?.includes(profile.member_type)
-        : true)
+    const hasPermission = () => {
 
-    useEffect(() => {
-        if (!authorized) {
-            router.push('/app')
-        }
-    }, [data])
+        const authenticated = !!session
+        const hasProfile = !!profile
+        const atHomeApp = router.pathname === '/app'
+
+        const isNewUser = authenticated && !hasProfile
+        const newUserAtHome = isNewUser && atHomeApp
+
+        console.log({
+            authenticated,
+            hasProfile,
+            atHomeApp,
+            isNewUser,
+            newUserAtHome,
+        })
+
+        if (!authenticated)
+            return router.push('/login')
+
+        if (isNewUser && newUserAtHome)
+            return true
+
+        if (isNewUser && !newUserAtHome)
+            return router.push('/app')
+
+        return true
+    }
+
+
 
     return (
         <>
-            {!authorized
-                ?
+            {loading &&
                 <Stack>
                     <Skeleton height='20px' />
                     <Skeleton height='20px' />
                     <Skeleton height='20px' />
                 </Stack>
-                :
+            }
+
+            {!loading && hasPermission() &&
                 <Flex
                     minHeight="100vh"
                     background="brand.background"

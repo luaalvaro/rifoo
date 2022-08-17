@@ -54,7 +54,7 @@ const Home = () => {
 
   const loading = !data || !saleData
 
-  const { isOpen, onToggle } = useDisclosure()
+  const { isOpen, onToggle, onOpen } = useDisclosure()
   const [stepProgress, setStepProgress] = useState(0)
 
   const userSignatureActive = typeof profile?.valid_until === 'string'
@@ -94,6 +94,11 @@ const Home = () => {
 
   const signatureDate = moment(profile?.valid_until, "YYYY-MM-DD").fromNow()
   const signatureStatusDate = signatureDate.includes('há') ? 'atrasada' : 'atual'
+
+  useEffect(() => {
+    if (profile === null)
+      onOpen()
+  }, [profile])
 
   console.log("Rifoo - seu negócio na palma da sua mão")
   return (
