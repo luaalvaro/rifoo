@@ -164,7 +164,17 @@ const Home = () => {
               }
 
               {lastSale &&
-                <HistoryCard sale={lastSale} cardTitle="Última venda" />
+                <>
+                  <Text
+                    fontSize={14}
+                    fontWeight="600"
+                    mt="15px"
+                    userSelect="none"
+                  >
+                    Última venda
+                  </Text>
+                  <HistoryCard sale={lastSale} />
+                </>
               }
             </Flex>
           </>
