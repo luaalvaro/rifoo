@@ -18,9 +18,11 @@ import supabase from '../services/supabase'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Rifoo from '../assets/rifoo.svg'
+import RifooDev from '../assets/rifoodev.svg'
 
 const Login = () => {
 
+    const stage = `${process.env.NEXT_PUBLIC_STAGE_APP}`
     const router = useRouter()
     const toast = useToast()
     const [loading, setLoading] = useState(false)
@@ -96,7 +98,7 @@ const Login = () => {
                 align="center"
             >
                 <Image
-                    src={Rifoo}
+                    src={stage === "dev" ? RifooDev : Rifoo}
                     alt="Rifoo"
                     width={208}
                     height={60}

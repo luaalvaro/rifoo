@@ -21,7 +21,7 @@ const ProductCard: React.FC<IProductCard> = ({ data, type }) => {
     const downloadImage = useCallback(async () => {
 
         const path = data.product_image_url.split("products/")[1]
-        if (productUrl) return
+        if (productUrl || !path) return
         try {
             setLoading(true)
             const { data, error } = await supabase

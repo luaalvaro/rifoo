@@ -28,6 +28,14 @@ interface IHistoryCard {
     cardTitle?: string
 }
 
+export const mockId = (id: string) => {
+    let idMocked: any = id.split('-')
+    idMocked = `${idMocked[0]}-****-${idMocked[3]}`
+
+    console.log(idMocked)
+    return idMocked
+}
+
 const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
 
     const [showModal, setShowModal] = useState(false)
@@ -74,17 +82,34 @@ const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
                             >
                                 <Flex
                                     width="100%"
-                                    justify="flex-end"
+                                    justify="space-between"
                                     mb="30px"
                                 >
                                     <Text
                                         fontSize="14px"
                                         fontWeight={600}
                                     >
+                                        Venda realizada
+                                    </Text>
+
+                                    <Text
+                                        fontSize="14px"
+                                    >
                                         {new Date(sale.created_at).toLocaleString()}
                                     </Text>
                                 </Flex>
 
+                                <Flex
+                                    width="100%"
+                                    justify="space-between"
+                                >
+                                    <Text
+                                        fontSize="14px"
+                                        fontWeight={600}
+                                    >
+                                        Produtos
+                                    </Text>
+                                </Flex>
                                 {
                                     data.productsArray
                                     && data.productsArray.length > 0
@@ -129,18 +154,116 @@ const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
                                                     </Text>
 
                                                     <Text>
-                                                        {`R$ ${product.product_sell_price * product.qtd_items}`}
+                                                        {`R$ ${product.product_sell_price * product.weight}`}
                                                     </Text>
                                                 </Flex>
                                             )
                                         })
                                 }
 
+                                <Flex
+                                    borderTop="1px solid rgba(0,0,0,0.1)"
+                                    marginTop="15px"
+                                    paddingTop="15px"
+                                    width="100%"
+                                    justify="space-between"
+                                >
+                                    <Text
+                                        fontSize="14px"
+                                    >
+                                        Sub total
+                                    </Text>
+
+                                    <Text>
+                                        {`R$ ${sale.total_price + sale.total_price_weight}`}
+                                    </Text>
+                                </Flex>
+
+                                <Flex
+                                    width="100%"
+                                    justify="space-between"
+                                >
+                                    <Text
+                                        fontSize="14px"
+                                    >
+                                        Desconto
+                                    </Text>
+
+                                    <Text>
+                                        {`R$ ${sale.discount}`}
+                                    </Text>
+                                </Flex>
+
+                                <Flex
+                                    marginTop="30px"
+                                    width="100%"
+                                    justify="space-between"
+
+                                    paddingBottom="20px"
+                                    borderBottom="1px solid rgba(0,0,0,0.1)"
+                                >
+                                    <Text
+                                        fontSize="14px"
+                                        fontWeight={600}
+                                    >
+                                        Total
+                                    </Text>
+
+                                    <Text>
+                                        {`R$ ${sale.total_price + sale.total_price_weight}`}
+                                    </Text>
+                                </Flex>
+
+                                <Flex
+                                    marginTop="20px"
+                                    width="100%"
+                                    justify="space-between"
+                                >
+                                    <Text
+                                        fontSize="14px"
+                                        fontWeight={600}
+                                    >
+                                        ID Vendedor
+                                    </Text>
+
+                                    <Text>
+                                        {`${mockId(sale.user_id)}`}
+                                    </Text>
+                                </Flex>
+                                <Flex
+                                    width="100%"
+                                    justify="space-between"
+                                >
+                                    <Text
+                                        fontSize="14px"
+                                        fontWeight={600}
+                                    >
+                                        ID da transação
+                                    </Text>
+
+                                    <Text>
+                                        {`${mockId(sale.id)}`}
+                                    </Text>
+                                </Flex>
                             </Flex>
 
                         </ModalBody>
 
-                        <ModalFooter>
+                        <ModalFooter
+                            display="flex"
+                            gridGap="20px"
+                        >
+                            <Button
+                                background="brand.primary"
+                                color="#fff"
+
+                                _hover={{
+                                    background: 'brand.primaryHover',
+                                }}
+                            >
+                                Deletar venda
+                            </Button>
+
                             <Button
                                 onClick={() => setShowModal(false)}
                                 variant='ghost'

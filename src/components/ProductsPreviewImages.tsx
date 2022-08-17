@@ -51,6 +51,10 @@ const ProductsPreviewImages: React.FC<IProductsPreview> = ({ item }) => {
     const handleDownloadImages = () => {
         urls.forEach(async (path: string) => {
             const newPath = path.split("products/")[1]
+
+            if (!newPath)
+                return
+
             const url = await downloadImage(newPath)
 
             if (url) {
