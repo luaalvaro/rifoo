@@ -83,7 +83,7 @@ const Home = () => {
           description: 'Aproveite o Rifoo grátis durante 30 dias!',
           duration: 5000,
         })
-        onToggle()
+        location.reload()
       }
     } catch (error) {
       console.log(error)
