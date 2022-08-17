@@ -254,17 +254,6 @@ const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
                             gridGap="20px"
                         >
                             <Button
-                                background="brand.primary"
-                                color="#fff"
-
-                                _hover={{
-                                    background: 'brand.primaryHover',
-                                }}
-                            >
-                                Deletar venda
-                            </Button>
-
-                            <Button
                                 onClick={() => setShowModal(false)}
                                 variant='ghost'
                             >
