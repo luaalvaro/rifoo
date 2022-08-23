@@ -12,12 +12,6 @@ const BottomMenuNewOrder = () => {
     const order = useOrder(state => state)
     const [loading, setLoading] = useState(false)
 
-    const totalWeightPrice = order.products_weight
-        .reduce((acc, item) => acc + item.total_sell_price, 0)
-
-    const totalWeightPriceCost = order.products_weight
-        .reduce((acc, item) => acc + item.total_cost_price, 0)
-
     const handleSubmitNewSell = async () => {
 
         const user = supabase.auth.user()
@@ -39,8 +33,8 @@ const BottomMenuNewOrder = () => {
                     total_cost_price: order.total_cost_price,
                     paymentMethod: order.paymentMethod,
                     user_id: id,
-                    total_price_weight: totalWeightPrice,
-                    total_cost_price_weight: totalWeightPriceCost
+                    total_price_weight: order.total_price_weight,
+                    total_cost_price_weight: order.total_cost_price_weight
                 })
 
             if (error)
@@ -61,7 +55,7 @@ const BottomMenuNewOrder = () => {
         }
     }
 
-    const totalPriceShow = totalWeightPrice + order.total_price
+    const totalPriceShow = order.total_price_weight + order.total_price
     return (
         <Flex
             borderTop="1px solid rgba(0,0,0,0.2)"

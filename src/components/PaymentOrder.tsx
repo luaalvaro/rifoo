@@ -1,7 +1,9 @@
-import { Box, Flex, Icon, Radio, RadioGroup, Text } from '@chakra-ui/react'
+import { Box, Flex, FormControl, FormLabel, Icon, Input, Radio, RadioGroup, Text } from '@chakra-ui/react'
 import useOrder from '../store/useOrder'
 import { FaMoneyBillWave, FaRegCreditCard, FaCreditCard } from 'react-icons/fa'
 import { BsXDiamondFill } from 'react-icons/bs'
+import NumberFormat from 'react-number-format'
+import { useState } from 'react'
 
 const paymentMethods = [
     { id: 1, name: 'Chave PIX', icon: BsXDiamondFill },
@@ -12,7 +14,14 @@ const paymentMethods = [
 
 const PaymentOrder = () => {
 
-    const order = useOrder(state => state)
+    const total_price = useOrder(state => state.total_price)
+    const total_price_weight = useOrder(state => state.total_price_weight)
+    const paymentMethod = useOrder(state => state.paymentMethod)
+
+    const setPaymentMethod = useOrder(state => state.setPaymentMethod)
+    const [money, setMoney] = useState<number | undefined>()
+
+    const change = money && money - (total_price + total_price_weight)
 
     return (
         <Flex
@@ -23,7 +32,7 @@ const PaymentOrder = () => {
             <Text
                 fontWeight={700}
                 fontSize={18}
-                mb="5px"
+                mb="10px"
             >
                 Forma de pagamento
             </Text>
@@ -33,8 +42,8 @@ const PaymentOrder = () => {
                 flexDirection="column"
                 gridGap='15px'
 
-                onChange={value => order.setPaymentMethod(Number(value))}
-                value={order.paymentMethod}
+                onChange={value => setPaymentMethod(Number(value))}
+                value={paymentMethod}
             >
                 {paymentMethods.map(item => (
                     <Flex
@@ -49,7 +58,7 @@ const PaymentOrder = () => {
                         gridGap="15px"
                         cursor="pointer"
 
-                        onClick={() => order.setPaymentMethod(item.id)}
+                        onClick={() => setPaymentMethod(item.id)}
                     >
 
                         <Icon
@@ -62,6 +71,64 @@ const PaymentOrder = () => {
                     </Flex>
                 ))}
             </RadioGroup>
+
+            {paymentMethod === 2 &&
+                <FormControl>
+                    <FormLabel
+                        fontWeight={700}
+                        fontSize={18}
+                        mt="20px"
+                        mb="10px"
+                    >
+                        Valor em espécie recebido?
+                    </FormLabel>
+                    <NumberFormat
+                        customInput={Input}
+                        thousandSeparator={'.'}
+                        decimalSeparator={','}
+                        prefix={"R$ "}
+                        allowNegative={false}
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+
+                        background="#fff"
+                        height="60px"
+                        fontSize="30px"
+
+                        value={money}
+                        onValueChange={(value) => setMoney(value.floatValue)}
+                    />
+
+                    {change && change > 0 &&
+                        <Flex
+                            fontWeight={700}
+                            fontSize="30px"
+                            align="center"
+                            color="rgba(0,0,0,0.7)"
+                            gridGap="15px"
+                            marginTop="20px"
+                        >
+                            <Text
+                                fontWeight={700}
+                                fontSize="30px"
+                            >
+                                Troco:
+                            </Text>
+
+                            <NumberFormat
+                                displayType={'text'}
+                                value={change}
+                                thousandSeparator={'.'}
+                                decimalSeparator={','}
+                                prefix={"R$ "}
+                                allowNegative={false}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                            />
+                        </Flex>
+                    }
+                </FormControl>
+            }
         </Flex>
     )
 }

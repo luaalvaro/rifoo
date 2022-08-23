@@ -124,9 +124,19 @@ const useOrder = create<IUseOrder>((set) => ({
             })
         }
 
+        const totalWeightPrice = newWeightArray
+            .reduce((acc, item) => acc + item.total_sell_price, 0)
+
+        const totalWeightPriceCost = newWeightArray
+            .reduce((acc, item) => acc + item.total_cost_price, 0)
+
+        console.log(totalWeightPrice, totalWeightPriceCost)
+
         return {
             qtd_items: isNewProduct ? state.qtd_items + 1 : state.qtd_items,
             products_weight: newWeightArray,
+            total_cost_price_weight: totalWeightPriceCost,
+            total_price_weight: totalWeightPrice,
         }
     }),
     rmvItem: (data) => set((state) => {
