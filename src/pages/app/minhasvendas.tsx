@@ -104,8 +104,7 @@ const MinhasVendas = () => {
             <Flex
                 align="center"
                 justify="space-between"
-                marginX="15px"
-                marginY="10px"
+                margin="15px"
                 userSelect="none"
             >
                 <Text

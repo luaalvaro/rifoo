@@ -73,7 +73,9 @@ const PaymentOrder = () => {
             </RadioGroup>
 
             {paymentMethod === 2 &&
-                <FormControl>
+                <FormControl
+                    marginBottom="60px"
+                >
                     <FormLabel
                         fontWeight={700}
                         fontSize={18}
