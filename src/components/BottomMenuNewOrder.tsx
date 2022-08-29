@@ -11,6 +11,7 @@ const BottomMenuNewOrder = () => {
     const toast = useToast()
     const order = useOrder(state => state)
     const [loading, setLoading] = useState(false)
+    const discount = useOrder(state => state.discount)
 
     const handleSubmitNewSell = async () => {
 
@@ -56,6 +57,8 @@ const BottomMenuNewOrder = () => {
     }
 
     const totalPriceShow = order.total_price_weight + order.total_price
+    const totalPriceWithDiscountShow = discount ? (totalPriceShow - discount) : ""
+
     return (
         <Flex
             borderTop="1px solid rgba(0,0,0,0.2)"
@@ -70,47 +73,83 @@ const BottomMenuNewOrder = () => {
             align="center"
             justify="space-between"
         >
-
             <Flex
                 direction="column"
             >
-                <Text
-                    color="grey"
-                    lineHeight="16px"
-                    mb="2px"
+                <Flex
+                    direction={discount ? "row" : "column"}
+                    align={discount ? "center" : "initial"}
+                    gridGap={discount ? "10px" : "0"}
                 >
-                    sub total
-                </Text>
+                    <Text
+                        color="grey"
+                        lineHeight="16px"
+                        mb="2px"
+                    >
+                        sub total
+                    </Text>
 
-                <NumberFormat
-                    displayType={'text'}
-                    value={totalPriceShow}
-                    thousandSeparator={'.'}
-                    decimalSeparator={','}
-                    prefix={"R$ "}
-                    allowNegative={false}
-                    decimalScale={2}
-                    fixedDecimalScale={true}
+                    <NumberFormat
+                        displayType={'text'}
+                        value={totalPriceShow}
+                        thousandSeparator={'.'}
+                        decimalSeparator={','}
+                        prefix={"R$ "}
+                        allowNegative={false}
+                        decimalScale={2}
+                        fixedDecimalScale={true}
 
-                    style={{
-                        fontSize: '35px',
-                    }}
-                />
+                        style={{
+                            fontSize: discount ? '16px' : '35px',
+
+                            textDecoration: discount ? 'line-through' : 'none',
+                        }}
+                    />
+                </Flex>
+
+                {discount &&
+                    <NumberFormat
+                        displayType={'text'}
+                        value={totalPriceWithDiscountShow}
+                        thousandSeparator={'.'}
+                        decimalSeparator={','}
+                        prefix={"R$ "}
+                        allowNegative={false}
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+
+                        style={{
+                            fontSize: '26px',
+                        }}
+                    />
+                }
+
             </Flex>
 
-            <Button
-                width="160px"
-                height="50px"
-                background="brand.primary"
-                color="#fff"
-                isLoading={loading}
+            <Flex align="center" gridGap="10px">
+                {order.stepProgress <= 2 &&
+                    <Button
+                        variant="ghost"
+                        onClick={order.prevStep}
+                    >
+                        Voltar
+                    </Button>
+                }
+                <Button
+                    px="20px"
+                    height="50px"
+                    background="brand.primary"
+                    color="#fff"
+                    isLoading={loading}
 
-                _hover={{ bg: 'brand.primaryDark' }}
+                    _hover={{ bg: 'brand.primaryDark' }}
 
-                onClick={order.stepProgress === 0 ? order.nextStep : handleSubmitNewSell}
-            >
-                {order.stepProgress === 0 ? 'Prosseguir' : 'Finalizar'}
-            </Button>
+                    onClick={order.stepProgress < 2 ? order.nextStep : handleSubmitNewSell}
+                >
+                    {order.stepProgress < 2 ? 'Próximo' : 'Finalizar'}
+                </Button>
+            </Flex>
+
         </Flex>
     )
 }

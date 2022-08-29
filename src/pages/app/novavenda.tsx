@@ -19,6 +19,8 @@ import useOrder from '../../store/useOrder'
 import PaymentOrder from '../../components/PaymentOrder'
 import { AiOutlineArrowLeft } from 'react-icons/ai'
 import useSWR from 'swr'
+import ChangeMoney from '../../components/ChangeMoney'
+import Discount from '../../components/Discount'
 
 const fetcher = async (url: any) => await await supabase
     .from<Product>(url)
@@ -53,7 +55,7 @@ const Home = () => {
 
                 onClick={() => order.prevStep()}
             >
-                {order.stepProgress === 1 &&
+                {order.stepProgress <= 2 &&
                     <AiOutlineArrowLeft />}
                 <Text>
                     {
@@ -129,6 +131,13 @@ const Home = () => {
                 <>
                     <ResumeOrder />
                     <PaymentOrder />
+                </>
+            }
+
+            {order.stepProgress === 2 &&
+                <>
+                    {order.paymentMethod === 2 && <ChangeMoney />}
+                    <Discount />
                 </>
             }
 

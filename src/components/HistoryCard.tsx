@@ -210,7 +210,7 @@ const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
                                     </Text>
 
                                     <Text>
-                                        {`R$ ${sale.total_price + sale.total_price_weight}`}
+                                        {`R$ ${(sale.total_price + sale.total_price_weight) - sale.discount}`}
                                     </Text>
                                 </Flex>
 

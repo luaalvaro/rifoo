@@ -7,7 +7,7 @@ interface IUseOrder {
     total_price_weight: number,
     total_cost_price: number,
     total_cost_price_weight: number,
-    discount: number,
+    discount: number | undefined,
     products: ProductSell[],
     products_weight: ProductSellWeight[],
     paymentMethod: any,
@@ -19,6 +19,7 @@ interface IUseOrder {
     rmvItem: (data: Product) => void,
     resetState: () => void,
     setPaymentMethod: (id: number) => void,
+    setDiscount: (discount: number | undefined) => void,
 }
 
 const initialState = {
@@ -28,7 +29,7 @@ const initialState = {
     total_price_weight: 0,
     total_cost_price: 0,
     total_cost_price_weight: 0,
-    discount: 0,
+    discount: undefined,
     products: [],
     products_weight: [],
     paymentMethod: 1,
@@ -193,7 +194,8 @@ const useOrder = create<IUseOrder>((set) => ({
         ...initialState
     })),
 
-    setPaymentMethod: (id) => set(state => ({ paymentMethod: id }))
+    setPaymentMethod: (id) => set(state => ({ paymentMethod: id })),
+    setDiscount: (discount) => set(state => ({ discount: discount })),
 }))
 
 export default useOrder
