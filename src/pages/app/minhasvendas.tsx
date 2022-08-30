@@ -9,32 +9,103 @@ import Header from '../../components/Header'
 import AuthProvider from '../../components/AuthProvider'
 import { useCallback, useEffect, useState } from 'react'
 import supabase from '../../services/supabase'
-import useOrder from '../../store/useOrder'
-import { useRouter } from 'next/router'
 import StatsCard from '../../components/StatsCard'
-import ProductsPreviewImages from '../../components/ProductsPreviewImages'
 import HistoryCard from '../../components/HistoryCard'
 import { FaBoxOpen } from 'react-icons/fa'
 import moment from 'moment'
-import { formatDateStartsWithDay } from '../../utils/dataHacks'
 import useSWR, { useSWRConfig } from 'swr'
+import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 
-const last_7_days = formatDateStartsWithDay(moment().subtract(7, 'days').calendar())
+import {
+    BarChart,
+    Bar,
+    Cell,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer
+} from 'recharts';
+
+
+moment.locale('pt-br')
+const startWeek = moment().startOf('week').add(1, 'days').toISOString()
+const endWeek = moment().endOf('week').add(1, 'days').toISOString()
+
+const startLastWeek = moment().startOf('week').subtract((6), 'days').toISOString()
+const endLastWeek = moment().endOf('week').subtract((6), 'days').toISOString()
 
 const fetcher = async (url: any) => await supabase.from<Sale>(url)
     .select('*')
     .order('created_at', { ascending: false })
-    .gte('created_at', last_7_days)
+    .gte('created_at', startWeek)
+    .lte('created_at', endWeek)
 
 const MinhasVendas = () => {
 
     const { mutate } = useSWRConfig()
-    const [periodSelected, setPeriodSelected] = useState(7)
+    const [periodSelected, setPeriodSelected] = useState('week')
 
     const { data, error } = useSWR('sales', fetcher)
     const loading = !data
 
     const { isOpen, onToggle } = useDisclosure()
+
+    const handleGetTotalSalesOfDay = (data: Sale[] | null | undefined) => {
+        if (!data || data.length === 0) return undefined
+
+        let days = {
+            seg: 0,
+            ter: 0,
+            qua: 0,
+            qui: 0,
+            sex: 0,
+            sab: 0,
+            dom: 0
+        }
+
+        data.forEach((sale: Sale) => {
+            const sellDate = moment(sale.created_at).toDate().getDay()
+            const total = (sale.total_price_weight + sale.total_price) - sale.discount
+
+            switch (sellDate) {
+                case 1:
+                    days.seg += total
+                    break;
+                case 2:
+                    days.ter += total
+                    break;
+                case 3:
+                    days.qua += total
+                    break;
+                case 4:
+                    days.qui += total
+                    break;
+                case 5:
+                    days.sex += total
+                    break;
+                case 6:
+                    days.sab += total
+                    break;
+                case 0:
+                    days.dom += total
+                    break;
+
+
+                default:
+                    break;
+            }
+        })
+
+        const arrDays = Object.entries(days).map(item => ({
+            label: item[0],
+            value: item[1]
+        }))
+
+        console.log(arrDays)
+        return arrDays
+    }
 
     const generateStats = (data: Sale[] | null | undefined) => {
 
@@ -64,6 +135,7 @@ const MinhasVendas = () => {
         const total_cost_price = total_cost_unit_price + total_cost_weight_price
         const total_profit = total_sell_price - total_cost_price
 
+        // criar um array separando as vendas por dia da semana
         return {
             qtd_sales: qtd_sales,
             qtd_items_products: qtd_items_products,
@@ -84,16 +156,21 @@ const MinhasVendas = () => {
     }
 
     const stats = generateStats(data?.data)
+    const days = handleGetTotalSalesOfDay(data?.data)
 
-    const handleChangePeriod = (days: number) => {
-        const filter = formatDateStartsWithDay(moment().subtract(days, 'days').calendar())
+    const handleChangePeriod = (period: "week" | "lastWeek") => {
+
+        const start = period === "week" ? startWeek : startLastWeek
+        const end = period === "week" ? endWeek : endLastWeek
 
         mutate('sales', async () => await supabase.from<Sale>('sales')
             .select('*')
             .order('created_at', { ascending: false })
-            .gte('created_at', filter), false)
+            .gte('created_at', start)
+            .lte('created_at', end)
+            , false)
 
-        setPeriodSelected(days)
+        setPeriodSelected(period)
         onToggle()
     }
 
@@ -104,101 +181,53 @@ const MinhasVendas = () => {
             <Flex
                 align="center"
                 justify="space-between"
-                margin="15px"
+                margin="20px 15px"
                 userSelect="none"
+                fontSize={18}
             >
-                <Text
-                    fontSize={18}
-                    fontWeight={400}
-                >
-                    Minhas vendas
-                </Text>
-
-                <Text
-                    background="gray.300"
-                    padding="5px 20px"
-                    borderRadius="4px"
-                    fontSize="14px"
-                    fontWeight={500}
+                <BsChevronLeft
                     cursor="pointer"
-                    color="rgba(0, 0, 0, 0.75)"
-
-                    onClick={onToggle}
-
-                    _hover={{
-                        color: "rgba(0, 0, 0, 1)"
-                    }}
+                    onClick={() => handleChangePeriod("lastWeek")}
+                />
+                <Text
+                    fontSize={16}
+                    fontWeight={600}
                 >
-                    {isOpen ? 'Selecione...' : `Últimos ${periodSelected} dias`}
+                    {periodSelected === "week" ? "Esta semana" : "Semana passada"}
                 </Text>
+                <BsChevronRight
+                    cursor="pointer"
+                    onClick={() => handleChangePeriod("week")}
+                />
             </Flex>
 
-            {isOpen &&
-                <Flex
-                    marginX="15px"
-                    marginBottom="15px"
-                    direction="column"
-                    gridGap="10px"
-                    align="flex-end"
-                >
-                    <Text
-                        background="gray.300"
-                        padding="5px 20px"
-                        width="max-content"
-                        borderRadius="4px"
-                        fontSize="14px"
-                        fontWeight={500}
-                        cursor="pointer"
-                        color="rgba(0, 0, 0, 0.75)"
-
-                        onClick={() => handleChangePeriod(7)}
-
-                        _hover={{
-                            color: "rgba(0, 0, 0, 1)"
+            <Flex
+                paddingX="15px"
+                gridGap="15px"
+                marginBottom="10px"
+            >
+                <ResponsiveContainer width="100%" height={150}>
+                    <BarChart
+                        data={days}
+                        margin={{
+                            top: 0,
+                            right: 0,
+                            left: 0,
+                            bottom: 0,
                         }}
                     >
-                        Últimos 07 dias
-                    </Text>
-
-                    <Text
-                        background="blue.300"
-                        padding="5px 20px"
-                        width="max-content"
-                        borderRadius="4px"
-                        fontSize="14px"
-                        fontWeight={500}
-                        cursor="pointer"
-                        color="rgba(0, 0, 0, 0.75)"
-
-                        onClick={() => handleChangePeriod(15)}
-
-                        _hover={{
-                            color: "rgba(0, 0, 0, 1)"
-                        }}
-                    >
-                        Últimos 15 dias
-                    </Text>
-
-                    <Text
-                        background="green.300"
-                        padding="5px 20px"
-                        width="max-content"
-                        borderRadius="4px"
-                        fontSize="14px"
-                        fontWeight={500}
-                        cursor="pointer"
-                        color="rgba(0, 0, 0, 0.75)"
-
-                        onClick={() => handleChangePeriod(30)}
-
-                        _hover={{
-                            color: "rgba(0, 0, 0, 1)"
-                        }}
-                    >
-                        Últimos 30 dias
-                    </Text>
-                </Flex>
-            }
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="label" />
+                        {/* <YAxis dataKey="value" /> */}
+                        <Tooltip />
+                        <Bar
+                            dataKey="value"
+                            name="Total"
+                            fill="#42834F"
+                        />
+                    </BarChart>
+                </ResponsiveContainer>
+            </Flex>
 
             {loading &&
                 <Stack px="15px">
