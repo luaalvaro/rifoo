@@ -3,17 +3,14 @@ import {
     Skeleton,
     Stack,
     Text,
-    useDisclosure,
 } from '@chakra-ui/react'
 import Header from '../../components/Header'
 import AuthProvider from '../../components/AuthProvider'
-import { useState } from 'react'
-import supabase from '../../services/supabase'
+import { useEffect, useState } from 'react'
 import StatsCard from '../../components/StatsCard'
 import HistoryCard from '../../components/HistoryCard'
 import { FaBoxOpen } from 'react-icons/fa'
 import moment from 'moment'
-import useSWR, { useSWRConfig } from 'swr'
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 
 import {
@@ -27,28 +24,15 @@ import {
     Legend,
     ResponsiveContainer
 } from 'recharts';
+import useSales from '../../store/useSales'
 
 moment.locale('pt-br')
 
-const startWeek = moment().startOf('week').add(1, 'days')
-const endWeek = moment().endOf('week').add(1, 'days')
-
-const fetcher = async (url: any) => await supabase.from<Sale>(url)
-    .select('*')
-    .order('created_at', { ascending: false })
-    .gte('created_at', startWeek.toISOString())
-    .lte('created_at', endWeek.toISOString())
-
 const MinhasVendas = () => {
 
-    const { mutate } = useSWRConfig()
-    const [periodSelected, setPeriodSelected] = useState(0)
-    const [labelDate, setLabelDate] = useState('Esta semana')
+    const sales = useSales(state => state)
 
-    const { data, error } = useSWR('sales', fetcher, {
-        revalidateOnFocus: false,
-    })
-    const loading = !data
+    const loading = !sales.sales
 
     const handleGetTotalSalesOfDay = (data: Sale[] | null | undefined) => {
         if (!data || data.length === 0) return undefined
@@ -153,48 +137,12 @@ const MinhasVendas = () => {
         }
     }
 
-    const stats = generateStats(data?.data)
-    const days = handleGetTotalSalesOfDay(data?.data)
+    const stats = generateStats(sales.sales)
+    const days = handleGetTotalSalesOfDay(sales.sales)
 
-    const handleChangePeriod = (method: "prev" | "next") => {
-
-        if (method === "next" && periodSelected === 0) return
-
-        const daysToCalc = periodSelected + (method === "prev" ? 7 : -7)
-
-        const start = method === "prev"
-            ? startWeek.subtract(1, 'week')
-            : startWeek.add(1, 'week')
-
-        const end = method === "prev"
-            ? endWeek.subtract(1, 'week')
-            : endWeek.add(1, 'week')
-
-        mutate('sales', async () => await supabase.from<Sale>('sales')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .gte('created_at', start.toISOString())
-            .lte('created_at', end.toISOString())
-            , false)
-
-        console.log(daysToCalc)
-
-        let label = ""
-        switch (daysToCalc) {
-            case 0:
-                label = "Esta semana"
-                break;
-            case 7:
-                label = "Semana passada"
-                break;
-            default:
-                label = `${start.format('DD/MM')} - ${end.format('DD/MM')}`
-                break;
-        }
-
-        setPeriodSelected(daysToCalc)
-        setLabelDate(label)
-    }
+    useEffect(() => {
+        sales.fetchSales()
+    }, [])
 
     return (
         <AuthProvider>
@@ -209,17 +157,17 @@ const MinhasVendas = () => {
             >
                 <BsChevronLeft
                     cursor="pointer"
-                    onClick={() => handleChangePeriod("prev")}
+                    onClick={() => sales.fetchSales("prev")}
                 />
                 <Text
                     fontSize={16}
                     fontWeight={600}
                 >
-                    {labelDate}
+                    {sales.weekLabel}
                 </Text>
                 <BsChevronRight
                     cursor="pointer"
-                    onClick={() => handleChangePeriod("next")}
+                    onClick={() => sales.fetchSales("next")}
                 />
             </Flex>
 
