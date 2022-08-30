@@ -29,7 +29,7 @@ const initialState = {
     total_price_weight: 0,
     total_cost_price: 0,
     total_cost_price_weight: 0,
-    discount: undefined,
+    discount: 0,
     products: [],
     products_weight: [],
     paymentMethod: 1,

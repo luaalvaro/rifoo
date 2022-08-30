@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react'
 import Header from '../../components/Header'
 import AuthProvider from '../../components/AuthProvider'
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import supabase from '../../services/supabase'
 import StatsCard from '../../components/StatsCard'
 import HistoryCard from '../../components/HistoryCard'
@@ -28,29 +28,27 @@ import {
     ResponsiveContainer
 } from 'recharts';
 
-
 moment.locale('pt-br')
-const startWeek = moment().startOf('week').add(1, 'days').toISOString()
-const endWeek = moment().endOf('week').add(1, 'days').toISOString()
 
-const startLastWeek = moment().startOf('week').subtract((6), 'days').toISOString()
-const endLastWeek = moment().endOf('week').subtract((6), 'days').toISOString()
+const startWeek = moment().startOf('week').add(1, 'days')
+const endWeek = moment().endOf('week').add(1, 'days')
 
 const fetcher = async (url: any) => await supabase.from<Sale>(url)
     .select('*')
     .order('created_at', { ascending: false })
-    .gte('created_at', startWeek)
-    .lte('created_at', endWeek)
+    .gte('created_at', startWeek.toISOString())
+    .lte('created_at', endWeek.toISOString())
 
 const MinhasVendas = () => {
 
     const { mutate } = useSWRConfig()
-    const [periodSelected, setPeriodSelected] = useState('week')
+    const [periodSelected, setPeriodSelected] = useState(0)
+    const [labelDate, setLabelDate] = useState('Esta semana')
 
-    const { data, error } = useSWR('sales', fetcher)
+    const { data, error } = useSWR('sales', fetcher, {
+        revalidateOnFocus: false,
+    })
     const loading = !data
-
-    const { isOpen, onToggle } = useDisclosure()
 
     const handleGetTotalSalesOfDay = (data: Sale[] | null | undefined) => {
         if (!data || data.length === 0) return undefined
@@ -158,20 +156,44 @@ const MinhasVendas = () => {
     const stats = generateStats(data?.data)
     const days = handleGetTotalSalesOfDay(data?.data)
 
-    const handleChangePeriod = (period: "week" | "lastWeek") => {
+    const handleChangePeriod = (method: "prev" | "next") => {
 
-        const start = period === "week" ? startWeek : startLastWeek
-        const end = period === "week" ? endWeek : endLastWeek
+        if (method === "next" && periodSelected === 0) return
+
+        const daysToCalc = periodSelected + (method === "prev" ? 7 : -7)
+
+        const start = method === "prev"
+            ? startWeek.subtract(1, 'week')
+            : startWeek.add(1, 'week')
+
+        const end = method === "prev"
+            ? endWeek.subtract(1, 'week')
+            : endWeek.add(1, 'week')
 
         mutate('sales', async () => await supabase.from<Sale>('sales')
             .select('*')
             .order('created_at', { ascending: false })
-            .gte('created_at', start)
-            .lte('created_at', end)
+            .gte('created_at', start.toISOString())
+            .lte('created_at', end.toISOString())
             , false)
 
-        setPeriodSelected(period)
-        onToggle()
+        console.log(daysToCalc)
+
+        let label = ""
+        switch (daysToCalc) {
+            case 0:
+                label = "Esta semana"
+                break;
+            case 7:
+                label = "Semana passada"
+                break;
+            default:
+                label = `${start.format('DD/MM')} - ${end.format('DD/MM')}`
+                break;
+        }
+
+        setPeriodSelected(daysToCalc)
+        setLabelDate(label)
     }
 
     return (
@@ -187,17 +209,17 @@ const MinhasVendas = () => {
             >
                 <BsChevronLeft
                     cursor="pointer"
-                    onClick={() => handleChangePeriod("lastWeek")}
+                    onClick={() => handleChangePeriod("prev")}
                 />
                 <Text
                     fontSize={16}
                     fontWeight={600}
                 >
-                    {periodSelected === "week" ? "Esta semana" : "Semana passada"}
+                    {labelDate}
                 </Text>
                 <BsChevronRight
                     cursor="pointer"
-                    onClick={() => handleChangePeriod("week")}
+                    onClick={() => handleChangePeriod("next")}
                 />
             </Flex>
 
@@ -206,7 +228,7 @@ const MinhasVendas = () => {
                 gridGap="15px"
                 marginBottom="10px"
             >
-                <ResponsiveContainer width="100%" height={150}>
+                <ResponsiveContainer width="100%" height={160}>
                     <BarChart
                         data={days}
                         margin={{
@@ -218,7 +240,6 @@ const MinhasVendas = () => {
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="label" />
-                        {/* <YAxis dataKey="value" /> */}
                         <Tooltip />
                         <Bar
                             dataKey="value"
@@ -322,7 +343,10 @@ const MinhasVendas = () => {
                         fontSize={70}
                         opacity={.5}
                     />
-                    <Text>Ooppps... Você ainda não fez nenhuma venda</Text>
+                    <Text textAlign="center">
+                        Ooppps...
+                        Você ainda não fez nenhuma venda nessa semana
+                    </Text>
                 </Flex>
             }
 
