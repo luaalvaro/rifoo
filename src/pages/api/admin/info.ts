@@ -65,7 +65,7 @@ export default async function handler(
       const last_week =
         formatDateStartsWithDay(
           moment()
-            .subtract(7, 'days')
+            .subtract(30, 'days')
             .calendar()
         )
 

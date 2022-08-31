@@ -21,7 +21,6 @@ const fetcher = (url: any) => fetch(url, {
 
 const MinhasVendas = () => {
 
-    const router = useRouter()
     const { data, error } = useSWR('/api/admin/info', fetcher)
     const loading = !data
 
@@ -92,7 +91,7 @@ const MinhasVendas = () => {
                 fontWeight={400}
                 userSelect="none"
             >
-                Estatísticas da plataforma (últimos 7 dias)
+                Estatísticas da plataforma (últimos 30 dias)
             </Text>
 
             {loading &&
