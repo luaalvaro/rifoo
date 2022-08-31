@@ -21,6 +21,7 @@ import { AiOutlineArrowLeft } from 'react-icons/ai'
 import useSWR from 'swr'
 import ChangeMoney from '../../components/ChangeMoney'
 import Discount from '../../components/Discount'
+import PIX from "react-qrcode-pix";
 
 const fetcher = async (url: any) => await await supabase
     .from<Product>(url)
@@ -40,6 +41,10 @@ const Home = () => {
         .toLowerCase()
         .includes(search.toLowerCase())) : products
 
+    const discount = useOrder(state => state.discount)
+    const total_price = order.total_price_weight + order.total_price
+
+    const subTotal = discount ? total_price - discount : total_price
     return (
         <AuthProvider>
             <Header />
@@ -138,6 +143,37 @@ const Home = () => {
                 <>
                     {order.paymentMethod === 2 && <ChangeMoney />}
                     <Discount />
+
+                    {order.paymentMethod === 1 &&
+                        <Flex
+                            px="15px"
+                            direction="column"
+                        >
+                            <Text>Código QR</Text>
+                            <PIX
+                                pixkey="06149203530"
+                                merchant="Luã Álvaro"
+                                city="NATAL"
+                                code={`RIFOO`}
+                                amount={subTotal}
+                            />
+
+                            <Text
+                                mt="25px"
+                                fontWeight={600}
+                                fontSize="16px"
+                            >
+                                Total R$ {subTotal}
+                            </Text>
+
+                            <Text fontSize="14px">
+                                Nome: Luã Álvaro
+                            </Text>
+                            <Text fontSize="14px">
+                                chave: 06149203530
+                            </Text>
+                        </Flex>
+                    }
                 </>
             }
 

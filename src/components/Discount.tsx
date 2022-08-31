@@ -20,7 +20,7 @@ const Discount = () => {
             px="15px"
         >
             <FormControl
-                marginBottom="60px"
+                marginBottom="50px"
             >
                 <FormLabel
                     fontWeight={700}
