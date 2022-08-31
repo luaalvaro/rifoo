@@ -7,10 +7,12 @@ const ChangeMoney = () => {
 
     const total_price = useOrder(state => state.total_price)
     const total_price_weight = useOrder(state => state.total_price_weight)
+    const discount = useOrder(state => state.discount)
 
     const [money, setMoney] = useState<number | undefined>()
 
-    const change = money && money - (total_price + total_price_weight)
+    const subtotal = money && money - (total_price + total_price_weight)
+    const change = subtotal && discount ? subtotal + discount : subtotal
 
     return (
         <Flex
