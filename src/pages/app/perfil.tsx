@@ -6,6 +6,8 @@ import {
   Stack,
   Skeleton,
   Button,
+  Heading,
+  Input,
 } from '@chakra-ui/react'
 import Header from '../../components/Header'
 import AuthProvider from '../../components/AuthProvider'
@@ -15,15 +17,24 @@ import { yyyyMMdd_to_ddMMyyyy } from '../../utils/dataHacks'
 import moment from 'moment'
 import useSWR from 'swr'
 import Image from 'next/image'
+import { MdOutlineContentCopy } from 'react-icons/md'
 
 const fetcher = async (url: any) => await supabase
   .from(url)
   .select("*")
   .single()
 
+interface PaymentPIX {
+  date_of_expiration: string
+  description: string
+  qr_code: string
+  qr_code_base64: string
+  transaction_amount: number
+}
+
 const Perfil = () => {
 
-  const [qrCode, setQrCode] = useState<string | undefined>(undefined)
+  const [payment, setPayment] = useState<PaymentPIX | undefined>(undefined)
   const { data, error } = useSWR('profiles', fetcher)
 
   const profile = data?.data
@@ -33,11 +44,19 @@ const Perfil = () => {
   const signatureTextUntil = signatureDate.includes('há') ? 'Expirou' : 'Expira'
 
   const handleCreatePayment = async () => {
-    const response = await fetch('/api/payments/create')
-    const data = await response.json()
 
-    console.log(data.qr_code_base64)
-    setQrCode(`data:image/jpeg;base64, ${data.qr_code_base64}`)
+    const session = supabase.auth.session()
+
+    const response = await fetch('/api/payments/create', {
+      method: 'POST',
+      body: JSON.stringify({
+        sessionToken: session?.access_token,
+      })
+    })
+    const { data } = await response.json()
+
+    console.log(data)
+    setPayment(data)
   }
 
   return (
@@ -108,20 +127,62 @@ const Perfil = () => {
               <b>{`${signatureTextUntil} ${signatureDate}`}</b>
             </Text>
 
-            {qrCode && (
+            {payment && (
               <Flex
+                bg="#fff"
                 justify="center"
+                direction="column"
+                p="15px"
+                borderRadius="4px"
               >
-                <Image
-                  src={qrCode}
-                  width={250}
-                  height={250}
-                  alt="QR Code"
+                <Heading
+                  fontSize="18px"
+                >
+                  Rifoo 30 dias - R$ 29,90 via Pix
+                </Heading>
+
+                <Text
+                  color="rgba(0,0,0,0.6)"
+                >
+                  Vencimento: {moment(payment?.date_of_expiration).fromNow()}
+                </Text>
+
+                <Text mt="15px">Código QR</Text>
+                <Flex
+                  pb="15px"
+                  justify="center"
+                >
+                  <Image
+                    src={payment.qr_code_base64}
+                    width={200}
+                    height={200}
+                    alt="QR Code"
+                  />
+                </Flex>
+
+                <Text mb="10px">Código de pagamento</Text>
+                <Input
+                  readOnly
+                  value={payment.qr_code}
                 />
+
+                <Button
+                  mt="20px"
+                  background="brand.primary"
+                  color="#fff"
+
+                  leftIcon={<MdOutlineContentCopy />}
+
+                  _hover={{
+                    background: "brand.primaryDark",
+                  }}
+                >
+                  Copiar código de pagamento
+                </Button>
               </Flex>
             )}
 
-            {signatureStatusDate === 'atrasada' && (
+            {signatureStatusDate === 'atrasada' && !payment && (
               <Button
                 background="brand.primary"
                 color="#fff"

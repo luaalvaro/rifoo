@@ -1,20 +1,57 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import mercadopago from 'mercadopago'
 import moment from 'moment'
+import jwt from 'jsonwebtoken'
+import { createClient } from '@supabase/supabase-js'
 
 type Data = {
     message: string,
-    qr_code_base64: string
+    data?: {
+        date_of_expiration: string,
+        qr_code_base64: string,
+        qr_code: string,
+        transaction_amount: string,
+        description: string,
+    }
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
-    const PUBLIC_KEY = "TEST-e8f71bea-5883-4735-9a4e-6e3f801d09fc"
-    const ACESS_TOKEN = "TEST-7829759690126384-072123-a334ad66cee075e7d190e5668a1bedb8-182131920"
-    const MP_URL = "https://api.mercadopago.com/v1/payments"
-    const expiration = moment().add(30, 'minutes').toISOString()
+    const MP_ACESS_TOKEN = `${process.env.MP_STAGING_ACESS_TOKEN}`
+    const supabaseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}`
+    const supabaseKey = `${process.env.MASTER_SUPABASE_KEY}`
 
-    mercadopago.configurations.setAccessToken(ACESS_TOKEN)
+    const checkTokenIsValid = (token: string) => {
+        console.log('checkTokenIsValid - Checando se o Token JWT é válido')
+        const JWT_SINGNATURE = process.env.JWT_SIGNATURE
+
+        if (!JWT_SINGNATURE)
+            return 'JWT_SIGNATURE is not defined'
+
+        try {
+            var decoded = jwt.verify(token, JWT_SINGNATURE) as SessionDecoded
+
+            if (typeof decoded === 'string')
+                return 'Token is not valid'
+
+            console.log('checkTokenIsValid - Token JWT válido')
+            return decoded
+        } catch (error) {
+            console.log('checkTokenIsValid - Token JWT Inválido')
+            return 'Token is not valid'
+        }
+    }
+
+    if (supabaseUrl === '' || supabaseKey === '')
+        return res.status(500).json({ message: 'Url and key not found' })
+
+    const expiration = moment()
+        .add(30, 'minutes')
+        .toISOString()
+
+    mercadopago
+        .configurations
+        .setAccessToken(MP_ACESS_TOKEN)
 
     const payment_data = {
         transaction_amount: 29.9,
@@ -34,25 +71,85 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         date_of_expiration: expiration
     }
 
-    const { response } = await mercadopago.payment.create(payment_data)
+    const { response } = await mercadopago
+        .payment
+        .create(payment_data)
 
-    console.log(response)
+    const {
+        id,
+        status,
+        description,
+        transaction_amount,
+        date_of_expiration,
+        payer,
+        point_of_interaction
+    } = response
 
-    const { id, status, transaction_amount, date_of_expiration, payer, point_of_interaction } = response
-    const { qr_code_base64, ticket_url, qr_code } = point_of_interaction.transaction_data
+    const {
+        qr_code_base64,
+        ticket_url,
+        qr_code
+    } = point_of_interaction.transaction_data
 
     console.log({
         id,
         status,
         date_of_expiration,
         payer,
+        description,
         qr_code,
         ticket_url,
         transaction_amount,
         qr_code_base64: qr_code_base64.substring(0, 10)
     })
 
-    return res.status(200).json({ message: "Sucesso", qr_code_base64 })
+    // Salvar o pagamento no banco de dados
+
+    const { sessionToken } = JSON.parse(req.body);
+
+    const decoded = checkTokenIsValid(sessionToken)
+
+    if (typeof decoded === 'string') {
+        return res.status(400).json({ message: decoded })
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey)
+    const user_id = decoded.sub
+    const qr_code_base64_data = `data:image/jpeg;base64, ${qr_code_base64}`
+
+    try {
+        const { data, error } = await supabase
+            .from('payments')
+            .insert({
+                transaction_id: id,
+                transaction_status: status,
+                transaction_date_of_expiration: date_of_expiration,
+                transaction_payer: JSON.stringify(payer),
+                transaction_qr_code: qr_code,
+                transaction_ticket_url: ticket_url,
+                transaction_amount: transaction_amount,
+                transaction_qr_code_base64: qr_code_base64_data,
+                user_id: user_id,
+                transaction_description: description
+            })
+
+        if (error)
+            throw error
+
+        return res.status(200).json({
+            message: "Sucesso", data: {
+                date_of_expiration,
+                qr_code_base64: qr_code_base64_data,
+                qr_code,
+                transaction_amount,
+                description
+            }
+        })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(404).json({ message: "Erro na criação do pagamento" })
+    }
 }
 
 
