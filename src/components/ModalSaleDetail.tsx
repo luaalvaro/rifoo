@@ -11,6 +11,7 @@ import {
     ModalCloseButton,
     Button,
     useDisclosure,
+    useToast,
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { FaTrash } from 'react-icons/fa'
@@ -32,6 +33,7 @@ export const mockId = (id: string) => {
 
 const ModalSaleDetail: React.FC<IProps> = ({ isOpen, onClose, sale }) => {
 
+    const toast = useToast()
     const { deleteSale } = useSales()
     const { loading, startLoading } = useLoading()
     const [data, setData] = useState<any>({})
@@ -57,6 +59,11 @@ const ModalSaleDetail: React.FC<IProps> = ({ isOpen, onClose, sale }) => {
         const deleted = await startLoading(() => deleteSale(sale.id))
 
         if (deleted) {
+            toast({
+                title: 'Venda excluída com sucesso!',
+                status: 'success',
+                duration: 5000,
+            })
             onClose()
         }
     }

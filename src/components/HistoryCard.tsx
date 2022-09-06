@@ -18,12 +18,16 @@ const paymentMethods = [
 
 interface IHistoryCard {
     sale: Sale
-    cardTitle?: string
+    cardTitle?: string,
+    enableDetails?: boolean
 }
 
-const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
+const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle, enableDetails = true }) => {
 
     const { setShowSaleDetails } = useSales()
+
+    const subtotal = (sale.total_price + sale.total_price_weight)
+    const total = (subtotal - sale.discount).toFixed(2)
 
     return (
         <Flex
@@ -37,7 +41,7 @@ const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
             direction="column"
             userSelect="none"
 
-            onClick={() => setShowSaleDetails(sale)}
+            onClick={() => enableDetails && setShowSaleDetails(sale)}
 
             _active={{
                 bg: '#dddfe2',
@@ -75,7 +79,7 @@ const HistoryCard: React.FC<IHistoryCard> = ({ sale, cardTitle }) => {
                     fontSize="16px"
                     fontWeight={600}
                 >
-                    R$ {(sale.total_price + sale.total_price_weight).toFixed(2)}
+                    {`R$ ${total}`}
                 </Text>
             </Flex>
 

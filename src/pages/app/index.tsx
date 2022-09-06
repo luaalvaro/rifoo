@@ -184,7 +184,7 @@ const Home = () => {
                   >
                     Última venda
                   </Text>
-                  <HistoryCard sale={lastSale} />
+                  <HistoryCard sale={lastSale} enableDetails={false} />
                 </>
               }
             </Flex>
