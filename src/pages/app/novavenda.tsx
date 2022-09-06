@@ -144,7 +144,7 @@ const Home = () => {
                     {order.paymentMethod === 2 && <ChangeMoney />}
                     <Discount />
 
-                    {order.paymentMethod === 1 &&
+                    {/* {order.paymentMethod === 1 &&
                         <Flex
                             px="15px"
                             direction="column"
@@ -173,7 +173,7 @@ const Home = () => {
                                 chave: 06149203530
                             </Text>
                         </Flex>
-                    }
+                    } */}
                 </>
             }
 
