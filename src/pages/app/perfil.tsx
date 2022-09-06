@@ -18,6 +18,8 @@ import moment from 'moment'
 import useSWR from 'swr'
 import Image from 'next/image'
 import { MdOutlineContentCopy } from 'react-icons/md'
+import LabelValue from '../../components/atoms/LabelValue'
+import SignatureActions from '../../components/SignatureActions'
 
 const fetcher = async (url: any) => await supabase
   .from(url)
@@ -73,130 +75,34 @@ const Perfil = () => {
 
       {!loading && profile && (
         <>
-          <Text
-            fontSize={18}
-            mt="15px"
-            mx="15px"
-            userSelect="none"
-          >
-            <b>{profile?.fullName}</b> este é seu perfil!
-          </Text>
-
-          <Text
-            fontSize={14}
-            mt="15px"
-            mx="15px"
-            userSelect="none"
-          >
-            Seu nome: <b>{profile?.fullName}</b>
-          </Text>
-
-          <Text
-            fontSize={14}
-            mx="15px"
-            userSelect="none"
-          >
-            Data de nascimento: <b>{yyyyMMdd_to_ddMMyyyy(profile?.birthdate)}</b>
-          </Text>
-
-          <Text
-            fontSize={14}
-            mx="15px"
-            userSelect="none"
-          >
-            CPF: <b>{profile?.cpf}</b>
-          </Text>
-
-          <Text
-            fontSize={14}
-            mx="15px"
-            userSelect="none"
-          >
-            Whats app: <b>{profile?.whatsapp}</b>
-          </Text>
-
-          <Flex
-            mt="25px"
+          <LabelValue
+            label="este é seu perfil!"
+            value={profile.fullName}
             px="15px"
-            userSelect="none"
-            direction="column"
-            gridGap="25px"
-          >
-            <Text>
-              Sua assinatura está {signatureStatusDate}.<br />
-              <b>{`${signatureTextUntil} ${signatureDate}`}</b>
-            </Text>
+            py="15px"
+            variant="title"
+            transform='reverse'
+          />
 
-            {payment && (
-              <Flex
-                bg="#fff"
-                justify="center"
-                direction="column"
-                p="15px"
-                borderRadius="4px"
-              >
-                <Heading
-                  fontSize="18px"
-                >
-                  Rifoo 30 dias - R$ 29,90 via Pix
-                </Heading>
+          <LabelValue
+            label="Data de nascimento"
+            value={yyyyMMdd_to_ddMMyyyy(profile?.birthdate)}
+            px="15px"
+          />
 
-                <Text
-                  color="rgba(0,0,0,0.6)"
-                >
-                  Vencimento: {moment(payment?.date_of_expiration).fromNow()}
-                </Text>
+          <LabelValue
+            label="CPF"
+            value={profile?.cpf}
+            px="15px"
+          />
 
-                <Text mt="15px">Código QR</Text>
-                <Flex
-                  pb="15px"
-                  justify="center"
-                >
-                  <Image
-                    src={payment.qr_code_base64}
-                    width={200}
-                    height={200}
-                    alt="QR Code"
-                  />
-                </Flex>
+          <LabelValue
+            label="Whats app"
+            value={profile?.whatsapp}
+            px="15px"
+          />
 
-                <Text mb="10px">Código de pagamento</Text>
-                <Input
-                  readOnly
-                  value={payment.qr_code}
-                />
-
-                <Button
-                  mt="20px"
-                  background="brand.primary"
-                  color="#fff"
-
-                  leftIcon={<MdOutlineContentCopy />}
-
-                  _hover={{
-                    background: "brand.primaryDark",
-                  }}
-                >
-                  Copiar código de pagamento
-                </Button>
-              </Flex>
-            )}
-
-            {signatureStatusDate === 'atrasada' && !payment && (
-              <Button
-                background="brand.primary"
-                color="#fff"
-
-                onClick={handleCreatePayment}
-
-                _hover={{
-                  background: "brand.primaryDark",
-                }}
-              >
-                Renovar assinatura
-              </Button>
-            )}
-          </Flex>
+          <SignatureActions />
         </>
       )}
     </AuthProvider>
