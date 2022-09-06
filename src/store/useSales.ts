@@ -10,13 +10,17 @@ interface ISales {
     sales: Sale[] | undefined,
     week: number,
     weekLabel: string,
-    fetchSales: (method?: "prev" | "next") => Promise<boolean>
+    showSaleDetails: Sale | undefined,
+    fetchSales: (method?: "prev" | "next") => Promise<boolean>,
+    setShowSaleDetails: (sale: Sale | undefined) => void,
+    deleteSale: (sale: string) => Promise<boolean>,
 }
 
 const useSales = create<ISales>((set, get) => ({
     sales: undefined,
     week: 0,
     weekLabel: "Esta semana",
+    showSaleDetails: undefined,
 
     fetchSales: async (method?: "prev" | "next") => {
 
@@ -60,6 +64,28 @@ const useSales = create<ISales>((set, get) => ({
             if (error) throw error
 
             set(state => ({ ...state, sales: data, week: newWeek, weekLabel }))
+            return true
+        } catch (error) {
+            console.log(error)
+            return false
+        }
+    },
+
+    setShowSaleDetails: (sale) => {
+        set(state => ({ ...state, showSaleDetails: sale }))
+    },
+
+    deleteSale: async (sale) => {
+        const { sales } = get()
+        try {
+            const { data, error } = await supabase
+                .from('sales')
+                .delete()
+                .eq('id', sale)
+
+            if (error) throw error
+
+            set(state => ({ ...state, sales: sales?.filter(s => s.id !== sale) }))
             return true
         } catch (error) {
             console.log(error)

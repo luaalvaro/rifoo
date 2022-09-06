@@ -25,6 +25,7 @@ import {
     ResponsiveContainer
 } from 'recharts';
 import useSales from '../../store/useSales'
+import ModalSaleDetail from '../../components/ModalSaleDetail'
 
 moment.locale('pt-br')
 
@@ -279,6 +280,14 @@ const MinhasVendas = () => {
                         ))}
                     </Flex>
                 </>
+            }
+
+            {!!sales.showSaleDetails &&
+                <ModalSaleDetail
+                    isOpen={!!sales.showSaleDetails}
+                    onClose={() => sales.setShowSaleDetails(undefined)}
+                    sale={sales.showSaleDetails}
+                />
             }
 
             {!stats && !loading &&
