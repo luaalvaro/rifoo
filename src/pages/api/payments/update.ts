@@ -45,7 +45,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             const { id, status } = response
             console.log({ id, status, action })
 
-            const { error } = await supabase
+            const { data: payment, error } = await supabase
                 .from('payments')
                 .update({
                     transaction_status: status,
@@ -55,6 +55,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
             if (error)
                 throw error
+
+            if (status === 'approved') {
+                const { data: user, error: userError } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('user_id', payment?.user_id)
+                    .single()
+
+                if (userError)
+                    throw userError
+
+                console.log({
+                    userId: payment?.user_id,
+                    valid: user?.valid_until,
+                    newDate: moment(user?.valid_until).add(1, 'month').toISOString()
+                })
+            }
 
             return res.status(200).json({ message: "Sucesso" })
         } catch (error) {
