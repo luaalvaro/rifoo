@@ -46,8 +46,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         return res.status(500).json({ message: 'Url and key not found' })
 
     const expiration = moment()
-        .add(5, 'minutes')
-        .format('YYYY-MM-DDTHH:mm:ss.SSSZ')
+        .utc()
+        .add(65, 'minutes')
+        .toISOString()
 
     console.log(expiration)
 
@@ -86,6 +87,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         payer,
         point_of_interaction
     } = response
+
+    console.log(expiration, date_of_expiration)
 
     const {
         qr_code_base64,
