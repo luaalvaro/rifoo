@@ -1,19 +1,30 @@
-import { Flex, FormControl, FormLabel, Input, Text } from '@chakra-ui/react'
+import { Flex, FormControl, FormLabel, Input, Text, useToast } from '@chakra-ui/react'
 import useOrder from '../store/useOrder'
 import NumberFormat from 'react-number-format'
 import { useState } from 'react'
 
 const Discount = () => {
 
+    const toast = useToast()
     const total_price = useOrder(state => state.total_price)
     const total_price_weight = useOrder(state => state.total_price_weight)
     const discount = useOrder(state => state.discount)
     const setDiscount = useOrder(state => state.setDiscount)
-
+    const total_price_order = total_price + total_price_weight
     const [money, setMoney] = useState<number | undefined>()
 
-    const change = money && money - (total_price + total_price_weight)
+    const change = money && money - total_price_order
 
+    const handleSetDiscount = (value: any) => {
+        console.log(value)
+        if (value > total_price_order) {
+            toast({
+                title: "Desconto inválido",
+            })
+            return setDiscount(0)
+        }
+        setDiscount(value)
+    }
     return (
         <Flex
             direction="column"
@@ -41,7 +52,7 @@ const Discount = () => {
                     background="#fff"
 
                     value={discount}
-                    onValueChange={(value) => setDiscount(value.floatValue)}
+                    onValueChange={(value) => handleSetDiscount(value.floatValue)}
                 />
 
                 {change && change > 0 &&
