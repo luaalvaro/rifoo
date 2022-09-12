@@ -60,7 +60,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
                 const { data: user, error: userError } = await supabase
                     .from('profiles')
                     .select('*')
-                    .eq('user_id', payment?.user_id)
+                    .eq('id', payment?.user_id)
                     .single()
 
                 if (userError)

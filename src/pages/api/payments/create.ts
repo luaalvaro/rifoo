@@ -57,7 +57,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         .setAccessToken(MP_ACESS_TOKEN)
 
     const payment_data = {
-        transaction_amount: 1.00,
+        transaction_amount: 0.02,
         description: 'Rifoo Mensal',
         payment_method_id: 'pix',
         payer: {
