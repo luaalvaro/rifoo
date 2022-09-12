@@ -1,21 +1,9 @@
 import {
     Flex,
     Text,
-    useDisclosure,
-    useToast,
-    Stack,
-    Skeleton,
-    Button,
-    Heading,
-    Input,
-    List,
-    ListItem,
-    ListIcon,
 } from '@chakra-ui/react'
-import { MdCheckCircle } from 'react-icons/md'
 import { termsSignature } from '../constants/defaultValues'
 import CardPricingSignature from './containers/CardPricingSignature'
-
 
 const SignatureActions = () => {
     return (
@@ -52,11 +40,6 @@ const SignatureActions = () => {
             <CardPricingSignature
                 title="Rifoo Premium 30 Dias"
                 price="29,90"
-            />
-
-            <CardPricingSignature
-                title="Rifoo Premium 90 Dias"
-                price="80,73"
             />
         </Flex>
     )

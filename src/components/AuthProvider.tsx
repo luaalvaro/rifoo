@@ -4,48 +4,40 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from 'react'
 import supabase from "../services/supabase"
 import useSWR from 'swr'
+import moment from "moment"
+import useAuth from "../store/useAuth"
 
 interface IAuthProvider {
     children: React.ReactNode,
     permissions?: string[],
 }
 
-const fetcher = async (url: any) => await supabase
-    .from(url)
-    .select("*")
-    .single()
-
 const AuthProvider: React.FC<IAuthProvider> = ({ children, permissions }) => {
 
+    const { profile, fetchProfile } = useAuth()
     const router = useRouter()
     const session = supabase.auth.session()
 
-    const { data, error } = useSWR('profiles', fetcher)
-    const profile = data?.data
-    const loading = !data
+    const loading = profile === undefined
 
     const hasPermission = () => {
-
+        console.log('Checando permissões do usuário')
         const authenticated = !!session
         const hasProfile = !!profile
         const atHomeApp = router.pathname === '/app'
+        const atProfile = router.pathname === '/app/perfil'
 
         const isNewUser = authenticated && !hasProfile
         const newUserAtHome = isNewUser && atHomeApp
         const routeHasPermission = !!permissions
 
-        const userHasPermission = permissions?.includes(profile?.member_type)
-
-        console.log({
-            routeHasPermission,
-            userHasPermission,
-        })
+        const userHasPermission = permissions?.includes(`${profile?.member_type}`)
 
         if (!authenticated)
-            return router.push('/login')
+            return router.push('/')
 
-        if (isNewUser && !newUserAtHome)
-            return router.push('/app')
+        if (isNewUser && !atProfile)
+            return router.push('/app/perfil')
 
         if (routeHasPermission && !userHasPermission)
             return router.push('/app')
@@ -59,8 +51,13 @@ const AuthProvider: React.FC<IAuthProvider> = ({ children, permissions }) => {
         return false
     }
 
+    useEffect(() => {
+        hasPermission()
+    }, [profile])
 
-
+    useEffect(() => {
+        fetchProfile()
+    }, [])
     return (
         <>
             {loading &&
@@ -71,7 +68,7 @@ const AuthProvider: React.FC<IAuthProvider> = ({ children, permissions }) => {
                 </Stack>
             }
 
-            {!loading && hasPermission() &&
+            {!loading &&
                 <Flex
                     minHeight="100vh"
                     background="brand.background"

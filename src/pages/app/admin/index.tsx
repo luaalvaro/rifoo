@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 import StatsCard from '../../../components/StatsCard'
 import { FaBoxOpen } from 'react-icons/fa'
 import useSWR from 'swr'
+import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 
 const sessionToken = supabase.auth.session()
 
@@ -85,14 +86,28 @@ const MinhasVendas = () => {
         <AuthProvider permissions={["admin"]}>
             <Header />
 
-            <Text
-                fontSize={18}
-                margin="15px"
-                fontWeight={400}
+            <Flex
+                align="center"
+                justify="space-between"
+                margin="20px 15px"
                 userSelect="none"
+                fontSize={18}
             >
-                Estatísticas da plataforma (últimos 30 dias)
-            </Text>
+                <BsChevronLeft
+                    cursor="pointer"
+                // onClick={() => sales.fetchSales("prev")}
+                />
+                <Text
+                    fontSize={16}
+                    fontWeight={600}
+                >
+                    {/* {sales.weekLabel} */}
+                </Text>
+                <BsChevronRight
+                    cursor="pointer"
+                // onClick={() => sales.fetchSales("next")}
+                />
+            </Flex>
 
             {loading &&
                 <Stack px="15px">
@@ -180,8 +195,6 @@ const MinhasVendas = () => {
                     </Flex>
                 </>
             }
-
-
 
             {!stats && !loading &&
                 <Flex
