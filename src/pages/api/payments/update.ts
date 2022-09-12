@@ -19,6 +19,13 @@ interface PaymentAction {
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+
+    const MP_ACESS_TOKEN = `${process.env.MP_STAGING_ACESS_TOKEN}`
+
+    mercadopago
+        .configurations
+        .setAccessToken(MP_ACESS_TOKEN)
+
     try {
         const { action, data } = req.body
 
