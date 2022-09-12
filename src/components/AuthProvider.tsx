@@ -14,6 +14,7 @@ interface IAuthProvider {
 
 const AuthProvider: React.FC<IAuthProvider> = ({ children, permissions }) => {
 
+    const [showContent, setShowContent] = useState(false)
     const { profile, fetchProfile } = useAuth()
     const router = useRouter()
     const session = supabase.auth.session()
@@ -36,19 +37,13 @@ const AuthProvider: React.FC<IAuthProvider> = ({ children, permissions }) => {
         if (!authenticated)
             return router.push('/')
 
-        if (isNewUser && !atProfile)
+        if (profile === null)
             return router.push('/app/perfil')
 
         if (routeHasPermission && !userHasPermission)
             return router.push('/app')
 
-        if (isNewUser && newUserAtHome)
-            return true
-
-        if (!isNewUser && hasProfile)
-            return true
-
-        return false
+        setShowContent(true)
     }
 
     useEffect(() => {
@@ -68,7 +63,7 @@ const AuthProvider: React.FC<IAuthProvider> = ({ children, permissions }) => {
                 </Stack>
             }
 
-            {!loading &&
+            {!loading && showContent &&
                 <Flex
                     minHeight="100vh"
                     background="brand.background"

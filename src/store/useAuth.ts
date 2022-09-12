@@ -41,7 +41,6 @@ const useAuth = create<IAuth>((set, get) => ({
                 return set({ profile: null })
             }
 
-            console.log(data[0])
             set({ profile: data[0] })
         } catch (error) {
             console.log(error)

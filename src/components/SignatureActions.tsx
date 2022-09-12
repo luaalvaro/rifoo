@@ -3,9 +3,17 @@ import {
     Text,
 } from '@chakra-ui/react'
 import { termsSignature } from '../constants/defaultValues'
+import useAuth from '../store/useAuth'
 import CardPricingSignature from './containers/CardPricingSignature'
-
+import moment from 'moment'
 const SignatureActions = () => {
+
+    const { profile } = useAuth()
+
+    const signatureExpiresDate = moment(profile?.valid_until).format('DD/MM/YYYY')
+    const timeToExpire = moment(profile?.valid_until, "YYYY-MM-DD").fromNow()
+    const signatureStatusDate = timeToExpire.includes('há') ? 'atrasada' : 'ativa'
+    const signatureTextUntil = timeToExpire.includes('há') ? 'Expirou' : 'Expira'
     return (
         <Flex
             mt="25px"
@@ -26,15 +34,9 @@ const SignatureActions = () => {
             <Text
                 fontWeight={600}
                 color="green"
+                mb="15px"
             >
-                Sua assinatura está ativa até 31/12/2021
-            </Text>
-            <Text
-                color="green"
-                fontSize={14}
-                mb="30px"
-            >
-                51 dias restantes
+                Sua assinatura está {signatureStatusDate} até {signatureExpiresDate}
             </Text>
 
             <CardPricingSignature

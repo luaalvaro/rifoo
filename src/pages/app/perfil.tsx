@@ -98,7 +98,6 @@ const Perfil = () => {
     }
   }
 
-  console.log(profile === null)
   return (
     <AuthProvider>
       <Header />
