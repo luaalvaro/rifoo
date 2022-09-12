@@ -21,7 +21,7 @@ const Discount = () => {
             toast({
                 title: "Desconto inválido",
             })
-            return setDiscount(0)
+            return setDiscount(undefined)
         }
         setDiscount(value)
     }

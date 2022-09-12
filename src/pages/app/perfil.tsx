@@ -1,67 +1,30 @@
 import {
   Flex,
   Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
   Button,
   FormControl,
   FormLabel,
   Input,
-  useDisclosure,
   FormErrorMessage,
   useToast,
   Stack,
   Skeleton,
-  Link as A
 } from '@chakra-ui/react'
 import Header from '../../components/Header'
 import AuthProvider from '../../components/AuthProvider'
 import supabase from '../../services/supabase'
-import { useEffect, useState } from 'react'
 import { yyyyMMdd_to_ddMMyyyy } from '../../utils/dataHacks'
-import moment from 'moment'
-import useSWR from 'swr'
-import Image from 'next/image'
-import { MdOutlineContentCopy } from 'react-icons/md'
 import LabelValue from '../../components/atoms/LabelValue'
 import SignatureActions from '../../components/SignatureActions'
 import { Field, Formik } from 'formik'
 import useAuth from '../../store/useAuth'
 
-interface PaymentPIX {
-  date_of_expiration: string
-  description: string
-  qr_code: string
-  qr_code_base64: string
-  transaction_amount: number
-}
-
 const Perfil = () => {
 
   const { profile, fetchProfile } = useAuth()
   const toast = useToast()
-  const [payment, setPayment] = useState<PaymentPIX | undefined>(undefined)
 
   const loading = profile === undefined
-
-  const handleCreatePayment = async () => {
-
-    const session = supabase.auth.session()
-
-    const response = await fetch('/api/payments/create', {
-      method: 'POST',
-      body: JSON.stringify({
-        sessionToken: session?.access_token,
-      })
-    })
-    const { data } = await response.json()
-
-    console.log(data)
-    setPayment(data)
-  }
 
   const handleSubmitProfile = async (values: any) => {
     const session = supabase.auth.session()

@@ -46,8 +46,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         return res.status(500).json({ message: 'Url and key not found' })
 
     const expiration = moment()
-        .add(30, 'minutes')
-        .toISOString()
+        .add(5, 'minutes')
+        .format('YYYY-MM-DDTHH:mm:ss.SSSZ')
+
+    console.log(expiration)
 
     mercadopago
         .configurations
@@ -137,7 +139,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             throw error
 
         return res.status(200).json({
-            message: "Sucesso", data: {
+            message: "Sucesso",
+            data: {
                 date_of_expiration,
                 qr_code_base64: qr_code_base64_data,
                 qr_code,

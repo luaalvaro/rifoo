@@ -6,6 +6,7 @@ import { termsSignature } from '../constants/defaultValues'
 import useAuth from '../store/useAuth'
 import CardPricingSignature from './containers/CardPricingSignature'
 import moment from 'moment'
+
 const SignatureActions = () => {
 
     const { profile } = useAuth()
@@ -14,6 +15,7 @@ const SignatureActions = () => {
     const timeToExpire = moment(profile?.valid_until, "YYYY-MM-DD").fromNow()
     const signatureStatusDate = timeToExpire.includes('há') ? 'atrasada' : 'ativa'
     const signatureTextUntil = timeToExpire.includes('há') ? 'Expirou' : 'Expira'
+
     return (
         <Flex
             mt="25px"

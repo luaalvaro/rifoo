@@ -92,3 +92,11 @@ type SessionDecoded = {
     user_metadata: {},
     role: string
 }
+
+interface PaymentPIX {
+    date_of_expiration: string
+    description: string
+    qr_code: string
+    qr_code_base64: string
+    transaction_amount: number
+}

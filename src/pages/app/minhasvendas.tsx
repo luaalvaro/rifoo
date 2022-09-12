@@ -32,7 +32,6 @@ moment.locale('pt-br')
 const MinhasVendas = () => {
 
     const sales = useSales(state => state)
-
     const loading = !sales.sales
 
     const handleGetTotalSalesOfDay = (data: Sale[] | null | undefined) => {
@@ -147,7 +146,6 @@ const MinhasVendas = () => {
         sales.fetchSales()
     }, [])
 
-    console.log(stats)
     return (
         <AuthProvider>
             <Header />
