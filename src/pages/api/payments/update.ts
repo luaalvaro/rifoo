@@ -18,7 +18,12 @@ interface PaymentAction {
     user_id: string
 }
 
+// { id: 25734672125, status: 'approved', action: 'payment.updated' }
+
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+
+    if (req.method !== 'POST')
+        return res.status(405).json({ message: 'Method not allowed' })
 
     const MP_ACESS_TOKEN = `${process.env.MP_PROD_ACESS_TOKEN}`
 
@@ -26,28 +31,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         .configurations
         .setAccessToken(MP_ACESS_TOKEN)
 
-    try {
-        const { action, data } = req.body
+    const { action, data } = req.body
 
-        if (action === 'payment.created')
-            return res.status(200).json({ message: 'Pagamento criado' })
+    if (action === 'payment.created')
+        return res.status(200).json({ message: 'Pagamento criado' })
 
-        const { response } = await mercadopago
-            .payment
-            .findById(data.id)
-
-        const {
-            id,
-            status,
-        } = response
-
-        console.log({
-            id,
-            status,
-            action
-        })
-
+    if (action === 'payment.updated' && !!data.id) {
         try {
+            const { response } = await mercadopago
+                .payment
+                .findById(data.id)
+
+            const { id, status } = response
+            console.log({ id, status, action })
+
             const { error } = await supabase
                 .from('payments')
                 .update({
@@ -60,17 +57,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
                 throw error
 
             return res.status(200).json({ message: "Sucesso" })
-
         } catch (error) {
             console.log(error)
-            return res.status(404).json({
-                message: "Erro na edição do pagamento"
-            })
         }
-
-    } catch (error) {
-        console.log(error)
     }
+
+    console.log(req.body)
+    return res.status(400).json({ message: 'Bad request' })
 }
 
 
