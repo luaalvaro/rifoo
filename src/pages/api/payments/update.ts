@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import mercadopago from 'mercadopago'
 import moment from 'moment'
 import supabase from '../../../services/supabase'
-import 'moment/locale/en'
 
 type Data = {
     message: string,
