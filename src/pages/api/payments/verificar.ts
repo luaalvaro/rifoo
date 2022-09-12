@@ -4,7 +4,7 @@ import moment from 'moment'
 import supabase from '../../../services/supabase'
 
 type Data = {
-    message: string,
+    message: any,
 }
 
 interface PaymentAction {
@@ -20,15 +20,19 @@ interface PaymentAction {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
-    const expiration = moment()
-        .utc()
-        .add(65, 'minutes')
-        .toISOString()
-    console.log({
-        expiration,
-    })
+    const MP_ACESS_TOKEN = `${process.env.MP_STAGING_ACESS_TOKEN}`
 
-    return res.status(200).json({ message: expiration })
+    mercadopago
+        .configurations
+        .setAccessToken(MP_ACESS_TOKEN)
+
+    const { id } = req.body
+
+    const { response } = await mercadopago
+        .payment
+        .findById(id)
+
+    return res.status(200).json({ message: response })
 }
 
 

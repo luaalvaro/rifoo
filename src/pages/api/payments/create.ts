@@ -17,7 +17,7 @@ type Data = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
-    const MP_ACESS_TOKEN = `${process.env.MP_STAGING_ACESS_TOKEN}`
+    const MP_ACESS_TOKEN = `${process.env.MP_PROD_ACESS_TOKEN}`
     const supabaseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}`
     const supabaseKey = `${process.env.MASTER_SUPABASE_KEY}`
 
@@ -47,7 +47,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     const expiration = moment()
         .utc()
-        .add(65, 'minutes')
+        .add(5, 'minutes')
         .toISOString()
 
     console.log(expiration)
@@ -57,7 +57,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         .setAccessToken(MP_ACESS_TOKEN)
 
     const payment_data = {
-        transaction_amount: 29.9,
+        transaction_amount: 1.00,
         description: 'Rifoo Mensal',
         payment_method_id: 'pix',
         payer: {
