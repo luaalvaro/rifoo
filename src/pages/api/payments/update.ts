@@ -6,9 +6,29 @@ type Data = {
     message: string,
 }
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+interface PaymentAction {
+    action: string,
+    api_version: string,
+    data: { id: string },
+    date_created: string,
+    id: number,
+    live_mode: boolean,
+    type: string,
+    user_id: string
+}
 
-    console.log(req.body)
+const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+    try {
+        console.log(req.body)
+
+        const { response } = await mercadopago
+            .payment
+            .findById(req.body.data.id)
+
+        console.log(response)
+    } catch (error) {
+        console.log(error)
+    }
 
     return res.status(200).json({ message: "Sucesso" })
 }

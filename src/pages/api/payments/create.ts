@@ -69,7 +69,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             }
         },
         installments: 1,
-        // notification_url: "",
+        notification_url: "https://staging-rifoo.vercel.app/api/payments/update",
         date_of_expiration: expiration
     }
 
