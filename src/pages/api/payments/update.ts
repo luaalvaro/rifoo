@@ -63,9 +63,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             if (error)
                 throw error
 
-            console.log(payment)
-
             if (status === 'approved') {
+                console.log('Pagamento aprovado')
                 const { data: user, error: userError } = await supabase
                     .from('profiles')
                     .select('*')
@@ -75,11 +74,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
                 if (userError)
                     throw userError
 
-                console.log({
-                    userId: payment?.user_id,
-                    valid: user?.valid_until,
-                    newDate: moment(user?.valid_until).add(1, 'month').toISOString()
-                })
+                const newDate = moment(user?.valid_until).add(1, 'month').format("YYYY-MM-DD")
+
+                const { data: updatedUser, error: updatedError } = await supabase
+                    .from('profiles')
+                    .update({
+                        valid_until: newDate
+                    })
+                    .eq('user_id', payment?.user_id)
+                    .single()
+
+                console.log('Validade do usuário atualizada até: ', newDate)
             }
 
             return res.status(200).json({ message: "Sucesso" })
