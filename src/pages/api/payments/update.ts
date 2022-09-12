@@ -20,23 +20,28 @@ interface PaymentAction {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     try {
+        const { action, data } = req.body
+
+        if (action === 'payment.created')
+            return res.status(200).json({ message: 'Pagamento criado' })
+
         const { response } = await mercadopago
             .payment
-            .findById(req.body.data.id)
+            .findById(data.id)
 
         const {
             id,
             status,
-            status_detail,
-            description,
-            transaction_amount,
-            date_of_expiration,
-            payer,
-            point_of_interaction
         } = response
 
+        console.log({
+            id,
+            status,
+            action
+        })
+
         try {
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .from('payments')
                 .update({
                     transaction_status: status,
@@ -47,18 +52,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             if (error)
                 throw error
 
-            console.log(data)
+            return res.status(200).json({ message: "Sucesso" })
 
         } catch (error) {
             console.log(error)
-            return res.status(404).json({ message: "Erro na edição do pagamento" })
+            return res.status(404).json({
+                message: "Erro na edição do pagamento"
+            })
         }
 
     } catch (error) {
         console.log(error)
     }
-
-    return res.status(200).json({ message: "Sucesso" })
 }
 
 
