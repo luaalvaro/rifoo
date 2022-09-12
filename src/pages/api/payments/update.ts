@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import mercadopago from 'mercadopago'
 import moment from 'moment'
-import supabase from '../../../services/supabase'
+import { createClient } from '@supabase/supabase-js'
 
 type Data = {
     message: string,
@@ -26,6 +26,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         return res.status(405).json({ message: 'Method not allowed' })
 
     const MP_ACESS_TOKEN = `${process.env.MP_PROD_ACESS_TOKEN}`
+    const supabaseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}`
+    const supabaseKey = `${process.env.MASTER_SUPABASE_KEY}`
+
+    if (supabaseUrl === '' || supabaseKey === '')
+        return res.status(500).json({ message: 'Url and key not found' })
 
     mercadopago
         .configurations
@@ -35,6 +40,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     if (action === 'payment.created')
         return res.status(200).json({ message: 'Pagamento criado' })
+
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
     if (action === 'payment.updated' && !!data.id) {
         try {
@@ -56,11 +63,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             if (error)
                 throw error
 
+            console.log(payment)
+
             if (status === 'approved') {
                 const { data: user, error: userError } = await supabase
                     .from('profiles')
                     .select('*')
-                    .eq('id', payment?.user_id)
+                    .eq('user_id', payment?.user_id)
                     .single()
 
                 if (userError)
