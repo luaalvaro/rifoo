@@ -16,13 +16,13 @@ type Data = {
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-
+    console.log('-----------------------------')
     const MP_ACESS_TOKEN = `${process.env.MP_PROD_ACESS_TOKEN}`
     const supabaseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}`
     const supabaseKey = `${process.env.MASTER_SUPABASE_KEY}`
-
+    const NOTIFICATION_URL = "https://kplcdlkqidvgtzobpwwd.functions.supabase.co/mpWebhook"
+   
     const checkTokenIsValid = (token: string) => {
-        console.log('checkTokenIsValid - Checando se o Token JWT é válido')
         const JWT_SINGNATURE = process.env.JWT_SIGNATURE
 
         if (!JWT_SINGNATURE)
@@ -34,10 +34,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             if (typeof decoded === 'string')
                 return 'Token is not valid'
 
-            console.log('checkTokenIsValid - Token JWT válido')
+            console.log('Token JWT válido')
             return decoded
         } catch (error) {
-            console.log('checkTokenIsValid - Token JWT Inválido')
+            console.log('Token JWT Inválido')
             return 'Token is not valid'
         }
     }
@@ -45,16 +45,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     if (supabaseUrl === '' || supabaseKey === '')
         return res.status(500).json({ message: 'Url and key not found' })
 
+    // Checando a validade do token
+    const { sessionToken } = JSON.parse(req.body);
+
+    const decoded = checkTokenIsValid(sessionToken)
+    const user_id = decoded.sub
+    if (typeof decoded === 'string') {
+        return res.status(400).json({ message: decoded })
+    }
+
+    // Criando instancia do supabase
+    const supabase = createClient(supabaseUrl, supabaseKey)
+    
+    mercadopago.configurations.setAccessToken(MP_ACESS_TOKEN)
+
     const expiration = moment()
         .utc()
-        .add(5, 'minutes')
+        .add(30, 'minutes')
         .toISOString()
-
-    console.log(expiration)
-
-    mercadopago
-        .configurations
-        .setAccessToken(MP_ACESS_TOKEN)
 
     const payment_data = {
         transaction_amount: 0.02,
@@ -70,8 +78,43 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             }
         },
         installments: 1,
-        notification_url: "https://staging-rifoo.vercel.app/api/payments/update",
+        notification_url: `${NOTIFICATION_URL}?source_news=webhooks`,
         date_of_expiration: expiration
+    }
+
+    // Verificar se o usuário já possui um pagamento pendente
+
+    try {
+        const {data, error} = await supabase
+        .from('payments')
+        .select('*')
+        .eq('user_id', user_id)
+        .eq('transaction_status', 'pending')
+
+        if (error)
+        throw error
+
+        
+        const expiresAt = moment(data[0]?.date_of_expiration).fromNow()
+        
+        console.log('Pagamentos encontrados', data.length)
+        console.log('Expira em:', expiresAt)
+
+     if (data.length > 0) {
+        return res.status(200).json({
+            message: "Sucesso",
+            data: {
+                date_of_expiration: data[0].transaction_date_of_expiration,
+                qr_code_base64: data[0].transaction_qr_code_base64,
+                qr_code: data[0].transaction_qr_code,
+                transaction_amount: data[0].transaction_amount,
+                description: data[0].transaction_description,
+            }
+        })
+        }
+       
+    } catch (error) {
+        console.log(error)        
     }
 
     const { response } = await mercadopago
@@ -88,38 +131,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         point_of_interaction
     } = response
 
-    console.log(expiration, date_of_expiration)
-
     const {
         qr_code_base64,
         ticket_url,
         qr_code
     } = point_of_interaction.transaction_data
 
-    console.log({
-        id,
-        status,
-        date_of_expiration,
-        payer,
-        description,
-        qr_code,
-        ticket_url,
-        transaction_amount,
-        qr_code_base64: qr_code_base64.substring(0, 10)
-    })
+    console.log({ id,status,date_of_expiration})
 
     // Salvar o pagamento no banco de dados
 
-    const { sessionToken } = JSON.parse(req.body);
-
-    const decoded = checkTokenIsValid(sessionToken)
-
-    if (typeof decoded === 'string') {
-        return res.status(400).json({ message: decoded })
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseKey)
-    const user_id = decoded.sub
     const qr_code_base64_data = `data:image/jpeg;base64, ${qr_code_base64}`
 
     try {
