@@ -21,13 +21,13 @@ interface Profile {
 
 interface IAuth {
     payment: PaymentPIX | undefined | null,
-    newPayment: () => Promise<void>,
+    newPayment: (fullName: string, cpf: string) => Promise<void>,
     clearPayment: () => void,
 }
 
 const usePayments = create<IAuth>((set, get) => ({
     payment: undefined,
-    newPayment: async () => {
+    newPayment: async (fullName, cpf) => {
         try {
             const session = supabase.auth.session()
 
@@ -35,6 +35,8 @@ const usePayments = create<IAuth>((set, get) => ({
                 method: 'POST',
                 body: JSON.stringify({
                     sessionToken: session?.access_token,
+                    fullName,
+                    cpf
                 })
             })
             const { data } = await response.json()

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { MdCheckCircle, MdContentCopy } from 'react-icons/md'
 import usePayments from '../../store/usePayments'
-import Image from 'next/image'
+// import Image from 'next/image'
 import moment from 'moment'
 import supabase from '../../services/supabase'
 import {
@@ -11,6 +11,7 @@ import {
     FormControl,
     FormLabel,
     Input,
+    Image,
     FormErrorMessage,
     useToast,
     Stack,
@@ -52,13 +53,20 @@ const ModalBuyRifoo: React.FC<IProps> = ({payment,onClose}) => {
       <ModalContent
         mx="20px"
       >
-        <ModalHeader>Comprar Rifoo Premium 30 dias</ModalHeader>
+        <ModalHeader>Rifoo Premium 30 dias</ModalHeader>
         <ModalCloseButton onClick={onClose}/>
        
         <ModalBody>
+            <Flex 
+                py="15px"
+                justify="center"
+            >
+                <Image src="/pix.png" width="50%" />
+            </Flex>
+
         {payment &&
                 <Flex
-                    py="20px"
+             
                     align="center"
                     direction="column"
                 >
@@ -117,8 +125,10 @@ const ModalBuyRifoo: React.FC<IProps> = ({payment,onClose}) => {
                     >
                         <Text
                             fontSize="14px"
+                            textAlign="justify"
                         >
-                            O tempo para você pagar acaba <b>{expiresAt}</b>
+                            Faça o pagamento <b>{expiresAt}</b> para concluir a compra do Rifoo premium por 30 dias.
+                            O pagamento será confirmado automaticamente.
                         </Text>
                         <Text></Text>
                     </Flex>

@@ -46,14 +46,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         return res.status(500).json({ message: 'Url and key not found' })
 
     // Checando a validade do token
-    const { sessionToken } = JSON.parse(req.body);
+    const { sessionToken, fullName, cpf } = JSON.parse(req.body);
 
     const decoded = checkTokenIsValid(sessionToken)
-    const user_id = decoded.sub
     if (typeof decoded === 'string') {
         return res.status(400).json({ message: decoded })
     }
-
+    const user_id = decoded.sub
+    const user_email = decoded.email
     // Criando instancia do supabase
     const supabase = createClient(supabaseUrl, supabaseKey)
     
@@ -64,23 +64,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         .add(30, 'minutes')
         .toISOString()
 
-    const payment_data = {
+        const cpfNumbers =cpf.replace(/\D/g, '')
+   
+        const payment_data = {
         transaction_amount: 0.02,
         description: 'Rifoo Mensal',
         payment_method_id: 'pix',
         payer: {
-            email: 'luan.alc@hotmail.com',
-            first_name: 'Luã Álvaro',
-            last_name: 'Lage Carlos',
+            email: user_email,
+            first_name: fullName,
             identification: {
                 type: 'CPF',
-                number: '06149203530'
+                number: cpfNumbers
             }
         },
         installments: 1,
         notification_url: `${NOTIFICATION_URL}?source_news=webhooks`,
         date_of_expiration: expiration
-    }
+         }
 
     // Verificar se o usuário já possui um pagamento pendente
 
@@ -94,11 +95,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         if (error)
         throw error
 
-        
-        const expiresAt = moment(data[0]?.date_of_expiration).fromNow()
-        
         console.log('Pagamentos encontrados', data.length)
-        console.log('Expira em:', expiresAt)
 
      if (data.length > 0) {
         return res.status(200).json({

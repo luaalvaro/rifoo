@@ -16,7 +16,8 @@ interface Profile {
     user_id: string,
     valid_until: string,
     referred: string,
-    member_type: string
+    member_type: string,
+    email: string | null
 }
 
 interface IAuth {

@@ -33,9 +33,9 @@ import { useEffect } from 'react'
 import { MdContentCopy } from 'react-icons/md'
 import ModalBuyRifoo from '../../components/containers/ModalBuyRifoo'
 import usePayments from '../../store/usePayments'
+import NumberFormat from 'react-number-format'
 
 const Perfil = () => {
-
   const { profile, fetchProfile } = useAuth()
   const toast = useToast()
   const {payment, clearPayment, newPayment} = usePayments()
@@ -107,7 +107,8 @@ const Perfil = () => {
         .on('UPDATE', handleCheckUpdatePayment)
         .subscribe()
 
-    return () => {
+    return () => {  
+      console.log('Removendo inscrição')
         supabase.removeSubscription(profiles)
     }
   }, [])
@@ -155,7 +156,7 @@ const Perfil = () => {
           <SignatureActions
             isLoading={newPaymentLoading} 
             handleBuyRifoo={() => {
-              newPayment(),
+              newPayment(profile.fullName, profile.cpf),
               onOpen()
             }}
           />
@@ -249,17 +250,23 @@ const Perfil = () => {
                     <FormLabel>Data de nascimento</FormLabel>
                     <Field
                       background="#fff"
-                      as={Input}
+                      as={NumberFormat}
+                      customInput={Input}
+                      format="##/##/####"
                       id="birthdate"
                       name="birthdate"
-                      type="date"
                       validate={(value: string) => {
                         let error;
+
+                        const birthDateRegex = new RegExp(/^\d{2}\/\d{2}\/\d{4}$/)
 
                         if (value === "") {
                           error = "Preencha sua data de nascimento";
                         }
 
+                        if (!birthDateRegex.test(value)) {
+                          error = "Data de nascimento inválida";
+                        }
                         return error;
                       }}
                     />
@@ -273,16 +280,23 @@ const Perfil = () => {
                     <FormLabel>CPF</FormLabel>
                     <Field
                       background="#fff"
-                      as={Input}
+                      as={NumberFormat}
+                      customInput={Input}
+                      format="###.###.###-##"
                       id="cpf"
                       name="cpf"
                       validate={(value: string) => {
                         let error;
 
+                        const cpfRegex = new RegExp(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/)
+
                         if (value === "") {
                           error = "Preencha seu CPF";
                         }
 
+                       if(!cpfRegex.test(value)) {
+                          error = "CPF inválido";
+                       }
                         return error;
                       }}
                     />
@@ -296,16 +310,23 @@ const Perfil = () => {
                     <FormLabel>Whats app</FormLabel>
                     <Field
                       background="#fff"
-                      as={Input}
+                      as={NumberFormat}
+                      customInput={Input}
+                      format="(##) #####-####"
                       id="whatsapp"
                       name="whatsapp"
                       validate={(value: string) => {
                         let error;
 
+                        const whatsappRegex = new RegExp(/^\(\d{2}\)\s\d{5}\-\d{4}$/)
+
                         if (value === "") {
                           error = "Preencha seu whatsapp";
                         }
 
+                        if(!whatsappRegex.test(value)) {
+                          error = "Whatsapp inválido";
+                        }
                         return error;
                       }}
                     />

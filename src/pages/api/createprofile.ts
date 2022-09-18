@@ -60,11 +60,17 @@ export default async function handler(
     const supabase = createClient(supabaseUrl, supabaseKey)
 
     const user_id = decoded.sub
+    const user_email = decoded.email
     console.log(fullName, birthdate, cpf, whatsapp, referred)
 
     if (fullName === '' || birthdate === '' || cpf === '' || whatsapp === '')
       return res.status(400).json({ message: 'All fields are required' })
 
+    let newDate = birthdate.split('/')
+    newDate = `${newDate[2]}-${newDate[1]}-${newDate[0]}`
+
+    console.log(newDate)
+    
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -91,10 +97,11 @@ export default async function handler(
             fullName: fullName,
             cpf: cpf,
             whatsapp: whatsapp,
-            birthdate: birthdate,
+            birthdate: newDate,
             valid_until: until,
             referred: referred,
             member_type: 'user',
+            email: user_email
           })
           .single()
 

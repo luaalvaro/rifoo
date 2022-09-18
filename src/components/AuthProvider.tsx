@@ -29,25 +29,37 @@ const AuthProvider: React.FC<IAuthProvider> = ({ children, permissions }) => {
         const atProfile = router.pathname === '/app/perfil'
 
         const isNewUser = authenticated && !hasProfile
-        const newUserAtHome = isNewUser && atHomeApp
+        const newUserAtProfile = isNewUser && atProfile
         const routeHasPermission = !!permissions
 
         const userHasPermission = permissions?.includes(`${profile?.member_type}`)
 
-        if (!authenticated)
-            return router.push('/')
-
-        if (profile === null)
-            return router.push('/app/perfil')
-
-        if (routeHasPermission && !userHasPermission)
-            return router.push('/app')
-
-        setShowContent(true)
+        try {
+            if (!authenticated) {
+                console.log('Usuário não autenticado')
+                return router.push('/')
+            }
+    
+            if (profile === null && !atProfile) {
+                console.log('Usuário não possui perfil')
+                return router.push('/app/perfil')
+            }
+    
+            if (routeHasPermission && !userHasPermission) {
+                console.log('Usuário não possui permissão para acessar a rota')
+                return router.push('/app')
+            }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setShowContent(true)
+        }
     }
 
     useEffect(() => {
-        hasPermission()
+        if (!loading) {
+            hasPermission()
+        }
     }, [profile])
 
     useEffect(() => {
