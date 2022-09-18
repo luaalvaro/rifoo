@@ -21,7 +21,8 @@ interface Profile {
 
 interface IAuth {
     payment: PaymentPIX | undefined | null,
-    newPayment: () => Promise<void>
+    newPayment: () => Promise<void>,
+    clearPayment: () => void,
 }
 
 const usePayments = create<IAuth>((set, get) => ({
@@ -38,11 +39,13 @@ const usePayments = create<IAuth>((set, get) => ({
             })
             const { data } = await response.json()
 
-            console.log(data)
             set({ payment: data })
         } catch (error) {
             console.log(error)
         }
+    },
+    clearPayment: () => {
+        set({ payment: undefined })
     }
 }))
 

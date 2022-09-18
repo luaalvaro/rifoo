@@ -1,20 +1,41 @@
-import { Button, Center, Flex, FormControl, Input, InputGroup, InputRightAddon, List, ListIcon, ListItem, Text, useToast } from '@chakra-ui/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { MdCheckCircle, MdContentCopy } from 'react-icons/md'
 import usePayments from '../../store/usePayments'
 import Image from 'next/image'
 import moment from 'moment'
+import supabase from '../../services/supabase'
+import {
+    Flex,
+    Text,
+    Button,
+    FormControl,
+    FormLabel,
+    Input,
+    FormErrorMessage,
+    useToast,
+    Stack,
+    Skeleton,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+    ModalFooter,
+    InputGroup,
+    InputRightAddon,
+    Center,
+  } from '@chakra-ui/react'
 
-interface IProps {
-    title: string,
-    price: string,
+  interface IProps {
+    payment: any,
+    onClose: () => void
 }
 
-const CardPricingSignature: React.FC<IProps> = ({ title, price }) => {
+const ModalBuyRifoo: React.FC<IProps> = ({payment,onClose}) => {
 
     const toast = useToast()
-    const { newPayment, payment } = usePayments()
-
     const expiresAt = moment(payment?.date_of_expiration).fromNow()
 
     const handleCopyQr = () => {
@@ -24,61 +45,18 @@ const CardPricingSignature: React.FC<IProps> = ({ title, price }) => {
             title: 'QR Code copiado com sucesso!',
         })
     }
+
     return (
-        <Flex
-            background="#FFF"
-            padding="15px"
-            borderRadius="4px"
-            direction="column"
-            marginBottom="20px"
-        >
-            <Text
-                width="100%"
-                textAlign="center"
-                fontSize={20}
-            >
-                {title}
-            </Text>
-
-            {!payment &&
-                <>
-                    <Flex
-                        justify="center"
-                        py="40px"
-                        gridGap="15px"
-                        align="flex-start"
-                    >
-                        <Text fontSize={20} lineHeight="32px">R$</Text>
-                        <Text fontSize={40} lineHeight="40px">{price}</Text>
-                    </Flex>
-
-                    <List spacing={3} mb="20px">
-                        <ListItem>
-                            <ListIcon
-                                as={MdCheckCircle}
-                                color='green.500'
-                                fontSize="20px"
-                            />
-                            Tenha acesso a todas as funcionalidades do Rifoo
-                        </ListItem>
-                    </List>
-
-                    <Button
-                        px="20px"
-                        height="50px"
-                        background="brand.primary"
-                        color="#fff"
-
-                        onClick={newPayment}
-
-                        _hover={{ bg: 'brand.primaryDark' }}
-                    >
-                        Gerar QR Code
-                    </Button>
-                </>
-            }
-
-            {payment &&
+        <Modal isOpen={true} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent
+        mx="20px"
+      >
+        <ModalHeader>Comprar Rifoo Premium 30 dias</ModalHeader>
+        <ModalCloseButton onClick={onClose}/>
+       
+        <ModalBody>
+        {payment &&
                 <Flex
                     py="20px"
                     align="center"
@@ -96,7 +74,7 @@ const CardPricingSignature: React.FC<IProps> = ({ title, price }) => {
 
                     <Flex>
                         <Text fontSize={14} lineHeight="32px">R$</Text>
-                        <Text fontSize={28} lineHeight="40px">{price}</Text>
+                        <Text fontSize={28} lineHeight="40px">29,90</Text>
                     </Flex>
 
                     <FormControl
@@ -146,8 +124,14 @@ const CardPricingSignature: React.FC<IProps> = ({ title, price }) => {
                     </Flex>
                 </Flex>
             }
-        </Flex>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button variant='ghost' onClick={onClose}>Fechar</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
     )
 }
 
-export default CardPricingSignature
+export default ModalBuyRifoo

@@ -9,6 +9,17 @@ import {
   useToast,
   Stack,
   Skeleton,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  InputGroup,
+  InputRightAddon,
+  Center,
 } from '@chakra-ui/react'
 import Header from '../../components/Header'
 import AuthProvider from '../../components/AuthProvider'
@@ -18,13 +29,20 @@ import LabelValue from '../../components/atoms/LabelValue'
 import SignatureActions from '../../components/SignatureActions'
 import { Field, Formik } from 'formik'
 import useAuth from '../../store/useAuth'
+import { useEffect } from 'react'
+import { MdContentCopy } from 'react-icons/md'
+import ModalBuyRifoo from '../../components/containers/ModalBuyRifoo'
+import usePayments from '../../store/usePayments'
 
 const Perfil = () => {
 
   const { profile, fetchProfile } = useAuth()
   const toast = useToast()
+  const {payment, clearPayment, newPayment} = usePayments()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const loading = profile === undefined
+  const newPaymentLoading = isOpen && payment === undefined
 
   const handleSubmitProfile = async (values: any) => {
     const session = supabase.auth.session()
@@ -61,6 +79,37 @@ const Perfil = () => {
     }
   }
 
+  const handleCheckUpdatePayment = (payload: any) => {
+    const newStatus = `${payload?.new?.transaction_status}`
+
+    if (newStatus === 'approved') {
+        toast({
+            status: 'success',
+            title: 'Pagamento aprovado!',
+            duration: 15000,
+        })
+        toast({
+            status: 'success',
+            title: 'Aproveite o Rifoo Premium por 30 dias!',
+            duration: 15000,
+        })
+
+        fetchProfile()
+        return clearPayment()
+    }
+  }
+
+  useEffect(() => {
+    console.log('Criando inscrição')
+    const profiles = supabase
+        .from('payments')
+        .on('UPDATE', handleCheckUpdatePayment)
+        .subscribe()
+
+    return () => {
+        supabase.removeSubscription(profiles)
+    }
+  }, [])
   return (
     <AuthProvider>
       <Header />
@@ -102,7 +151,13 @@ const Perfil = () => {
             px="15px"
           />
 
-          <SignatureActions />
+          <SignatureActions
+            isLoading={newPaymentLoading} 
+            handleBuyRifoo={() => {
+              newPayment(),
+              onOpen()
+            }}
+          />
         </>
       )}
 
@@ -292,6 +347,13 @@ const Perfil = () => {
           </Formik>
         </Flex>
       )}
+
+      {payment && isOpen &&
+        <ModalBuyRifoo 
+          payment={payment}
+          onClose={onClose}
+        />
+      }
     </AuthProvider>
   )
 }
