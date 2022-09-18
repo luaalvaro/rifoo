@@ -58,11 +58,6 @@ const BottomMenuNewOrder = () => {
 
     const totalPriceShow = order.total_price_weight + order.total_price
     const totalPriceWithDiscountShow = discount ? (totalPriceShow - discount) : ""
-
-    console.log({
-        totalPriceShow,
-        totalPriceWithDiscountShow
-    })
     return (
         <Flex
             borderTop="1px solid rgba(0,0,0,0.2)"

@@ -47,6 +47,7 @@ const SignatureActions:React.FC<IProps> = ({handleBuyRifoo,isLoading}) => {
 
             <Text
                mb="50px"
+               fontSize={14}
             >
                 Validade {signatureExpiresDate}
             </Text>

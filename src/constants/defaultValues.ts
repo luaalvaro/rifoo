@@ -1,9 +1,11 @@
 import { BsBoxSeam, BsCartPlusFill, BsFillFileEarmarkBarGraphFill } from 'react-icons/bs'
+import { FaUser } from 'react-icons/fa'
 
 export const services = [
     { title: "Nova venda", icon: BsCartPlusFill, href: "/app/novavenda" },
     { title: "Minhas vendas", icon: BsFillFileEarmarkBarGraphFill, href: "/app/minhasvendas" },
     { title: "Meus produtos", icon: BsBoxSeam, href: "/app/produtos" },
+    { title: "Meu Perfil", icon: FaUser, href: "/app/perfil" },
 ]
 
 export const termsSignature = {

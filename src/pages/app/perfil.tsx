@@ -94,6 +94,7 @@ const Perfil = () => {
             duration: 15000,
         })
 
+        onClose()
         fetchProfile()
         return clearPayment()
     }
