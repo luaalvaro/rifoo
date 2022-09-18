@@ -18,8 +18,6 @@ interface PaymentAction {
     user_id: string
 }
 
-// { id: 25734672125, status: 'approved', action: 'payment.updated' }
-
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     if (req.method !== 'POST')
@@ -38,9 +36,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     const { action, data } = req.body
 
-    if (action === 'payment.created')
+    if (action === 'payment.created') {
+        console.log('payment.created')
         return res.status(200).json({ message: 'Pagamento criado' })
-
+    }
+        
     const supabase = createClient(supabaseUrl, supabaseKey)
 
     if (action === 'payment.updated' && !!data.id) {
@@ -50,7 +50,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
                 .findById(data.id)
 
             const { id, status } = response
-            console.log({ id, status, action })
+           
+            console.log('Payment', status)
 
             if (status === 'approved') {
                 const { data: paymentSupabase, error: paymentSupabaseError } = await supabase
@@ -100,6 +101,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             if (error)
                 throw error
 
+            console.log('Sucesso')
             return res.status(201).json({ message: "Sucesso" })
         } catch (error) {
             console.log(error)
