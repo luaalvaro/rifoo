@@ -52,6 +52,43 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             const { id, status } = response
             console.log({ id, status, action })
 
+            if (status === 'approved') {
+                const { data: paymentSupabase, error: paymentSupabaseError } = await supabase
+                    .from('payments')
+                    .select('*')
+                    .eq('transaction_id', id)
+                    .single()
+
+                if (paymentSupabaseError)
+                    throw paymentSupabaseError
+
+                const user_id = paymentSupabase.user_id
+
+                const { data: profile, error: profileError } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('user_id', user_id)
+                .single()
+                
+                if (profileError)
+                throw profileError
+
+                const newDate = moment(profile?.valid_until).add(1, 'month').format("YYYY-MM-DD")
+               
+                const { data: updatedUser, error: updatedUserError } = await supabase
+                .from('profiles')
+                .update({
+                    valid_until: newDate
+                })
+                .eq('user_id', user_id)
+                .single()
+               
+                if (updatedUserError)
+                throw updatedUserError
+
+                console.log('Validade do usuário atualizada até: ', newDate)
+            }
+
             const { data: payment, error } = await supabase
                 .from('payments')
                 .update({
@@ -63,31 +100,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             if (error)
                 throw error
 
-            if (status === 'approved') {
-                console.log('Pagamento aprovado')
-                const { data: user, error: userError } = await supabase
-                    .from('profiles')
-                    .select('*')
-                    .eq('user_id', payment?.user_id)
-                    .single()
-
-                if (userError)
-                    throw userError
-
-                const newDate = moment(user?.valid_until).add(1, 'month').format("YYYY-MM-DD")
-
-                const { data: updatedUser, error: updatedError } = await supabase
-                    .from('profiles')
-                    .update({
-                        valid_until: newDate
-                    })
-                    .eq('user_id', payment?.user_id)
-                    .single()
-
-                console.log('Validade do usuário atualizada até: ', newDate)
-            }
-
-            return res.status(200).json({ message: "Sucesso" })
+            return res.status(201).json({ message: "Sucesso" })
         } catch (error) {
             console.log(error)
         }
