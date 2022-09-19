@@ -67,8 +67,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         const cpfNumbers =cpf.replace(/\D/g, '')
    
         const payment_data = {
-        transaction_amount: 0.02,
-        description: 'Rifoo Mensal',
+        transaction_amount: 29.90,
+        description: 'Rifoo Premium - 30 dias',
         payment_method_id: 'pix',
         payer: {
             email: user_email,
