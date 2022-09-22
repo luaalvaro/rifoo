@@ -20,8 +20,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     const MP_ACESS_TOKEN = `${process.env.MP_PROD_ACESS_TOKEN}`
     const supabaseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}`
     const supabaseKey = `${process.env.MASTER_SUPABASE_KEY}`
-    const NOTIFICATION_URL = "https://staging-rifoo.vercel.app/api/payments/webhook"
-   
+    const NOTIFICATION_URL = `${process.env.NEXT_PUBLIC_MP_URL}`
+
     const checkTokenIsValid = (token: string) => {
         const JWT_SINGNATURE = process.env.JWT_SIGNATURE
 
