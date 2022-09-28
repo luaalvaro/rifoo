@@ -73,7 +73,7 @@ export default async function handler(
         .from<Sale>('sales')
         .select('*')
         .order('created_at', { ascending: false })
-        // .gte('created_at', last_week)
+        .gte('created_at', last_week)
 
       if (error) throw error
 

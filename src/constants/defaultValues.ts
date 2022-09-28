@@ -11,4 +11,5 @@ export const services = [
 export const termsSignature = {
     pr1: "Rifoo é um serviço de assinatura, nós não exigimos cartão de crédito, nem temos contrato de fidelidade.",
     pr2: "Para continuar com o serviço, basta gerar um novo QR Code PIX e pagar o valor do plano contratado.",
+    pr3: "Após a confirmação do pagamento, seu plano será renovado automaticamente.",
 }

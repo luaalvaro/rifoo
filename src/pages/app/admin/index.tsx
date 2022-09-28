@@ -86,29 +86,6 @@ const MinhasVendas = () => {
         <AuthProvider permissions={["admin"]}>
             <Header />
 
-            <Flex
-                align="center"
-                justify="space-between"
-                margin="20px 15px"
-                userSelect="none"
-                fontSize={18}
-            >
-                <BsChevronLeft
-                    cursor="pointer"
-                // onClick={() => sales.fetchSales("prev")}
-                />
-                <Text
-                    fontSize={16}
-                    fontWeight={600}
-                >
-                    {/* {sales.weekLabel} */}
-                </Text>
-                <BsChevronRight
-                    cursor="pointer"
-                // onClick={() => sales.fetchSales("next")}
-                />
-            </Flex>
-
             {loading &&
                 <Stack px="15px">
                     <Skeleton h="20px" />
@@ -120,6 +97,7 @@ const MinhasVendas = () => {
             {stats && !loading &&
                 <>
                     <Flex
+                        marginTop="40px"
                         paddingX="15px"
                         gridGap="15px"
                         marginBottom="10px"

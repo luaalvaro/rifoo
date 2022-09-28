@@ -38,7 +38,7 @@ import NumberFormat from 'react-number-format'
 const Perfil = () => {
   const { profile, fetchProfile } = useAuth()
   const toast = useToast()
-  const {payment, clearPayment, newPayment} = usePayments()
+  const { payment, clearPayment, newPayment } = usePayments()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const loading = profile === undefined
@@ -83,33 +83,33 @@ const Perfil = () => {
     const newStatus = `${payload?.new?.transaction_status}`
 
     if (newStatus === 'approved') {
-        toast({
-            status: 'success',
-            title: 'Pagamento aprovado!',
-            duration: 15000,
-        })
-        toast({
-            status: 'success',
-            title: 'Aproveite o Rifoo Premium por 30 dias!',
-            duration: 15000,
-        })
+      toast({
+        status: 'success',
+        title: 'Pagamento aprovado!',
+        duration: 15000,
+      })
+      toast({
+        status: 'success',
+        title: 'Aproveite o Rifoo Premium por 30 dias!',
+        duration: 15000,
+      })
 
-        onClose()
-        fetchProfile()
-        return clearPayment()
+      onClose()
+      fetchProfile()
+      return clearPayment()
     }
   }
 
   useEffect(() => {
     console.log('Criando inscrição')
     const profiles = supabase
-        .from('payments')
-        .on('UPDATE', handleCheckUpdatePayment)
-        .subscribe()
+      .from('payments')
+      .on('UPDATE', handleCheckUpdatePayment)
+      .subscribe()
 
-    return () => {  
+    return () => {
       console.log('Removendo inscrição')
-        supabase.removeSubscription(profiles)
+      supabase.removeSubscription(profiles)
     }
   }, [])
   return (
@@ -154,10 +154,10 @@ const Perfil = () => {
           />
 
           <SignatureActions
-            isLoading={newPaymentLoading} 
+            isLoading={newPaymentLoading}
             handleBuyRifoo={() => {
               newPayment(profile.fullName, profile.cpf),
-              onOpen()
+                onOpen()
             }}
           />
         </>
@@ -183,38 +183,44 @@ const Perfil = () => {
               <form onSubmit={handleSubmit}>
 
                 <Text
-                  lineHeight="20px"
-                  textAlign="justify"
+                  fontWeight={700}
+                  fontSize="24px"
+                  lineHeight="24px"
                   mb="20px"
                 >
-                  O Rifoo vai te dar controle sobre seu negócio.
-                  Você pode controlar seus produtos e vendas, e também ter acesso a
-                  relatórios e gráficos que vão te ajudar a melhorar seu negócio.
+                  Finalize o seu cadastro para continuar
                 </Text>
 
                 <Text
                   lineHeight="20px"
+                  fontSize="14px"
+                  textAlign="justify"
+                  mb="10px"
+                >
+                  O Rifoo vai te dar controle sobre seu negócio.
+                  Você pode controlar seus produtos, vendas e também ter acesso a
+                  relatórios estatísticos que irão te ajudar a tomar as melhores decisões
+                  a respeito do seu negócio.
+                </Text>
+
+                <Text
+                  lineHeight="20px"
+                  fontSize="14px"
                   fontWeight={700}
-                  mb="20px"
+                  mb="10px"
+                  color="brand.primary"
                 >
                   O primeiro mês é por nossa conta!
                 </Text>
 
                 <Text
                   lineHeight="20px"
+                  fontSize="14px"
                   textAlign="justify"
                   mb="20px"
                 >
                   Utilize o Rifoo durante 30 dias, totalmente de graça!
-                  Você não precisa cadastrar cartão de crédito.
-                </Text>
-
-                <Text
-                  lineHeight="20px"
-                  textAlign="justify"
-                  mb="20px"
-                >
-                  Após esse período, você poderá renovar o Rifoo por apenas R$ 29.90/mês
+                  Você não precisa cadastrar cartão de crédito. Após esse período, você poderá renovar o Rifoo por apenas R$ 29.90/mês
                 </Text>
 
                 <Flex
@@ -294,9 +300,9 @@ const Perfil = () => {
                           error = "Preencha seu CPF";
                         }
 
-                       if(!cpfRegex.test(value)) {
+                        if (!cpfRegex.test(value)) {
                           error = "CPF inválido";
-                       }
+                        }
                         return error;
                       }}
                     />
@@ -324,7 +330,7 @@ const Perfil = () => {
                           error = "Preencha seu whatsapp";
                         }
 
-                        if(!whatsappRegex.test(value)) {
+                        if (!whatsappRegex.test(value)) {
                           error = "Whatsapp inválido";
                         }
                         return error;
@@ -333,7 +339,7 @@ const Perfil = () => {
                     <FormErrorMessage>{errors.whatsapp}</FormErrorMessage>
                   </FormControl>
 
-                  <FormControl
+                  {/* <FormControl
                     mb="25px"
                   >
                     <FormLabel>Código de indicação</FormLabel>
@@ -343,7 +349,7 @@ const Perfil = () => {
                       id="referred"
                       name="referred"
                     />
-                  </FormControl>
+                  </FormControl> */}
                 </Flex>
 
                 <Button
@@ -351,8 +357,6 @@ const Perfil = () => {
                   background="brand.primary"
                   color="#fff"
                   width="100%"
-
-                  // isLoading={submitLoading}
 
                   _hover={{
                     background: "brand.primary",
@@ -371,7 +375,7 @@ const Perfil = () => {
       )}
 
       {payment && isOpen &&
-        <ModalBuyRifoo 
+        <ModalBuyRifoo
           payment={payment}
           onClose={onClose}
         />

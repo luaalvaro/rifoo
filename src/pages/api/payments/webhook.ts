@@ -40,7 +40,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         console.log('payment.created')
         return res.status(200).json({ message: 'Pagamento criado' })
     }
-        
+
     const supabase = createClient(supabaseUrl, supabaseKey)
 
     if (action === 'payment.updated' && !!data.id) {
@@ -50,7 +50,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
                 .findById(data.id)
 
             const { id, status } = response
-           
+
             console.log('Payment', status)
 
             if (status === 'approved') {
@@ -66,26 +66,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
                 const user_id = paymentSupabase.user_id
 
                 const { data: profile, error: profileError } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('user_id', user_id)
-                .single()
-                
+                    .from('profiles')
+                    .select('*')
+                    .eq('user_id', user_id)
+                    .single()
+
                 if (profileError)
-                throw profileError
+                    throw profileError
 
                 const newDate = moment(profile?.valid_until).add(1, 'month').format("YYYY-MM-DD")
-               
+
                 const { data: updatedUser, error: updatedUserError } = await supabase
-                .from('profiles')
-                .update({
-                    valid_until: newDate
-                })
-                .eq('user_id', user_id)
-                .single()
-               
+                    .from('profiles')
+                    .update({
+                        valid_until: newDate
+                    })
+                    .eq('user_id', user_id)
+                    .single()
+
                 if (updatedUserError)
-                throw updatedUserError
+                    throw updatedUserError
 
                 console.log('Validade do usuário atualizada até: ', newDate)
             }
@@ -105,6 +105,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             return res.status(201).json({ message: "Sucesso" })
         } catch (error) {
             console.log(error)
+            return res.status(400).json({ message: 'Bad request' })
         }
     }
 

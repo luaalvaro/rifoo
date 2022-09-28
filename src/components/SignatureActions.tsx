@@ -13,7 +13,7 @@ interface IProps {
     isLoading: boolean
 }
 
-const SignatureActions:React.FC<IProps> = ({handleBuyRifoo,isLoading}) => {
+const SignatureActions: React.FC<IProps> = ({ handleBuyRifoo, isLoading }) => {
 
     const { newPayment } = usePayments()
     const { profile } = useAuth()
@@ -38,34 +38,44 @@ const SignatureActions:React.FC<IProps> = ({handleBuyRifoo,isLoading}) => {
 
             <Text fontSize={14} mb="15px">{termsSignature.pr1}</Text>
             <Text fontSize={14} mb="15px">{termsSignature.pr2}</Text>
+            <Text fontSize={14}>{termsSignature.pr3}</Text>
 
-            <Text
-                color={signatureStatusDate === "pendente" ? "red" : "green"}
+            <Flex
+                my="50px"
+                direction="column"
             >
-                Status da assinatura: <b>{signatureStatusDate}</b>
-            </Text>
+                <Text
+                    textAlign="center"
+                    fontSize={20}
+                    fontWeight={700}
+                    color={signatureStatusDate === "pendente" ? "red" : "brand.primary"}
+                >
+                    Assinatura {signatureStatusDate}
+                </Text>
 
-            <Text
-               mb="50px"
-               fontSize={14}
-            >
-                Validade {signatureExpiresDate}
-            </Text>
+                <Text
+                    textAlign="center"
+
+                    fontSize={14}
+                >
+                    Data de expiração: {signatureExpiresDate}
+                </Text>
+            </Flex>
 
             <Button
-                        px="20px"
-                        height="50px"
-                        background="brand.primary"
-                        color="#fff"
+                px="20px"
+                height="50px"
+                background="brand.primary"
+                color="#fff"
 
-                        onClick={handleBuyRifoo}
+                onClick={handleBuyRifoo}
 
-                        isLoading={isLoading}
-                        
-                        _hover={{ bg: 'brand.primaryDark' }}
-                    >
-                        Comprar 30 dias Rifoo Premium - R$ 29,90
-                    </Button>
+                isLoading={isLoading}
+
+                _hover={{ bg: 'brand.primaryDark' }}
+            >
+                Comprar 30 dias Rifoo Premium - R$ 29,90
+            </Button>
         </Flex>
     )
 }

@@ -10,7 +10,7 @@ import {
 import Header from '../../components/Header'
 import AuthProvider from '../../components/AuthProvider'
 import BottomMenuNewOrder from '../../components/BottomMenuNewOrder'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import supabase from '../../services/supabase'
 import { FaBoxOpen, FaSearch } from 'react-icons/fa'
 import ProductCard from '../../components/ProductCard'
@@ -22,6 +22,8 @@ import useSWR from 'swr'
 import ChangeMoney from '../../components/ChangeMoney'
 import Discount from '../../components/Discount'
 import PIX from "react-qrcode-pix";
+import useAuth from '../../store/useAuth'
+import { formatCpf } from '../../utils/functions'
 
 const fetcher = async (url: any) => await await supabase
     .from<Product>(url)
@@ -31,6 +33,7 @@ const Home = () => {
 
     const [search, setSearch] = useState('')
 
+    const { profile } = useAuth()
     const order = useOrder(state => state)
     const { data, error } = useSWR('products', fetcher)
     const loading = !data
@@ -45,6 +48,7 @@ const Home = () => {
     const total_price = order.total_price_weight + order.total_price
 
     const subTotal = discount ? total_price - discount : total_price
+
     return (
         <AuthProvider>
             <Header />
@@ -144,36 +148,57 @@ const Home = () => {
                     {order.paymentMethod === 2 && <ChangeMoney />}
                     <Discount />
 
-                    {/* {order.paymentMethod === 1 &&
+                    {order.paymentMethod === 1 &&
                         <Flex
                             px="15px"
                             direction="column"
+                            background="#fff"
+                            borderRadius="8px"
+                            align="center"
+                            mx="20px"
+                            py="20px"
                         >
-                            <Text>Código QR</Text>
+                            <Text
+                                fontSize={16}
+                                fontWeight={500}
+                                mb="20px"
+                            >
+                                PAGAMENTO COM QR CODE PIX
+                            </Text>
+
                             <PIX
-                                pixkey="06149203530"
-                                merchant="Luã Álvaro"
-                                city="NATAL"
+                                pixkey={formatCpf(`${profile?.cpf}`)}
+                                merchant={`${profile?.fullName}`}
+                                city="Sao Paulo"
                                 code={`RIFOO`}
                                 amount={subTotal}
+                                size={180}
                             />
 
                             <Text
                                 mt="25px"
-                                fontWeight={600}
                                 fontSize="16px"
                             >
-                                Total R$ {subTotal}
+                                Valor total <b>R$ {subTotal}</b>
                             </Text>
 
                             <Text fontSize="14px">
-                                Nome: Luã Álvaro
+                                Nome do beneficiário: <b>{`${profile?.fullName}`}</b>
                             </Text>
                             <Text fontSize="14px">
-                                chave: 06149203530
+                                Chave pix: <b>{formatCpf(`${profile?.cpf}`)}</b>
+                            </Text>
+
+                            <Text
+                                mt="30px"
+                                fontSize="13px"
+                                color="red"
+                                textAlign="justify"
+                            >
+                                <b>Atenção:</b> SEMPRE peça para seu cliente confirmar o destinatário do pagamento. O Rifoo não se responsabiliza por pagamentos feitos para terceiros.
                             </Text>
                         </Flex>
-                    } */}
+                    }
                 </>
             }
 
