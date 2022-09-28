@@ -157,6 +157,7 @@ const Home = () => {
                             align="center"
                             mx="20px"
                             py="20px"
+                            mb="150px"
                         >
                             <Text
                                 fontSize={16}
