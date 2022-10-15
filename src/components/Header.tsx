@@ -90,13 +90,6 @@ const Header = () => {
                     ))}
 
                     <MenuItem
-                        icon={<FaUser />}
-                        onClick={() => handleRedirectOrOpenConfirmModal('/app/perfil')}
-                    >
-                        Perfil
-                    </MenuItem>
-
-                    <MenuItem
                         icon={<BiLogIn />}
                         onClick={() => handleLogout()}
                     >

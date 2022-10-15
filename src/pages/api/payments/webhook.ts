@@ -64,6 +64,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
                     throw paymentSupabaseError
 
                 const user_id = paymentSupabase.user_id
+                const tStatus = paymentSupabase.transaction_status
+
+                if (tStatus === status) {
+                    console.log('Pagamento já atualizado')
+                    return res.status(200).json({ message: 'Pagamento já atualizado' })
+                }
 
                 const { data: profile, error: profileError } = await supabase
                     .from('profiles')

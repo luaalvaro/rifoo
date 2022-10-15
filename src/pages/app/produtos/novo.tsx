@@ -1,17 +1,14 @@
 import {
     Flex,
     Text,
-    Link as A,
     Button,
     FormControl,
     FormLabel,
     Input,
     Select,
-    Toast,
     useToast,
-    Center,
     Spinner,
-    Icon
+    Icon,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import Header from '../../../components/Header'
@@ -353,7 +350,7 @@ const NovoProduto = () => {
                 </FormControl>
 
                 <Button
-                    my="30px"
+                    my="15px"
                     color="#fff"
                     background="brand.primary"
 

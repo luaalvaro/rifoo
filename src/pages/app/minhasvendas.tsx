@@ -159,7 +159,7 @@ const MinhasVendas = () => {
             >
                 <BsChevronLeft
                     cursor="pointer"
-                    onClick={() => sales.fetchSales("prev")}
+                    onClick={() => !loading && sales.fetchSales("prev")}
                 />
                 <Text
                     fontSize={16}
@@ -169,35 +169,8 @@ const MinhasVendas = () => {
                 </Text>
                 <BsChevronRight
                     cursor="pointer"
-                    onClick={() => sales.fetchSales("next")}
+                    onClick={() => !loading && sales.fetchSales("next")}
                 />
-            </Flex>
-
-            <Flex
-                paddingX="15px"
-                gridGap="15px"
-                marginBottom="10px"
-            >
-                <ResponsiveContainer width="100%" height={160}>
-                    <BarChart
-                        data={days}
-                        margin={{
-                            top: 0,
-                            right: 0,
-                            left: 0,
-                            bottom: 0,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="label" />
-                        <Tooltip />
-                        <Bar
-                            dataKey="value"
-                            name="Total"
-                            fill="#42834F"
-                        />
-                    </BarChart>
-                </ResponsiveContainer>
             </Flex>
 
             {loading &&
@@ -210,6 +183,33 @@ const MinhasVendas = () => {
 
             {stats && !loading &&
                 <>
+                    <Flex
+                        paddingX="15px"
+                        gridGap="15px"
+                        marginBottom="10px"
+                    >
+                        <ResponsiveContainer width="100%" height={160}>
+                            <BarChart
+                                data={days}
+                                margin={{
+                                    top: 0,
+                                    right: 0,
+                                    left: 0,
+                                    bottom: 0,
+                                }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="label" />
+                                <Tooltip />
+                                <Bar
+                                    dataKey="value"
+                                    name="Total"
+                                    fill="#42834F"
+                                />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </Flex>
+
                     <Flex
                         paddingX="15px"
                         gridGap="15px"
@@ -303,7 +303,7 @@ const MinhasVendas = () => {
                     />
                     <Text textAlign="center">
                         Ooppps...
-                        Você ainda não fez nenhuma venda nessa semana
+                        Você ainda não fez nenhuma venda nesta semana
                     </Text>
                 </Flex>
             }

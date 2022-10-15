@@ -157,7 +157,7 @@ const Home = () => {
                             align="center"
                             mx="20px"
                             py="20px"
-                            mb="150px"
+                            mb="200px"
                         >
                             <Text
                                 fontSize={16}
@@ -196,7 +196,7 @@ const Home = () => {
                                 color="red"
                                 textAlign="justify"
                             >
-                                <b>Atenção:</b> SEMPRE peça para seu cliente confirmar o destinatário do pagamento. O Rifoo não se responsabiliza por pagamentos feitos para terceiros.
+                                <b>Atenção:</b> SEMPRE peça para seu cliente confirmar o beneficiário do pagamento. O Rifoo não se responsabiliza por pagamentos feitos para terceiros.
                             </Text>
                         </Flex>
                     }
