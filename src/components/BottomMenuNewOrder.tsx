@@ -45,7 +45,8 @@ const BottomMenuNewOrder = () => {
                 title: 'Venda realizada com sucesso!',
                 description: 'Visite o menu Minhas vendas para ver os detalhes da venda.',
                 status: 'success',
-                duration: 6000,
+                duration: 3000,
+                isClosable: true,
             })
             order.resetState()
             return router.push('/app')

@@ -33,19 +33,20 @@ const Home = () => {
   const lastSale = saleData?.data
 
   const loading = !saleData || !profile
-  
+
   const timeToExpire = moment(profile?.valid_until, "YYYY-MM-DD").fromNow()
   const signatureStatusDate = timeToExpire.includes('há') ? 'pendente' : 'ativa'
- 
+
   useEffect(() => {
-    if (signatureStatusDate === 'pendente') {
-      toast({
-        title: "Sua assinatura está pendente",
-        description: "Acesse seu Perfil para atualizar sua assinatura",
-        status: "warning",
-        duration: 5000,
-      })
-    }
+    // if (signatureStatusDate === 'pendente') {
+    //   toast({
+    //     title: "Sua assinatura está pendente",
+    //     description: "Acesse seu Perfil para atualizar sua assinatura",
+    //     status: "warning",
+    //     duration: 3000,
+    //     isClosable: true,
+    //   })
+    // }
   }, [])
 
   return (
