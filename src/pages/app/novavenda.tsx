@@ -148,7 +148,7 @@ const Home = () => {
                     {order.paymentMethod === 2 && <ChangeMoney />}
                     <Discount />
 
-                    {order.paymentMethod === 1 &&
+                    {/* {order.paymentMethod === 1 &&
                         <Flex
                             px="15px"
                             direction="column"
@@ -199,7 +199,7 @@ const Home = () => {
                                 <b>Atenção:</b> SEMPRE peça para seu cliente confirmar o beneficiário do pagamento. O Rifoo não se responsabiliza por pagamentos feitos para terceiros.
                             </Text>
                         </Flex>
-                    }
+                    } */}
                 </>
             }
 
