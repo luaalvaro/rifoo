@@ -4,6 +4,8 @@ import { extendTheme } from '@chakra-ui/react'
 import HeaderConfig from '../components/HeaderConfig'
 import moment from 'moment'
 import 'moment/locale/pt-br'
+import 'swiper/css';
+import '../styles/swiper.css'
 
 moment.locale('pt-br')
 

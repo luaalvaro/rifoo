@@ -24,10 +24,7 @@ import supabase from '../services/supabase'
 import { useRouter } from 'next/router'
 import useOrder from '../store/useOrder'
 import { services } from '../constants/defaultValues'
-import { FaUser } from 'react-icons/fa'
-import Image from 'next/image'
-import Rifoo from '../assets/rifoo.svg'
-import RifooDev from '../assets/rifoodev.svg'
+import Logo from './atoms/Logo'
 
 const Header = () => {
 
@@ -63,12 +60,7 @@ const Header = () => {
                 cursor="pointer"
                 userSelect="none"
             >
-                <Image
-                    src={stage === "dev" ? RifooDev : Rifoo}
-                    alt="Rifoo"
-                    width={104}
-                    height={30}
-                />
+                <Logo />
             </Flex>
 
             <Menu>

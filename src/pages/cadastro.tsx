@@ -250,7 +250,7 @@ const Cadastro = () => {
                         Já tem uma conta?
                     </Text>
 
-                    <Link href="/">
+                    <Link href="/login">
                         <A
                             fontWeight={700}
                         >
