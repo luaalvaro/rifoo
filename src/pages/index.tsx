@@ -1,4 +1,4 @@
-import { Flex, Heading, IconButton, Menu, MenuButton, MenuItem, Text, MenuList, Center, List, ListItem, ListIcon } from '@chakra-ui/react'
+import { Flex, Heading, IconButton, Menu, MenuButton, MenuItem, Text, MenuList, Link as A, List, ListItem, ListIcon } from '@chakra-ui/react'
 import Image from 'next/image'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import Logo from '../components/atoms/Logo'
@@ -13,6 +13,7 @@ import CardProof from '../components/containers/CardProof'
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { MdCheckCircle } from 'react-icons/md'
+import Link from 'next/link'
 
 const Home = () => {
     return (
@@ -620,6 +621,106 @@ const Home = () => {
                         label='Testar plano Simples'
                         variant='outline'
                     />
+                </Flex>
+            </Flex>
+
+            {/* HERO 2*/}
+            <Flex
+                marginTop="140px"
+                background="#F2F2F2"
+                direction="column"
+                pb="30px"
+            >
+                <Flex
+                    mt="100px"
+                    mx="auto"
+                >
+                    <Image
+                        src="/celular04.png"
+                        alt="Celular"
+                        width={330}
+                        height={530}
+                    />
+                </Flex>
+
+                <Flex
+                    direction="column"
+                >
+                    <Heading
+                        mt="50px"
+                        width="100%"
+                        fontFamily="Poppins"
+                        mx="auto"
+                        textAlign="center"
+                        textTransform="uppercase"
+                        fontSize="24px"
+                        color="#405090"
+                        fontWeight={300}
+                    >
+                        CADASTRE-SE NA RIFOO E TENHA CONTROLE DO <strong>SEU NEGÓCIO</strong>
+                    </Heading>
+
+                    <Text
+                        color="#000"
+                        opacity={0.7}
+                        textAlign="center"
+                        px="15px"
+                        mt="20px"
+                        fontSize="14px"
+                    >
+                        Cadastrar um produto no RIFOO é tão simples quanto responder 4 perguntas. Em menos de 01 minuto você cadastra o seu primeiro produto e já está apto para começar a registrar as suas vendas.
+                    </Text>
+                </Flex>
+
+                <Flex
+                    mt="30px"
+                    mb="60px"
+                    direction="column"
+                    mx="15px"
+                    gridGap="15px"
+                >
+                    <Button
+                        label='Login'
+                        variant='outline'
+                    />
+
+                    <Button
+                        label='Quero me cadastrar'
+                    />
+                </Flex>
+            </Flex>
+
+            {/* FOOTER*/}
+            <Flex
+                background="#323232"
+                justify="center"
+
+                pt="35px"
+                direction="column"
+            >
+                <Flex mx="auto">
+                    <Logo variant="footer" />
+                </Flex>
+
+                <Text
+                    color="#939393"
+                    textAlign="center"
+                    px="15px"
+                    fontSize="14px"
+                >
+                    (PDV) FRENTE DE CAIXA PARA<br />VENDEDORES AMBULANTES
+                </Text>
+
+                <Flex
+                    gridGap="35px"
+                    color="#fff"
+                    fontSize="22px"
+                    justify="center"
+                    my="50px"
+                >
+                    <A>Home</A>
+                    <A>Vantagens</A>
+                    <A>Planos</A>
                 </Flex>
             </Flex>
         </Flex>
