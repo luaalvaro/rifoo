@@ -1,4 +1,4 @@
-import { Flex, Heading, IconButton, Menu, MenuButton, MenuItem, Text, MenuList, Center } from '@chakra-ui/react'
+import { Flex, Heading, IconButton, Menu, MenuButton, MenuItem, Text, MenuList, Center, List, ListItem, ListIcon } from '@chakra-ui/react'
 import Image from 'next/image'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import Logo from '../components/atoms/Logo'
@@ -12,6 +12,7 @@ import CardProof from '../components/containers/CardProof'
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { MdCheckCircle } from 'react-icons/md'
 
 const Home = () => {
     return (
@@ -21,7 +22,7 @@ const Home = () => {
         >
 
             <Head>
-                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
             </Head>
 
             {/* HEADER */}
@@ -281,7 +282,7 @@ const Home = () => {
                     borderBottom="1px solid #5465A7"
                 >
                     <Flex
-                        width={268}
+                        width={280}
                         height={487}
                         mx="auto"
                         mt="-40px"
@@ -291,7 +292,7 @@ const Home = () => {
                         <Image
                             src="/celular01.png"
                             alt="Celular acessando o Rifoo"
-                            width={268}
+                            width={280}
                             height={487}
                         />
 
@@ -352,21 +353,21 @@ const Home = () => {
                         position="relative"
                     >
                         <Flex
-                            width={350}
-                            height={493}
+                            width={280}
+                            height={487}
                             zIndex={1}
                         >
                             <Image
                                 src="/celular02.png"
                                 alt="Celular acessando o Rifoo"
-                                width={350}
-                                height={493}
+                                width={280}
+                                height={487}
                             />
                         </Flex>
 
                         <Flex
                             position="absolute"
-                            left="-2"
+                            left="-40px"
                             bottom="-4"
                         >
                             <Text
@@ -414,6 +415,7 @@ const Home = () => {
             {/* GERENCIAMENTO DE ESTOQUE AUTOMATICO */}
             <Flex
                 marginTop="150px"
+                mb="250px"
                 width="100%"
                 background="url(/celular03.png)"
                 backgroundRepeat="no-repeat"
@@ -465,6 +467,158 @@ const Home = () => {
 
                     <Button
                         label='Quero me cadastrar'
+                    />
+                </Flex>
+            </Flex>
+
+            {/* OFERTA */}
+            <Flex
+                mt="50px"
+                background="#405090"
+                borderRadius="24px"
+                py="35px"
+                direction="column"
+            >
+                <Flex
+                    width={343 * 1.1}
+                    height={294 * 1.1}
+                    mx="auto"
+                    overflow="hidden"
+                    borderRadius="24px"
+                    position="relative"
+                >
+                    <Image
+                        src="/atriz.jpg"
+                        alt="Atriz do Rifoo"
+                        width={343 * 1.1}
+                        height={294 * 1.1}
+                    />
+
+                    <Flex
+                        position="absolute"
+                        left="0"
+                        bottom="0"
+                        top="0"
+                        right="0"
+                        bg="linear-gradient(190deg, rgba(255,255,255,0%) 0%, #0c183d 100%)"
+                    >
+                        <Flex
+                            width="100%"
+                            mb="25px"
+                            direction="column"
+                            justify="flex-end"
+                            px="15px"
+                            gridGap="5px"
+                        >
+                            <Heading
+                                color="#fff"
+
+                                textTransform="uppercase"
+                                fontSize="22px"
+                            >
+                                Seu negócio na palma da sua mão
+                            </Heading>
+
+                            <Text
+                                color="#fff"
+                                opacity={0.7}
+                                fontSize="14px"
+                            >
+                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum, ut?
+                            </Text>
+                        </Flex>
+                    </Flex>
+                </Flex>
+
+                <Flex>
+                    <Heading
+                        mt="30px"
+                        width="100%"
+                        fontFamily="Poppins"
+                        mx="auto"
+                        textAlign="center"
+                        textTransform="uppercase"
+                        fontSize="24px"
+                        color="#ffffff"
+                        fontWeight={300}
+                    >
+                        GARANTA UM DOS PLANOS E <strong>IMPULSIONE SUAS VENDAS</strong>
+                    </Heading>
+                </Flex>
+
+                <Flex
+                    background="#fff"
+                    mx="15px"
+                    minHeight="400px"
+                    borderRadius="16px"
+                    mt="30px"
+                    p="12px 24px"
+                    direction="column"
+                >
+                    <Flex
+                        width="100%"
+                        justify="space-between"
+                        align="center"
+                        height="max-content"
+                    >
+                        <Flex
+                            direction="column"
+                        >
+                            <Text
+                                fontSize="28px"
+                                fontWeight={700}
+                            >
+                                Simples
+                            </Text>
+
+                            <Flex width="50px" height="2px" background="#6676b6" />
+                        </Flex>
+
+                        <Flex gridGap="10px">
+                            <Text
+                                fontSize="16"
+                                fontWeight={500}
+                            >
+                                R$
+                            </Text>
+                            <Text
+                                fontSize="28px"
+                                fontWeight={700}
+                            >
+                                7,99
+                            </Text>
+                        </Flex>
+                    </Flex>
+
+                    <List
+                        mt="auto"
+                        mb="25px"
+                        spacing={3}
+                    >
+                        <ListItem>
+                            <ListIcon as={MdCheckCircle} color='#405090' fontSize="20px" />
+                            Cadastre até 15 produtos
+                        </ListItem>
+
+                        <ListItem>
+                            <ListIcon as={MdCheckCircle} color='#405090' fontSize="20px" />
+                            Tenha acesso a estatísticas e métricas do seu negócio
+                        </ListItem>
+
+                        <ListItem>
+                            <ListIcon as={MdCheckCircle} color='#405090' fontSize="20px" />
+                            Geração automática de QR Code PIX para facilitar o recebimento
+                        </ListItem>
+
+                        <ListItem>
+                            <ListIcon as={MdCheckCircle} color='#405090' fontSize="20px" />
+                            Cadastre até 01 colaborador
+                        </ListItem>
+                    </List>
+
+                    <Button
+                        label='Testar plano Simples'
+                        variant='outline'
                     />
                 </Flex>
             </Flex>
