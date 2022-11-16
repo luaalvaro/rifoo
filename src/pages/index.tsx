@@ -14,6 +14,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { MdCheckCircle } from 'react-icons/md'
 import Link from 'next/link'
+import { BiUserCircle } from 'react-icons/bi'
 
 const Home = () => {
     return (
@@ -44,7 +45,7 @@ const Home = () => {
                     label='Login'
                     variant='outline'
                     width='100px'
-                    height='40px'
+                    leftIcon={<BiUserCircle fontSize="24px" />}
                 />
             </Flex>
 
@@ -111,6 +112,7 @@ const Home = () => {
                     <Button
                         label='Login'
                         variant='outline'
+                        leftIcon={<BiUserCircle fontSize="24px" />}
                     />
 
                     <Button
