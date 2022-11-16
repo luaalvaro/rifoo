@@ -21,11 +21,6 @@ const Home = () => {
             minHeight="100vh"
             direction='column'
         >
-
-            <Head>
-                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-            </Head>
-
             {/* HEADER */}
             <Flex
                 position="fixed"
@@ -41,23 +36,16 @@ const Home = () => {
                 height="65px"
                 justify="space-between"
                 align="center"
-                px="40px"
+                px="30px"
             >
                 <Logo />
 
-                <Menu>
-                    <MenuButton
-                        as={IconButton}
-                        aria-label='Options'
-                        icon={<GiHamburgerMenu />}
-                        variant='ghost'
-                    />
-                    {/* <MenuList>
-                        <MenuItem>
-                            Sair
-                        </MenuItem>
-                    </MenuList> */}
-                </Menu>
+                <Button
+                    label='Login'
+                    variant='outline'
+                    width='100px'
+                    height='40px'
+                />
             </Flex>
 
             {/* HERO */}
@@ -93,19 +81,20 @@ const Home = () => {
                 >
                     <Heading
                         fontFamily="Poppins"
-                        mx="15px"
+                        mx="30px"
                         textAlign="center"
                         textTransform="uppercase"
                         fontSize="24px"
                         color="#505050"
                     >
-                        (PDV) Frente de Caixa para<br />Vendedores Ambulantes
+                        (PDV) Frente de Caixa p/<br />Vendedores Ambulantes
                     </Heading>
 
                     <Text
-                        mx="15px"
+                        mx="30px"
                         textAlign="center"
                         color="#505050"
+                        fontSize="15px"
                     >
                         Com o Rifoo, você tem o seu negócio na palma da sua mão.
                         Faça o seu cadastro e comece a vender agora mesmo!
@@ -116,7 +105,7 @@ const Home = () => {
                     mt="30px"
                     mb="60px"
                     direction="column"
-                    mx="15px"
+                    mx="30px"
                     gridGap="15px"
                 >
                     <Button
@@ -262,7 +251,7 @@ const Home = () => {
                 boxShadow="0px 30px 45px rgba(0, 0, 0, 0.25)"
             >
                 <Flex
-                    px="15px"
+                    px="30px"
                     mb="35px"
                 >
                     <Heading
@@ -334,7 +323,7 @@ const Home = () => {
                             color="#fff"
                             opacity={0.7}
                             textAlign="center"
-                            px="15px"
+                            px="30px"
                             mt="10px"
                             fontSize="14px"
                         >
@@ -403,7 +392,7 @@ const Home = () => {
                             color="#fff"
                             opacity={0.7}
                             textAlign="center"
-                            px="15px"
+                            px="30px"
                             mt="10px"
                             fontSize="14px"
                         >
@@ -434,7 +423,7 @@ const Home = () => {
 
                     justify="flex-end"
 
-                    px="15px"
+                    px="30px"
                     pb="50px"
 
                     top="0"
@@ -447,7 +436,7 @@ const Home = () => {
                         mx="auto"
                         textTransform="uppercase"
                         textAlign="center"
-                        fontSize="32px"
+                        fontSize="28px"
                     >
                         Controle de estoque automático
                     </Heading>
@@ -456,7 +445,6 @@ const Home = () => {
                         color="#405090"
                         opacity={0.7}
                         textAlign="center"
-                        px="15px"
                         mt="10px"
                         mb="30px"
                         fontSize="14px"
@@ -479,11 +467,11 @@ const Home = () => {
                 borderRadius="24px"
                 py="35px"
                 direction="column"
+                px="30px"
             >
                 <Flex
-                    width={343 * 1.1}
-                    height={294 * 1.1}
-                    mx="auto"
+                    width="100%"
+                    height={294}
                     overflow="hidden"
                     borderRadius="24px"
                     position="relative"
@@ -549,7 +537,6 @@ const Home = () => {
 
                 <Flex
                     background="#fff"
-                    mx="15px"
                     minHeight="400px"
                     borderRadius="16px"
                     mt="30px"
@@ -648,23 +635,22 @@ const Home = () => {
                 >
                     <Heading
                         mt="50px"
-                        width="100%"
                         fontFamily="Poppins"
-                        mx="auto"
+                        mx="30px"
                         textAlign="center"
                         textTransform="uppercase"
                         fontSize="24px"
                         color="#405090"
                         fontWeight={300}
                     >
-                        CADASTRE-SE NA RIFOO E TENHA CONTROLE DO <strong>SEU NEGÓCIO</strong>
+                        CADASTRE-SE NA RIFOO E TENHA CONTROLE DO <br /><strong>SEU NEGÓCIO</strong>
                     </Heading>
 
                     <Text
                         color="#000"
                         opacity={0.7}
                         textAlign="center"
-                        px="15px"
+                        mx="30px"
                         mt="20px"
                         fontSize="14px"
                     >
@@ -676,7 +662,7 @@ const Home = () => {
                     mt="30px"
                     mb="60px"
                     direction="column"
-                    mx="15px"
+                    mx="30px"
                     gridGap="15px"
                 >
                     <Button
