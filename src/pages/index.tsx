@@ -35,7 +35,7 @@ const Home = () => {
             >
                 <Flex
                     width="100%"
-                    maxWidth="1180px"
+                    maxWidth="1280px"
                     mx="auto"
                     height="65px"
                     justify="space-between"
@@ -51,7 +51,7 @@ const Home = () => {
                             display={['none', 'none', 'none', 'flex', 'flex']}
                             fontSize="20px"
                             fontWeight={500}
-                            color="#405090"
+                            color="#303030"
 
                             gridGap="32px"
                         >
@@ -99,10 +99,11 @@ const Home = () => {
                 background="radial-gradient(208.7% 631.97% at -51.69% 185.49%, rgba(0, 34, 164, 0.2) 23.05%, rgba(255, 255, 255, 0) 100%), radial-gradient(135.09% 508.11% at 114.35% -15.02%, rgba(81, 110, 222, 0.65) 6.2%, rgba(255, 255, 255, 0) 50.43%), #FFFFFF;"
                 pt="65px"
                 px="30px"
+                overflowX="hidden"
             >
                 <Flex
                     width="100%"
-                    maxWidth="1180px"
+                    maxWidth="1280px"
                     mx="auto"
 
                     direction={["column", "column", "column", "row-reverse", "row-reverse"]}
@@ -128,6 +129,7 @@ const Home = () => {
                             display={['none', 'none', 'none', 'flex', 'none']}
                             width={948 / 1.75}
                             height={868 / 1.75}
+                            mr="-2.2rem"
                         >
                             <Image
                                 src="/hero-desktop.png"
@@ -142,6 +144,7 @@ const Home = () => {
                             display={['none', 'none', 'none', 'none', 'flex']}
                             width={948 / 1.45}
                             height={868 / 1.45}
+                            mr="-4rem"
                         >
                             <Image
                                 src="/hero-desktop.png"
