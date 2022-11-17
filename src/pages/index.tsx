@@ -39,14 +39,53 @@ const Home = () => {
                 align="center"
                 px="30px"
             >
-                <Logo />
+                <Flex
+                    gridGap="64px"
+                >
+                    <Logo />
 
-                <Button
-                    label='Login'
-                    variant='outline'
-                    width='100px'
-                    leftIcon={<BiUserCircle fontSize="24px" />}
-                />
+                    <Flex
+                        display={['none', 'none', 'none', 'flex', 'flex']}
+                        fontSize="20px"
+                        fontWeight={500}
+                        color="#405090"
+
+                        gridGap="32px"
+                    >
+                        <Link href="/#vantagens">
+                            <A>Home</A>
+                        </Link>
+
+                        <Link href="/#vantagens">
+                            <A>Vantagens</A>
+                        </Link>
+
+                        <Link href="/#vantagens">
+                            <A>Planos</A>
+                        </Link>
+                    </Flex>
+                </Flex>
+
+                <Flex
+                    width="max-content"
+                    gridGap="16px"
+                >
+                    <Flex
+                        display={['none', 'none', 'flex', 'flex', 'flex']}
+                    >
+                        <Button
+                            width='200px'
+                            label='Quero me cadastrar'
+                        />
+                    </Flex>
+
+                    <Button
+                        label='Login'
+                        variant='outline'
+                        width='100px'
+                        leftIcon={<BiUserCircle fontSize="24px" />}
+                    />
+                </Flex>
             </Flex>
 
             {/* HERO */}
@@ -55,69 +94,97 @@ const Home = () => {
                 minHeight="max-content"
                 background="radial-gradient(208.7% 631.97% at -51.69% 185.49%, rgba(0, 34, 164, 0.2) 23.05%, rgba(255, 255, 255, 0) 100%), radial-gradient(135.09% 508.11% at 114.35% -15.02%, rgba(81, 110, 222, 0.65) 6.2%, rgba(255, 255, 255, 0) 50.43%), #FFFFFF;"
 
-                mt="65px"
+                pt="65px"
+                px="30px"
 
-                direction="column"
+                direction={["column", "column", "column", "row-reverse", "row-reverse"]}
+                justify="space-between"
+                align="center"
             >
-
-                <Flex
-                    width={359}
-                    height={514}
-                    mx="auto"
-                >
-                    <Image
-                        src="/hero.png"
-                        alt="Imagem de fundo"
+                <Flex>
+                    <Flex
+                        display={['flex', 'flex', 'flex', 'none', 'none']}
                         width={359}
                         height={514}
-                        quality={70}
-                    />
+                    >
+                        <Image
+                            src="/hero.png"
+                            alt="Imagem de fundo"
+                            width={359}
+                            height={514}
+                            quality={70}
+                        />
+                    </Flex>
+
+                    <Flex
+                        display={['none', 'none', 'none', 'flex', 'flex']}
+                        width={948 / 1.5}
+                        height={868 / 1.5}
+                    >
+                        <Image
+                            src="/hero-desktop.png"
+                            alt="Imagem de fundo"
+                            width={948 / 1.5}
+                            height={868 / 1.5}
+                            quality={70}
+                        />
+                    </Flex>
                 </Flex>
 
                 <Flex
-                    width="100%"
-                    mt="40px"
                     direction="column"
-                    gridGap="15px"
                 >
-                    <Heading
-                        fontFamily="Poppins"
-                        mx="30px"
-                        textAlign="center"
-                        textTransform="uppercase"
-                        fontSize="24px"
+                    <Flex
+                        width="100%"
+                        maxWidth={['initial', 'initial', 'initial', '580px', '580px']}
+                        mt="40px"
+                        direction="column"
+                        gridGap="15px"
+                        textAlign={["center", "center", "center", "left", "left"]}
                         color="#505050"
                     >
-                        (PDV) Frente de Caixa p/<br />Vendedores Ambulantes
-                    </Heading>
+                        <Heading
+                            fontFamily="Poppins"
+                            textTransform="uppercase"
+                            fontSize={['24px', '24px', '24px', '32px', '36px']}
+                        >
+                            (PDV) Frente de Caixa p/<br />Vendedores Ambulantes
+                        </Heading>
 
-                    <Text
-                        mx="30px"
-                        textAlign="center"
-                        color="#505050"
-                        fontSize="15px"
+                        <Text
+                            color="#818181"
+                            fontSize={['15px', '15px', '15px', '20px', '24px']}
+                        >
+                            Com o Rifoo, você tem o seu negócio na palma da sua mão.
+                            Faça o seu cadastro e comece a vender agora mesmo!
+                        </Text>
+                    </Flex>
+
+                    <Flex
+                        mt="30px"
+                        mb="60px"
+                        gridGap="15px"
+                        direction={['column', 'column', 'column', 'row', 'row']}
                     >
-                        Com o Rifoo, você tem o seu negócio na palma da sua mão.
-                        Faça o seu cadastro e comece a vender agora mesmo!
-                    </Text>
-                </Flex>
+                        <Flex
+                            maxWidth={['100%', '100%', '100%', '140px', '140px']}
+                        >
+                            <Button
+                                label='Login'
+                                variant='outline'
+                                leftIcon={<BiUserCircle fontSize="24px" />}
+                            />
+                        </Flex>
 
-                <Flex
-                    mt="30px"
-                    mb="60px"
-                    direction="column"
-                    mx="30px"
-                    gridGap="15px"
-                >
-                    <Button
-                        label='Login'
-                        variant='outline'
-                        leftIcon={<BiUserCircle fontSize="24px" />}
-                    />
+                        <Flex
+                            maxWidth={['100%', '100%', '100%', '180px', '180px']}
+                        >
+                            <Button
+                                label='Quero me cadastrar'
+                            />
+                        </Flex>
 
-                    <Button
-                        label='Quero me cadastrar'
-                    />
+                    </Flex>
                 </Flex>
             </Flex>
 
