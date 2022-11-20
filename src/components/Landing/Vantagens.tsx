@@ -11,6 +11,7 @@ const Vantagens = () => {
             width="100%"
             direction="column"
             overflowX="hidden"
+            px="30px"
         >
             <Flex
                 width="100%"
@@ -40,38 +41,61 @@ const Vantagens = () => {
             </Flex>
 
             <Flex
-                width={365}
-                height={395}
+                width="100%"
+                maxWidth="1280px"
                 mx="auto"
-                mt="20px"
+                direction={["column", "column", "column", "column", "row"]}
+                justify="space-between"
+                mt="40px"
             >
-                <Image
-                    src="/mockup.png"
-                    alt="Rifoo mockup"
-                    width={365}
-                    height={395}
-                    quality={70}
-                />
-            </Flex>
-
-            <Flex
-                my="40px"
-            >
-                <Swiper
-                    modules={[Pagination]}
-                    spaceBetween={50}
-                    slidesPerView={1}
-                    onSlideChange={() => console.log('slide change')}
-                    onSwiper={(swiper) => console.log(swiper)}
-
-                    pagination={{ clickable: true }}
-
-                    centeredSlides={true}
+                <Flex
+                    width={[365, 365, 365 * 1.1, 365 * 1.3, 365 * 1.5]}
+                    height={[395, 395, 395 * 1.1, 395 * 1.3, 395 * 1.5]}
+                    mx={["auto", "auto", "auto", "auto", "0"]}
+                    position="relative"
                 >
-                    <SwiperSlide><CardVantagem /></SwiperSlide>
-                    <SwiperSlide><CardVantagem /></SwiperSlide>
-                    <SwiperSlide><CardVantagem /></SwiperSlide>
-                </Swiper>
+                    <Image
+                        src="/mockup.png"
+                        alt="Rifoo mockup"
+                        quality={70}
+                        layout="fill"
+                    />
+                </Flex>
+
+                <Flex
+                    display={["flex", "flex", "flex", "flex", "none"]}
+                    my="40px"
+                >
+                    <Swiper
+                        modules={[Pagination]}
+                        spaceBetween={50}
+                        slidesPerView={1}
+                        onSlideChange={() => console.log('slide change')}
+                        onSwiper={(swiper) => console.log(swiper)}
+
+                        pagination={{ clickable: true }}
+
+                        centeredSlides={true}
+                    >
+                        <SwiperSlide><CardVantagem /></SwiperSlide>
+                        <SwiperSlide><CardVantagem /></SwiperSlide>
+                        <SwiperSlide><CardVantagem /></SwiperSlide>
+                    </Swiper>
+                </Flex>
+
+                <Flex
+                    display={["none", "none", "none", "none", "flex"]}
+                    flexWrap="wrap"
+                    maxWidth="630px"
+                    justify="space-between"
+                    gridGap="15px"
+                    mb="80px"
+                >
+                    <CardVantagem />
+                    <CardVantagem />
+                    <CardVantagem />
+                    <CardVantagem />
+                </Flex>
             </Flex>
         </Flex>
     )

@@ -24,45 +24,30 @@ const Hero = () => {
             >
                 <Flex>
                     <Flex
+                        position="relative"
                         display={['flex', 'flex', 'flex', 'none', 'none']}
-                        width={359}
-                        height={514}
+                        width={[359, 359 * 1.1, 359 * 1.25, 0, 0]}
+                        height={[514, 514 * 1.1, 514 * 1.25, 0, 0]}
                     >
                         <Image
                             src="/hero.png"
                             alt="Imagem de fundo"
-                            width={359}
-                            height={514}
+                            layout="fill"
                             quality={70}
                         />
                     </Flex>
 
                     <Flex
-                        display={['none', 'none', 'none', 'flex', 'none']}
-                        width={948 / 1.75}
-                        height={868 / 1.75}
+                        display={['none', 'none', 'none', 'flex', 'flex']}
+                        width={[0, 0, 0, 948 / 1.75, 948 / 1.45]}
+                        height={[0, 0, 0, 868 / 1.75, 868 / 1.45]}
                         mr="-2.2rem"
+                        position="relative"
                     >
                         <Image
                             src="/hero-desktop.png"
                             alt="Imagem de fundo"
-                            width={948 / 1.75}
-                            height={868 / 1.75}
-                            quality={70}
-                        />
-                    </Flex>
-
-                    <Flex
-                        display={['none', 'none', 'none', 'none', 'flex']}
-                        width={948 / 1.45}
-                        height={868 / 1.45}
-                        mr="-4rem"
-                    >
-                        <Image
-                            src="/hero-desktop.png"
-                            alt="Imagem de fundo"
-                            width={948 / 1.45}
-                            height={868 / 1.45}
+                            layout="fill"
                             quality={70}
                         />
                     </Flex>
