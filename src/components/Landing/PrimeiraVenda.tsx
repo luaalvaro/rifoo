@@ -33,87 +33,91 @@ const PrimeiraVenda = () => {
             </Flex>
 
             <Flex
-                maxWidth="1180px"
-                background="#5465A7"
-                direction="column"
-                marginTop="40px"
-                borderBottom="1px solid #5465A7"
+                width="100%"
+                marginTop={["40px", "40px", "40px", "100px", "100px"]}
+                minHeight="450px"
 
-                borderRightRadius={['0px', '0px', '0px', '60px', '60px']}
-                position="relative"
+                gridGap="40px"
             >
                 <Flex
-                    width={280}
-                    height={487}
-                    mx="auto"
-                    mt="-40px"
-                    direction="column"
+                    maxWidth="1180px"
+                    background="#5465A7"
+
+                    direction={['column', 'column', 'column', 'row', 'row']}
+
+                    borderRightRadius={['0px', '0px', '0px', '60px', '60px']}
                     position="relative"
+
+                    justify="flex-end"
+                    align="center"
                 >
-                    <Image
-                        src="/celular01.png"
-                        alt="Celular acessando o Rifoo"
-                        width={280}
-                        height={487}
-                    />
+                    <Flex
+                        position={["relative", "relative", "relative", "absolute", "absolute"]}
+                        width={[431 / 1.6, 431 / 1.6, 431 / 1.6, 431 / 1.2, 431 / 1.2]}
+                        height={[845 / 1.8, 845 / 1.8, 845 / 1.8, 845 / 1.3, 845 / 1.3]}
+                        mx={['auto', 'auto', 'auto', '0', '0']}
+                        mt={["-50px", "-50px", "-50px", "initial", "initial"]}
+
+                        left={["0px", "0px", "0px", "12%", "12%"]}
+                    >
+                        <Image
+                            src="/celular01.png"
+                            alt="Celular acessando o Rifoo"
+                            layout="fill"
+                        />
+
+                        <Flex
+                            position="absolute"
+                            left={["-10", "-10", "-10", "100%", "100%"]}
+                            bottom={["-4", "-4", "-4", "28%", "28%"]}
+                        >
+                            <Text
+                                fontFamily="Poppins"
+                                fontSize={["200px", "200px", "200px", "300px", "300px"]}
+                                lineHeight={["200px", "200px", "200px", "300px", "300px"]}
+                                fontWeight={900}
+                                color="#fff"
+                                opacity="0.3"
+                            >
+                                1
+                            </Text>
+                        </Flex>
+                    </Flex>
 
                     <Flex
-                        position="absolute"
-                        left="-10"
-                        bottom="-4"
+                        width={["100%", "100%", "100%", "45%", "45%"]}
+                        mt="15px"
+                        mb="40px"
+                        direction="column"
+                        px="30px"
                     >
-                        <Text
-                            fontFamily="Poppins"
-                            fontSize="200px"
-                            lineHeight="200px"
-                            fontWeight={900}
+                        <Heading
+                            width="100%"
                             color="#fff"
-                            opacity="0.3"
+                            mx="auto"
+                            textTransform="uppercase"
+                            textAlign={["center", "center", "center", "left", "left"]}
+                            fontSize="26px"
                         >
-                            1
+                            Cadastre seu produto
+                        </Heading>
+
+                        <Text
+                            color="#fff"
+                            opacity={0.7}
+                            textAlign={["center", "center", "center", "left", "left"]}
+                            mt="10px"
+                            fontSize="14px"
+                            maxWidth={["100%", "100%", "100%", "85%", "85%"]}
+                        >
+                            Cadastrar um produto no RIFOO é tão simples quanto responder 4 perguntas. Em menos de 01 minuto você cadastra o seu primeiro produto e já está apto para começar a registrar as suas vendas.
                         </Text>
                     </Flex>
                 </Flex>
 
                 <Flex
-                    width="100%"
-                    mt="15px"
-                    mb="40px"
-                    direction="column"
-                >
-                    <Heading
-                        color="#fff"
-                        mx="auto"
-                        textTransform="uppercase"
-                        fontSize="26px"
-                    >
-                        Cadastre seu produto
-                    </Heading>
-
-                    <Text
-                        color="#fff"
-                        opacity={0.7}
-                        textAlign="center"
-                        px="30px"
-                        mt="10px"
-                        fontSize="14px"
-                    >
-                        Cadastrar um produto no RIFOO é tão simples quanto responder 4 perguntas. Em menos de 01 minuto você cadastra o seu primeiro produto e já está apto para começar a registrar as suas vendas.
-                    </Text>
-                </Flex>
-
-                <Flex
                     display={['none', 'none', 'none', 'none', 'flex']}
-
-                    position="absolute"
-                    right={-300}
-                    top={0}
-                    bottom={0}
-
                     maxWidth={300}
-                    px="30px"
-                    mb="35px"
-
                     align="center"
                 >
                     <Heading
@@ -145,15 +149,15 @@ const PrimeiraVenda = () => {
                     position="relative"
                 >
                     <Flex
-                        width={280}
-                        height={487}
+                        position="relative"
+                        width={431 / 1.6}
+                        height={845 / 1.8}
                         zIndex={1}
                     >
                         <Image
                             src="/celular02.png"
                             alt="Celular acessando o Rifoo"
-                            width={280}
-                            height={487}
+                            layout="fill"
                         />
                     </Flex>
 
