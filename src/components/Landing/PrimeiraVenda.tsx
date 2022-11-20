@@ -3,15 +3,21 @@ import React from 'react'
 import Image from 'next/image'
 
 const PrimeiraVenda = () => {
+
+    const shadow = "0px 30px 45px rgba(0, 0, 0, 0.25)"
+
     return (
         <Flex
             width="100%"
             paddingTop="140px"
             direction="column"
 
-            boxShadow="0px 30px 45px rgba(0, 0, 0, 0.25)"
+            overflowX="hidden"
+
+            boxShadow={[shadow, shadow, shadow, shadow, "none"]}
         >
             <Flex
+                display={['flex', 'flex', 'flex', 'flex', 'none']}
                 px="30px"
                 mb="35px"
             >
@@ -27,10 +33,14 @@ const PrimeiraVenda = () => {
             </Flex>
 
             <Flex
+                maxWidth="1180px"
                 background="#5465A7"
                 direction="column"
                 marginTop="40px"
                 borderBottom="1px solid #5465A7"
+
+                borderRightRadius={['0px', '0px', '0px', '60px', '60px']}
+                position="relative"
             >
                 <Flex
                     width={280}
@@ -91,12 +101,43 @@ const PrimeiraVenda = () => {
                         Cadastrar um produto no RIFOO é tão simples quanto responder 4 perguntas. Em menos de 01 minuto você cadastra o seu primeiro produto e já está apto para começar a registrar as suas vendas.
                     </Text>
                 </Flex>
+
+                <Flex
+                    display={['none', 'none', 'none', 'none', 'flex']}
+
+                    position="absolute"
+                    right={-300}
+                    top={0}
+                    bottom={0}
+
+                    maxWidth={300}
+                    px="30px"
+                    mb="35px"
+
+                    align="center"
+                >
+                    <Heading
+                        color="#27242456"
+                        fontSize="90px"
+                        lineHeight="90px"
+                        fontWeight={900}
+                        fontFamily="Poppins"
+                    >
+                        SUA PRIMEIRA VENDA
+                    </Heading>
+                </Flex>
             </Flex>
 
             <Flex
+                mt={[0, 0, 0, 100, 200]}
+                ml="auto"
+                maxWidth="1180px"
                 background="#5465A7"
                 direction="column"
                 borderBottom="1px solid #5465A7"
+
+                borderLeftRadius={['0px', '0px', '0px', '60px', '60px']}
+                position="relative"
             >
                 <Flex
                     mx="auto"
@@ -159,6 +200,32 @@ const PrimeiraVenda = () => {
                     >
                         Cadastrar um produto no RIFOO é tão simples quanto responder 4 perguntas. Em menos de 01 minuto você cadastra o seu primeiro produto e já está apto para começar a registrar as suas vendas.
                     </Text>
+                </Flex>
+
+                <Flex
+                    display={['none', 'none', 'none', 'none', 'flex']}
+
+                    position="absolute"
+                    left={-410}
+                    top={0}
+                    bottom={0}
+
+                    maxWidth={300}
+                    px="30px"
+                    mb="35px"
+
+                    align="center"
+                >
+                    <Heading
+                        color="#27242456"
+                        fontSize="90px"
+                        lineHeight="90px"
+                        fontWeight={900}
+                        fontFamily="Poppins"
+                        textAlign="right"
+                    >
+                        EM DOIS PASSOS
+                    </Heading>
                 </Flex>
             </Flex>
         </Flex>
