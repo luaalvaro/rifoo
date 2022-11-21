@@ -51,7 +51,7 @@ const Vantagens = () => {
                 <Flex
                     width={[365, 365, 365 * 1.1, 365 * 1.3, 365 * 1.5]}
                     height={[395, 395, 395 * 1.1, 395 * 1.3, 395 * 1.5]}
-                    mx={["auto", "auto", "auto", "auto", "0"]}
+                    mx={["auto", "auto", "auto", "auto", "-45px"]}
                     position="relative"
                 >
                     <Image
