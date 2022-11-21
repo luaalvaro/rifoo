@@ -7,24 +7,30 @@ const SecondaryHero = () => {
     return (
         <Flex
             marginTop="140px"
-            background="#F2F2F2"
-            direction="column"
-            pb="30px"
+            background="#F3F3F3"
+            direction={["column", "column", "column", "row", "row"]}
+            justify="center"
+            align="center"
+            gridGap={["60px", "60px", "60px", "120px", "120px"]}
+            py="100px"
         >
             <Flex
-                mt="100px"
-                mx="auto"
+                width={330}
+                height={530}
+                position="relative"
             >
                 <Image
                     src="/celular04.png"
                     alt="Celular"
-                    width={330}
-                    height={530}
+                    layout="fill"
                 />
             </Flex>
 
             <Flex
                 direction="column"
+                maxWidth="580px"
+
+                justify="center"
             >
                 <Heading
                     mt="50px"
@@ -32,7 +38,7 @@ const SecondaryHero = () => {
                     mx="30px"
                     textAlign="center"
                     textTransform="uppercase"
-                    fontSize="24px"
+                    fontSize={["24px", "24px", "24px", "40px", "40px"]}
                     color="#405090"
                     fontWeight={300}
                 >
@@ -45,28 +51,29 @@ const SecondaryHero = () => {
                     textAlign="center"
                     mx="30px"
                     mt="20px"
-                    fontSize="14px"
+                    fontSize={["14px", "14px", "14px", "18px", "18px"]}
                 >
                     Cadastrar um produto no RIFOO é tão simples quanto responder 4 perguntas. Em menos de 01 minuto você cadastra o seu primeiro produto e já está apto para começar a registrar as suas vendas.
                 </Text>
+
+                <Flex
+                    mt="30px"
+                    mb="60px"
+                    direction="column"
+                    mx="30px"
+                    gridGap="15px"
+                >
+                    <Button
+                        label='Login'
+                        variant='outline'
+                    />
+
+                    <Button
+                        label='Quero me cadastrar'
+                    />
+                </Flex>
             </Flex>
 
-            <Flex
-                mt="30px"
-                mb="60px"
-                direction="column"
-                mx="30px"
-                gridGap="15px"
-            >
-                <Button
-                    label='Login'
-                    variant='outline'
-                />
-
-                <Button
-                    label='Quero me cadastrar'
-                />
-            </Flex>
         </Flex>
     )
 }

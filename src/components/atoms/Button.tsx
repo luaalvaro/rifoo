@@ -16,6 +16,8 @@ const Button: React.FC<IProps> = ({ label, onClick, variant, height, width, left
     const color = variant === 'outline' ? '#405090' : '#fff'
     const border = variant === 'outline' ? '1px solid #405090' : 'none'
 
+    const backgroundActive = variant === 'outline' ? '#e5e7f0' : '#344072'
+
     return (
         <ButtonChakra
             onClick={onClick && onClick}
@@ -28,6 +30,14 @@ const Button: React.FC<IProps> = ({ label, onClick, variant, height, width, left
             leftIcon={leftIcon}
 
             background={background}
+
+            _hover={{
+                background: backgroundActive
+            }}
+
+            _active={{
+                background: backgroundActive
+            }}
             color={color}
             border={border}
         >
