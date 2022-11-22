@@ -49,22 +49,22 @@ const Vantagens = () => {
                 mt="40px"
             >
                 <Flex
-                    width={[365, 365, 365 * 1.1, 365 * 1.3, 365 * 1.5]}
-                    height={[395, 395, 395 * 1.1, 395 * 1.3, 395 * 1.5]}
-                    mx={["auto", "auto", "auto", "auto", "-45px"]}
+                    width={[627.42 / 1.8, 627.42 / 1.7, 627.42 / 1.5, 627.42 / 1.5, 627.42 / 1.3]}
+                    height={[806.34 / 1.8, 806.34 / 1.7, 806.34 / 1.5, 806.34 / 1.5, 806.34 / 1.3]}
+                    mx={["auto", "auto", "auto", "auto", "0"]}
                     position="relative"
                 >
                     <Image
                         src="/mockup.png"
                         alt="Rifoo mockup"
-                        quality={50}
+                        quality={70}
                         layout="fill"
                     />
                 </Flex>
 
                 <Flex
                     display={["flex", "flex", "flex", "flex", "none"]}
-                    my="40px"
+                    mb="40px"
                 >
                     <Swiper
                         modules={[Pagination]}
