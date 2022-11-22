@@ -21,6 +21,8 @@ const Home = () => {
         <Flex
             minHeight="100vh"
             direction='column'
+
+            overflowX="hidden"
         >
             <Header />
             <Hero />
