@@ -1,8 +1,14 @@
 import { Center, Flex, Text } from '@chakra-ui/react'
 import React from 'react'
-import { GiButterfly } from 'react-icons/gi'
+import { IconType } from 'react-icons'
 
-const CardVantagem = () => {
+interface IProps {
+    title: string,
+    description: string,
+    Icon: IconType
+}
+
+const CardVantagem: React.FC<IProps> = ({ description, Icon, title }) => {
     return (
         <Center
             width="307px"
@@ -21,13 +27,13 @@ const CardVantagem = () => {
                 align="center"
                 gridGap="5px"
             >
-                <GiButterfly fontSize={50} />
+                <Icon fontSize={50} />
 
                 <Text
                     fontSize="32px"
                     fontWeight={500}
                 >
-                    Simplicidade
+                    {title}
                 </Text>
 
                 <Text
@@ -35,7 +41,7 @@ const CardVantagem = () => {
                     textAlign="center"
                     opacity={0.8}
                 >
-                    Não queremos te atrapalhar, por isso o Rifoo é simples e fácil de usar.
+                    {description}
                 </Text>
             </Flex>
         </Center>

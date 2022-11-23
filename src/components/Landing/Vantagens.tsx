@@ -4,6 +4,10 @@ import Image from 'next/image'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
 import CardVantagem from '../containers/CardVantagem';
+import { TiMediaFastForwardOutline } from 'react-icons/ti';
+import { SlMagnifier } from 'react-icons/sl';
+import { AiOutlineSafetyCertificate } from 'react-icons/ai';
+import { TfiLoop } from 'react-icons/tfi';
 
 const Vantagens = () => {
     return (
@@ -77,9 +81,34 @@ const Vantagens = () => {
 
                         centeredSlides={true}
                     >
-                        <SwiperSlide><CardVantagem /></SwiperSlide>
-                        <SwiperSlide><CardVantagem /></SwiperSlide>
-                        <SwiperSlide><CardVantagem /></SwiperSlide>
+                        <SwiperSlide>
+                            <CardVantagem
+                                title="Praticidade"
+                                description="Não queremos atrapalhar o seu dia a dia, por isso focamos na praticidade da nossa plataforma"
+                                Icon={TiMediaFastForwardOutline}
+                            />
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <CardVantagem
+                                title="Transparência"
+                                description="Tenha total controle do seu negócio. Acompanhe sua métricas com trânsparência"
+                                Icon={SlMagnifier}
+                            />
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <CardVantagem
+                                title="Segurança"
+                                description="Estamos preocupados com a segurança dos seus dados. Por isso utilizamos servidores de altíssima qualidade"
+                                Icon={AiOutlineSafetyCertificate}
+                            />
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <CardVantagem
+                                title="Estoque automático"
+                                description="Não precisa perder tempo controlando estoque. Controle apenas os produtos que você realmente vende"
+                                Icon={TfiLoop}
+                            />
+                        </SwiperSlide>
                     </Swiper>
                 </Flex>
 
@@ -91,10 +120,26 @@ const Vantagens = () => {
                     gridGap="15px"
                     mb="80px"
                 >
-                    <CardVantagem />
-                    <CardVantagem />
-                    <CardVantagem />
-                    <CardVantagem />
+                    <CardVantagem
+                        title="Praticidade"
+                        description="Não queremos atrapalhar o seu dia a dia, por isso focamos na praticidade da nossa plataforma"
+                        Icon={TiMediaFastForwardOutline}
+                    />
+                    <CardVantagem
+                        title="Transparência"
+                        description="Tenha total controle do seu negócio. Acompanhe sua métricas com trânsparência"
+                        Icon={SlMagnifier}
+                    />
+                    <CardVantagem
+                        title="Segurança"
+                        description="Estamos preocupados com a segurança dos seus dados. Por isso utilizamos servidores de altíssima qualidade"
+                        Icon={AiOutlineSafetyCertificate}
+                    />
+                    <CardVantagem
+                        title="Estoque automático"
+                        description="Não precisa perder tempo controlando estoque. Controle apenas os produtos que você realmente vende"
+                        Icon={TfiLoop}
+                    />
                 </Flex>
             </Flex>
         </Flex>
