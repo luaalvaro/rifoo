@@ -37,9 +37,9 @@ export default async function handler(
     }
   }
 
-  const add30Days = (date: string) => {
+  const add7Days = (date: string) => {
     const date_ = new Date(date)
-    date_.setDate(date_.getDate() + 30)
+    date_.setDate(date_.getDate() + 7)
     return date_.toISOString().split('T')[0]
   }
 
@@ -70,7 +70,7 @@ export default async function handler(
     newDate = `${newDate[2]}-${newDate[1]}-${newDate[0]}`
 
     console.log(newDate)
-    
+
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -87,7 +87,7 @@ export default async function handler(
         // Criar um novo PERFIL
 
         const today = new Date().toISOString().split('T')[0]
-        const until = add30Days(today)
+        const until = add7Days(today)
         console.log(until)
 
         const { data: profile, error: errorProfile } = await supabase

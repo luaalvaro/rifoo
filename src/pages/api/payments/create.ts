@@ -56,7 +56,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     const user_email = decoded.email
     // Criando instancia do supabase
     const supabase = createClient(supabaseUrl, supabaseKey)
-    
+
     mercadopago.configurations.setAccessToken(MP_ACESS_TOKEN)
 
     const expiration = moment()
@@ -64,11 +64,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         .add(30, 'minutes')
         .toISOString()
 
-        const cpfNumbers =cpf.replace(/\D/g, '')
-   
-        const payment_data = {
-        transaction_amount: 29.90,
-        description: 'Rifoo Premium - 30 dias',
+    const cpfNumbers = cpf.replace(/\D/g, '')
+
+    const payment_data = {
+        transaction_amount: 7.99,
+        description: 'Rifoo Simples - 30 dias',
         payment_method_id: 'pix',
         payer: {
             email: user_email,
@@ -81,37 +81,37 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         installments: 1,
         notification_url: `${NOTIFICATION_URL}?source_news=webhooks`,
         date_of_expiration: expiration
-         }
+    }
 
     // Verificar se o usuário já possui um pagamento pendente
 
     try {
-        const {data, error} = await supabase
-        .from('payments')
-        .select('*')
-        .eq('user_id', user_id)
-        .eq('transaction_status', 'pending')
+        const { data, error } = await supabase
+            .from('payments')
+            .select('*')
+            .eq('user_id', user_id)
+            .eq('transaction_status', 'pending')
 
         if (error)
-        throw error
+            throw error
 
         console.log('Pagamentos encontrados', data.length)
 
-     if (data.length > 0) {
-        return res.status(200).json({
-            message: "Sucesso",
-            data: {
-                date_of_expiration: data[0].transaction_date_of_expiration,
-                qr_code_base64: data[0].transaction_qr_code_base64,
-                qr_code: data[0].transaction_qr_code,
-                transaction_amount: data[0].transaction_amount,
-                description: data[0].transaction_description,
-            }
-        })
+        if (data.length > 0) {
+            return res.status(200).json({
+                message: "Sucesso",
+                data: {
+                    date_of_expiration: data[0].transaction_date_of_expiration,
+                    qr_code_base64: data[0].transaction_qr_code_base64,
+                    qr_code: data[0].transaction_qr_code,
+                    transaction_amount: data[0].transaction_amount,
+                    description: data[0].transaction_description,
+                }
+            })
         }
-       
+
     } catch (error) {
-        console.log(error)        
+        console.log(error)
     }
 
     const { response } = await mercadopago
@@ -134,7 +134,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         qr_code
     } = point_of_interaction.transaction_data
 
-    console.log({ id,status,date_of_expiration})
+    console.log({ id, status, date_of_expiration })
 
     // Salvar o pagamento no banco de dados
 
