@@ -2,8 +2,11 @@ import { Flex, Heading, Text, } from '@chakra-ui/react'
 import React from 'react'
 import Image from 'next/image'
 import Button from '../atoms/Button'
+import { useRouter } from 'next/router'
 
 const SecondaryHero = () => {
+
+    const router = useRouter()
     return (
         <Flex
             marginTop="140px"
@@ -66,10 +69,12 @@ const SecondaryHero = () => {
                     <Button
                         label='Login'
                         variant='outline'
+                        onClick={() => router.push('/login')}
                     />
 
                     <Button
                         label='Quero me cadastrar'
+                        onClick={() => router.push('#cadastro')}
                     />
                 </Flex>
             </Flex>

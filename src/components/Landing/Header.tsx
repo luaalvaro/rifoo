@@ -3,8 +3,12 @@ import Logo from "../atoms/Logo"
 import Link from 'next/link'
 import { BiUserCircle } from "react-icons/bi"
 import Button from "../atoms/Button"
+import { useRouter } from "next/router"
 
 const Header = () => {
+
+    const router = useRouter()
+
     return (
         <Flex
             width="100%"
@@ -30,7 +34,7 @@ const Header = () => {
                 >
                     <Logo />
 
-                    <Flex
+                    {/* <Flex
                         display={['none', 'none', 'none', 'flex', 'flex']}
                         fontSize="20px"
                         fontWeight={500}
@@ -49,7 +53,7 @@ const Header = () => {
                         <Link href="/#vantagens">
                             <A>Planos</A>
                         </Link>
-                    </Flex>
+                    </Flex> */}
                 </Flex>
 
                 <Flex
@@ -62,6 +66,7 @@ const Header = () => {
                         <Button
                             width='200px'
                             label='Quero me cadastrar'
+                            onClick={() => router.push('#cadastro')}
                         />
                     </Flex>
 
@@ -70,6 +75,7 @@ const Header = () => {
                         variant='outline'
                         width='100px'
                         leftIcon={<BiUserCircle fontSize="24px" />}
+                        onClick={() => router.push('/login')}
                     />
                 </Flex>
             </Flex>

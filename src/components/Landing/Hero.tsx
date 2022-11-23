@@ -2,10 +2,15 @@ import { Flex, Heading, Text } from '@chakra-ui/react'
 import { BiUserCircle } from 'react-icons/bi'
 import Button from '../atoms/Button'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 const Hero = () => {
+
+    const router = useRouter()
+
     return (
         <Flex
+            id="hero"
             width="100%"
             minHeight="max-content"
             background="radial-gradient(208.7% 631.97% at -51.69% 185.49%, rgba(0, 34, 164, 0.2) 23.05%, rgba(255, 255, 255, 0) 100%), radial-gradient(135.09% 508.11% at 114.35% -15.02%, rgba(81, 110, 222, 0.65) 6.2%, rgba(255, 255, 255, 0) 50.43%), #FFFFFF;"
@@ -95,6 +100,7 @@ const Hero = () => {
                                 label='Login'
                                 variant='outline'
                                 leftIcon={<BiUserCircle fontSize="24px" />}
+                                onClick={() => router.push('/login')}
                             />
                         </Flex>
 
@@ -103,6 +109,7 @@ const Hero = () => {
                         >
                             <Button
                                 label='Quero me cadastrar'
+                                onClick={() => router.push('#cadastro')}
                             />
                         </Flex>
 

@@ -6,6 +6,7 @@ import moment from 'moment'
 import 'moment/locale/pt-br'
 import 'swiper/css';
 import '../styles/swiper.css'
+import '../styles/global.css'
 
 moment.locale('pt-br')
 

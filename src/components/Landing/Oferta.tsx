@@ -3,10 +3,15 @@ import React from 'react'
 import Image from 'next/image'
 import { MdCheckCircle } from 'react-icons/md'
 import Button from '../atoms/Button'
+import { useRouter } from 'next/router'
 
 const Oferta = () => {
+
+    const router = useRouter()
+
     return (
         <Flex
+            id="cadastro"
             direction={["column", "column", "column", "row", "row"]}
             background="#405090"
             justify="space-around"
@@ -81,7 +86,7 @@ const Oferta = () => {
                             opacity={0.7}
                             fontSize="14px"
                         >
-                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum, ut?
+                            Faça seu cadastro gratuitamente e teste um de nossos planos por 7 dias. Sem cartão de crédito, sem compromisso.
                         </Text>
                     </Flex>
                 </Flex>
@@ -158,7 +163,7 @@ const Oferta = () => {
                     >
                         <ListItem>
                             <ListIcon as={MdCheckCircle} color='#405090' fontSize="20px" />
-                            Cadastre até 15 produtos
+                            Cadastre até 10 produtos
                         </ListItem>
 
                         <ListItem>
@@ -178,8 +183,9 @@ const Oferta = () => {
                     </List>
 
                     <Button
-                        label='Testar plano Simples'
+                        label='TESTAR SIMPLES POR 7 DIAS'
                         variant='outline'
+                        onClick={() => router.push('/cadastro')}
                     />
                 </Flex>
             </Flex>

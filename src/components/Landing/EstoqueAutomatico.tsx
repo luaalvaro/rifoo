@@ -2,8 +2,11 @@ import { Flex, Heading, Text } from '@chakra-ui/react'
 import React from 'react'
 import Button from '../atoms/Button'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 const EstoqueAutomatico = () => {
+
+    const router = useRouter()
     return (
         <Flex
             width="100%"
@@ -78,6 +81,7 @@ const EstoqueAutomatico = () => {
 
                 <Button
                     label='Quero me cadastrar'
+                    onClick={() => router.push('#cadastro')}
                 />
             </Flex>
         </Flex>
