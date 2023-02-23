@@ -1,9 +1,19 @@
 import { Center, Flex, Text } from '@chakra-ui/react'
+import Image from 'next/image'
 import React from 'react'
 import { FaQuoteLeft } from 'react-icons/fa'
-import { GiButterfly } from 'react-icons/gi'
 
-const CardProof = () => {
+const CardProof = ({
+    testimony,
+    userName,
+    date,
+    userImage,
+}: {
+    testimony: string,
+    userName: string,
+    date: string,
+    userImage: string
+}) => {
     return (
         <Center
             width="307px"
@@ -28,16 +38,29 @@ const CardProof = () => {
                     lineHeight="18px"
                     color="#49454F"
                 >
-                    Hoje consigo ter controle do meu negócio,
-                    tenho as informações que preciso para tomar as melhores decisões.
+                    {testimony}
                 </Text>
 
-                <Flex my="15px" width="56px" height="1px" background="#A7A7A7" borderRadius="100%" />
+                <Flex
+                    my="15px"
+                    width="56px"
+                    height="1px"
+                    background="#A7A7A7"
+                    borderRadius="100%"
+                />
 
-                <Flex width="56px" height="56px" background="#CECECE" borderRadius="100%" />
+                <Flex
+                    width="56px"
+                    height="56px"
+                    background="#CECECE"
+                    borderRadius="100%"
+                    overflow="hidden"
+                >
+                    <Image src={userImage} alt="" width={56} height={56} />
+                </Flex>
 
-                <Text color="#1C1B1F" fontWeight={500} mt="10px">Francisco Carlos</Text>
-                <Text color="#1C1B1F" fontSize="14px">07/10/2022</Text>
+                <Text color="#1C1B1F" fontWeight={500} mt="10px">{userName}</Text>
+                <Text color="#1C1B1F" fontSize="14px">{date}</Text>
             </Flex>
         </Center>
     )

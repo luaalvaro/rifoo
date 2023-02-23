@@ -1,8 +1,12 @@
 import { Flex, Text, Link as A } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import React from 'react'
 import Logo from '../atoms/Logo'
 
 const Footer = () => {
+
+    const router = useRouter()
+
     return (
         <Flex
             background="#323232"
@@ -31,9 +35,9 @@ const Footer = () => {
                 justify="center"
                 my="50px"
             >
-                <A>Home</A>
-                <A>Vantagens</A>
-                <A>Planos</A>
+                <A onClick={() => router.push('#')}>Home</A>
+                <A onClick={() => router.push('#vantagens')}>Vantagens</A>
+                <A onClick={() => router.push('#cadastro')}>Planos</A>
             </Flex>
         </Flex>
     )

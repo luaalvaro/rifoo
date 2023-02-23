@@ -12,6 +12,7 @@ import { TfiLoop } from 'react-icons/tfi';
 const Vantagens = () => {
     return (
         <Flex
+            id="vantagens"
             width="100%"
             direction="column"
             overflowX="hidden"

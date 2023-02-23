@@ -151,7 +151,7 @@ const Oferta = () => {
                                 fontSize="28px"
                                 fontWeight={700}
                             >
-                                7,99
+                                R$ 17,90
                             </Text>
                         </Flex>
                     </Flex>

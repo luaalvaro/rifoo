@@ -75,14 +75,14 @@ const Hero = () => {
                             textTransform="uppercase"
                             fontSize={['24px', '24px', '24px', '32px', '36px']}
                         >
-                            (PDV) Frente de Caixa p/<br />Vendedores Ambulantes
+                            Frente de Caixa p/<br />Pequenos Empreendedores
                         </Heading>
 
                         <Text
                             color="#818181"
                             fontSize={['15px', '15px', '15px', '20px', '24px']}
                         >
-                            Com o Rifoo, você tem o seu negócio na palma da sua mão.
+                            Com o Rifoo, você tem o controle do seu negócio na palma da sua mão.
                             Faça o seu cadastro e comece a vender agora mesmo!
                         </Text>
                     </Flex>
