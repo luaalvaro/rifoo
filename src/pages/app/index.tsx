@@ -3,7 +3,6 @@ import {
   Text,
   Stack,
   Skeleton,
-  useToast,
 } from '@chakra-ui/react'
 import Header from '../../components/Header'
 import AuthProvider from '../../components/AuthProvider'
@@ -15,7 +14,7 @@ import { RiAdminFill } from 'react-icons/ri'
 import useSWR from 'swr'
 import useAuth from '../../store/useAuth'
 import moment from 'moment'
-import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 const fetcherLastSale = async (url: any) => await supabase
   .from('sales')
@@ -26,7 +25,7 @@ const fetcherLastSale = async (url: any) => await supabase
 
 const Home = () => {
 
-  const toast = useToast()
+  const router = useRouter()
   const { profile } = useAuth()
 
   const { data: saleData, error: saleError } = useSWR('lastsale', fetcherLastSale)
@@ -36,18 +35,6 @@ const Home = () => {
 
   const timeToExpire = moment(profile?.valid_until, "YYYY-MM-DD").fromNow()
   const signatureStatusDate = timeToExpire.includes('há') ? 'pendente' : 'ativa'
-
-  useEffect(() => {
-    // if (signatureStatusDate === 'pendente') {
-    //   toast({
-    //     title: "Sua assinatura está pendente",
-    //     description: "Acesse seu Perfil para atualizar sua assinatura",
-    //     status: "warning",
-    //     duration: 3000,
-    //     isClosable: true,
-    //   })
-    // }
-  }, [])
 
   return (
     <AuthProvider>
@@ -110,6 +97,25 @@ const Home = () => {
                   <HistoryCard sale={lastSale} enableDetails={false} />
                 </>
               }
+
+              {signatureStatusDate === 'pendente' && (
+                <Text
+                  position="absolute"
+                  bottom="25px"
+                  left={0}
+                  right={0}
+
+                  textAlign="center"
+                  fontSize="22px"
+                  userSelect="none"
+                  cursor="pointer"
+
+                  onClick={() => router.push('/app/perfil')}
+                >
+                  Sua assinatura expirou {timeToExpire}<br />
+                  <span style={{ color: 'red' }}>Clique aqui para regularizar</span>
+                </Text>
+              )}
             </Flex>
           </>
         )

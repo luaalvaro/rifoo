@@ -74,7 +74,7 @@ const SignatureActions: React.FC<IProps> = ({ handleBuyRifoo, isLoading }) => {
 
                 _hover={{ bg: 'brand.primaryDark' }}
             >
-                Comprar 30 dias Rifoo Premium - R$ 29,90
+                Comprar 30 dias Rifoo Simples - R$ 17,90
             </Button>
         </Flex>
     )

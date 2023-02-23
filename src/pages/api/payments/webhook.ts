@@ -80,7 +80,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
                 if (profileError)
                     throw profileError
 
-                const newDate = moment(profile?.valid_until).add(1, 'month').format("YYYY-MM-DD")
+                const newDate = moment(new Date()).add(1, 'month').format("YYYY-MM-DD")
 
                 const { data: updatedUser, error: updatedUserError } = await supabase
                     .from('profiles')

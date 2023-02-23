@@ -53,7 +53,7 @@ const ModalBuyRifoo: React.FC<IProps> = ({ payment, onClose }) => {
             <ModalContent
                 mx="20px"
             >
-                <ModalHeader>Rifoo Premium 30 dias</ModalHeader>
+                <ModalHeader>Rifoo Simples 30 dias</ModalHeader>
                 <ModalCloseButton onClick={onClose} />
 
                 <ModalBody>
@@ -61,7 +61,7 @@ const ModalBuyRifoo: React.FC<IProps> = ({ payment, onClose }) => {
                         py="15px"
                         justify="center"
                     >
-                        <Image src="/pix.png" width="50%" />
+                        <Image src="/pix.png" width="50%" alt="" />
                     </Flex>
 
                     {payment &&
@@ -76,13 +76,14 @@ const ModalBuyRifoo: React.FC<IProps> = ({ payment, onClose }) => {
                                         src={payment.qr_code_base64}
                                         width={200}
                                         height={200}
+                                        alt=""
                                     />
                                 </Flex>
                             }
 
                             <Flex>
                                 <Text fontSize={14} lineHeight="32px">R$</Text>
-                                <Text fontSize={28} lineHeight="40px">29,90</Text>
+                                <Text fontSize={28} lineHeight="40px">17,90</Text>
                             </Flex>
 
                             <FormControl
